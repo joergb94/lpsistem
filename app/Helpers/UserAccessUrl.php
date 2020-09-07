@@ -1,7 +1,7 @@
 <?php
 
-use App\Data_menu;
-use App\Type_user_detail;
+use App\Models\Data_menu;
+use App\Models\Type_user_detail;
 
 if (!function_exists('accesUrl')) {
  

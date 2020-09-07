@@ -1,14 +1,22 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
+
+    
+    public function type_users()
+    {
+        return $this->belongsTo('App\Type_user','type_user_id','id');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name','type_user_id','last_name','phone','email', 'password',
     ];
 
     /**
@@ -36,4 +44,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+     /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param $query
+     * @param bool $status
+     *
+     * @return mixed
+     */
+    public function scopeActive($query, $status = true)
+    {
+        //changed 'active' to 'status'
+        return $query->where('active', $status);
+    }
 }

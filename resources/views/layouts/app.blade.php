@@ -12,7 +12,8 @@
     <title>Sufee Admin - HTML5 Admin Template</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" href="apple-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
 
@@ -49,7 +50,7 @@
         @include('layouts.items.header')
     <!-- /header -->
     <!-- Header-->
-    <div class="content mt-3">
+    <div id="app" class="content mt-3">
         <div class="col-sm-12">
             @yield('content')
         </div>
@@ -57,14 +58,13 @@
     </div> <!-- .content -->
     </div>
     <!-- /#right-panel -->
-
     <!-- Right Panel -->
-
     <script src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('vendors/popper.js/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
-
+    <script src="{{ asset('js/sweetalert2.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!--<script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard.js') }}"></script>
@@ -73,6 +73,7 @@
     <script src="{{ asset('vendors/jqvmap/examples/js/jquery.vmap.sampledata.js') }}"></script>
     <script src="{{ asset('vendors/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>-->
     @yield('js')
+    
 </body>
 
 </html>
