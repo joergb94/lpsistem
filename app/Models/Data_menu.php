@@ -10,7 +10,7 @@ class Data_menu extends Model
     
     public function data_menu()
     {
-        return $this->hasMany('App\Type_user_detail','data_menu_id','id');
+        return $this->hasMany(' App\Models\Type_user_detail','data_menu_id','id');
     }
 
      /**

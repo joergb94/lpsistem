@@ -12,12 +12,12 @@ class Type_user_detail extends Model
 
     public function type_users()
     {
-        return $this->belongsTo('App\Type_user','type_user_id','id');
+        return $this->belongsTo('App\Models\Type_user','type_user_id','id');
     }
 
     public function data_menu()
     {
-        return $this->belongsTo('App\Data_menu','data_menu_id','id');
+        return $this->belongsTo('App\Models\Data_menu','data_menu_id','id');
     }
 
 

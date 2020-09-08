@@ -37919,7 +37919,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-sm-12" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
             _c("div", { staticClass: "row" }, [
@@ -50776,7 +50776,10 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
  */
 
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: {
+    menu: 0
+  }
 });
 
 /***/ }),

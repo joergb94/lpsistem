@@ -1090,7 +1090,7 @@ aside.left-panel {
           color: #fff !important; }
         .navbar .navbar-nav li > a .menu-icon {
           color: #ccffcc;
-          float: left;
+          
           margin-top: 8px;
           width: 55px;
           text-align: left;
@@ -1264,6 +1264,7 @@ body.open .navbar .navbar-brand.hidden {
 /* Right panel */
 .right-panel {
   display: table-cell;
+  width: 100%;
   padding-left: 0 !important;
   -webkit-transition: all 0.35s ease;
   transition: all 0.35s ease; }

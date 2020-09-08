@@ -32,7 +32,7 @@
 </head>
 
 <body>
-
+<div id="app" >
 
     <!-- Left Panel -->
     @guest
@@ -44,18 +44,19 @@
     <!-- Left Panel -->
 
     <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-    <!-- Header-->
-        @include('layouts.items.header')
-    <!-- /header -->
-    <!-- Header-->
-    <div id="app" class="content mt-3">
-        <div class="col-sm-12">
-            @yield('content')
+        <div id="right-panel" class="right-panel">
+        <!-- Header-->
+            @include('layouts.items.header')
+        <!-- /header -->
+        <!-- Header-->
+            <div  class="content mt-3" style="width:100%;">
+                <div class="col-sm-12">
+                    @yield('content')
+                </div>
+                <!--/.col-->
+            </div> 
+        <!-- .content -->
         </div>
-        <!--/.col-->
-    </div> <!-- .content -->
     </div>
     <!-- /#right-panel -->
     <!-- Right Panel -->

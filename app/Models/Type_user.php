@@ -12,7 +12,7 @@ class Type_user extends Model
 
     public function type_user()
     {
-        return $this->hasMany('App\User','type_user_id','id');
+        return $this->hasMany('App\Models\User','type_user_id','id');
     }
 
      /**
