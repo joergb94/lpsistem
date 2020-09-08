@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\RequestUser;
-use App\Http\Requests\RequestUserStore;
-use App\Http\Requests\RequestUserUpdate;
-use App\Http\Requests\RequestUserStatus;
-use App\Http\Requests\RequestUserDelete;
+use App\Http\Requests\User\UserRequest;
+use App\Http\Requests\User\UserIdRequest;
+use App\Http\Requests\User\UserPassRequest;
+use App\Http\Requests\User\UserUpdateRequest;
+use App\Http\Requests\User\UserStoreRequest;
 use App\Models\User;
 use App\Repositories\RepositoryUser;
 use Carbon\Carbon; 
+use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
@@ -26,9 +27,9 @@ class UserController extends Controller
     }
 
 
-    public function index(Request $request){
+    public function index(UserRequest $request){
 
-        if (!$request->ajax()) return redirect('/');
+        if (!$request->ajax()) return view('user.index',['dm'=>accesUrl(Auth::user(),1)]);
 
         $search = trim($request->search);
         $criterion = trim($request->criterion);
@@ -36,14 +37,12 @@ class UserController extends Controller
   
         return $this->RepositoryUser->getSearchPaginated($criterion, $search, $status);
     }
-
-
-    public function store(Request $request){
+    public function store(UserStoreRequest $request){
         $this->RepositoryUser->create($request->input());
         return response()->json('ready');
     }
 
-    public function update(Request $request){
+    public function update(UserUpdateRequest $request){
 
         $this->RepositoryUser->update($request['id'], $request->only(
             'name',
@@ -72,6 +71,4 @@ class UserController extends Controller
             }
         return response()->json('exito');
     }
-
-
 }

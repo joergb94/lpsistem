@@ -35,8 +35,8 @@ class RepositoryUser
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')
-                     : $this->model->where('id','>',0);
+                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->whereIn('type_user_id',[2,3])
+                     : $this->model->where('id','>',0)->whereIn('type_user_id',[2,3]);
                 
                 if($status != 'all'){
 

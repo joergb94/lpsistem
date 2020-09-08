@@ -13,8 +13,8 @@
                 <ul class="nav navbar-nav">
                    
                     @forelse($dm['data_menu'] as $menu)
-                         <li class="active" @click="menu={{$menu->data_menu['id']}}">
-                            <a class="btn-link" href="#"> <p class="text-primary"><i class="menu-icon {{$menu->data_menu['icon']}}"></i> {{$menu->data_menu['name']}}</p></a>
+                         <li class="active">
+                            <a class="btn-link" href="{{$menu->data_menu['link']}}"><i class="menu-icon {{$menu->data_menu['icon']}}"></i> {{$menu->data_menu['name']}}</a>
                          </li>
                         @empty
                         <li>

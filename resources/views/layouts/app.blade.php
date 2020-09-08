@@ -32,7 +32,7 @@
 </head>
 
 <body>
-<div id="app" >
+<div >
 
     <!-- Left Panel -->
     @guest
@@ -44,7 +44,7 @@
     <!-- Left Panel -->
 
     <!-- Right Panel -->
-        <div id="right-panel" class="right-panel">
+        <div  id="app"  class="right-panel">
         <!-- Header-->
             @include('layouts.items.header')
         <!-- /header -->
@@ -57,7 +57,7 @@
             </div> 
         <!-- .content -->
         </div>
-    </div>
+
     <!-- /#right-panel -->
     <!-- Right Panel -->
     <script src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
