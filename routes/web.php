@@ -18,7 +18,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::group(['middleware'=>['auth']], function(){
+    
+Route::get('logout', 'Auth\LoginController@redirectUrlLogout');
 Route::get('/home', 'HomeController@index')->name('home');
 //user
 Route::get('/users', 'UserController@index');
@@ -32,3 +34,4 @@ Route::get('/profile', 'ProfileController@index');
 Route::post('/profile/add', 'ProfileController@store');
 Route::post('/profile/update', 'ProfileController@update');
 Route::post('/profile/change_status','ProfileController@change_status');
+});

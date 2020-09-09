@@ -1303,6 +1303,50 @@ body.open .navbar .navbar-brand.hidden {
   padding: 15px 20px 13px;
   width: 100%; }
 
+
+  /* Right panel login*/
+.right-panel-login {
+  width: 100%;
+  padding-left: 0 !important;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease; }
+  .right-panel-login .breadcrumbs {
+    background-color: #fff;
+    display: inline-block;
+    margin-top: 0;
+    padding: 0 5px;
+    width: 100%; }
+    .right-panel-login .breadcrumbs .col-lg-8 .page-header {
+      float: left; }
+  .right-panel-login .page-header {
+    min-height: 50px;
+    margin: 0;
+    padding: 0 15px;
+    background: #ffffff;
+    border-bottom: 0; }
+    .right-panel-login .page-header h1 {
+      font-size: 18px;
+      padding: 15px 0; }
+    .right-panel-login .page-header .breadcrumb {
+      margin: 0;
+      padding: 13.5px 0;
+      background: #fff;
+      text-transform: capitalize; }
+    .right-panel-login .page-header .breadcrumb > li + li:before {
+      padding: 0 5px;
+      color: #ccc;
+      content: "/\00a0"; }
+
+.right-panel-login header.header {
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  clear: both;
+  display: inline-block;
+  padding: 15px 20px 13px;
+  width: 100%; }
+
+
+  
 .open .right-panel {
   margin-left: -210px; }
 

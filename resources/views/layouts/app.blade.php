@@ -36,15 +36,20 @@
 
     <!-- Left Panel -->
     @guest
+        <!-- Right Panel -->
+        <div  id="app"  class="right-panel-login">
     @else
         @include('layouts.items.leftPanel')
-    @endguest
-   <!-- /#left-panel -->
+
+    <!-- /#left-panel -->
 
     <!-- Left Panel -->
 
     <!-- Right Panel -->
         <div  id="app"  class="right-panel">
+    @endguest
+   
+        
         <!-- Header-->
             @include('layouts.items.header')
         <!-- /header -->
