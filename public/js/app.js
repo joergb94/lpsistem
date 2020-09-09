@@ -2454,6 +2454,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2464,7 +2468,7 @@ __webpack_require__.r(__webpack_exports__);
       phone: '',
       email: '',
       password: '',
-      password_confirm: '',
+      password_confirmation: '',
       type_user: '',
       titleModal: '',
       action: 0,
@@ -2498,7 +2502,9 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       var url = '/profile/password';
       var data = {
-        'password': this.password
+        'id': this.id,
+        'password': this.password,
+        'password_confirmation': this.password_confirmation
       };
 
       if (action == 2) {
@@ -2627,6 +2633,7 @@ __webpack_require__.r(__webpack_exports__);
               case 'password':
                 {
                   this.titleModal = 'Cambiar Contraseña';
+                  this.id = data.id;
                   this.password = '';
                   this.action = 1;
                   break;
@@ -2966,9 +2973,10 @@ __webpack_require__.r(__webpack_exports__);
           'password': this.password,
           'type': this.type
         };
-      } else {
+      } else if (action == 3) {
         var url = '/users/password';
         var data = {
+          'id': this.id,
           'password': this.password,
           'password_confirmation': this.password_confirmation
         };
@@ -3123,7 +3131,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.phone = '';
                   this.email = '';
                   this.password = '';
-                  this.action = 1;
+                  this.password_confirm = '', this.action = 1;
                   break;
                 }
 
@@ -3133,7 +3141,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.id = data.id;
                   this.type = data.type_user_id;
                   this.name = data.name;
-                  this.name = data.last_name;
+                  this.last_name = data.last_name;
                   this.phone = data.phone;
                   this.email = data.email;
                   this.password = data.password;
@@ -3146,7 +3154,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.titleModal = 'Change password';
                   this.id = data.id;
                   this.password = '';
-                  this.action = 3;
+                  this.password_confirm = '', this.action = 3;
                   break;
                 }
             }
@@ -3163,8 +3171,7 @@ __webpack_require__.r(__webpack_exports__);
       this.type = '';
       this.email = '';
       this.password = '';
-      this.action = '';
-      $.notifyClose();
+      this.password_confirm = '', $.notifyClose();
       $("#myModal").modal('hide');
     }
   },
@@ -39516,6 +39523,16 @@ var render = function() {
                 _c("label", {
                   domProps: { textContent: _vm._s(_vm.dataUser.created_at) }
                 })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "pwd" } }, [
+                  _vm._v("Ultima actualizacion:")
+                ]),
+                _vm._v(" "),
+                _c("label", {
+                  domProps: { textContent: _vm._s(_vm.dataUser.updated_at) }
+                })
               ])
             ])
           ])
@@ -39728,8 +39745,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.password_confirm,
-                          expression: "password_confirm"
+                          value: _vm.password_confirmation,
+                          expression: "password_confirmation"
                         }
                       ],
                       staticClass: "form-control",
@@ -39738,13 +39755,13 @@ var render = function() {
                         placeholder: "Enter password",
                         id: "password"
                       },
-                      domProps: { value: _vm.password_confirm },
+                      domProps: { value: _vm.password_confirmation },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.password_confirm = $event.target.value
+                          _vm.password_confirmation = $event.target.value
                         }
                       }
                     })
@@ -40454,7 +40471,7 @@ var render = function() {
                       ],
                       staticClass: "form-control",
                       attrs: {
-                        type: "text",
+                        type: "password",
                         placeholder: "Enter password",
                         id: "password"
                       },
@@ -40488,7 +40505,7 @@ var render = function() {
                       ],
                       staticClass: "form-control",
                       attrs: {
-                        type: "text",
+                        type: "password",
                         placeholder: "Enter confirm password",
                         id: "password_confirmation"
                       },

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\User\UserPassRequest;
+use App\Http\Requests\User\UserProfileRequest;
 use App\Repositories\RepositoryProfile;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +27,7 @@ class ProfileController extends Controller
         return $this->RepositoryProfile->get_info(Auth::user()->id);
     }
     
-    public function update(Request $request)
+    public function update(UserProfileRequest $request)
     {
         $this->RepositoryProfile->update($request['id'], $request->only(
             'name',
@@ -36,9 +38,12 @@ class ProfileController extends Controller
         return response()->json('ready');
     }
 
-    public function change_password(Request $request)
-    {
-       
+    public function change_password(UserPassRequest $request)
+    {   
+        dd($request->input());
+        $this->RepositoryProfile->update_password($request['id'], $request->only(
+          'password',
+        ));
     }
 
     

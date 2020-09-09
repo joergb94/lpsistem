@@ -26,12 +26,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/users', 'UserController@index');
 Route::post('/users/add', 'UserController@store');
 Route::post('/users/update', 'UserController@update');
+Route::post('/users/password', 'UserController@change_password');
 Route::post('/users/change_status','UserController@change_status');
 Route::post('/users/deleteOrResotore','UserController@deleteOrResotore');
 
 //profile
 Route::get('/profile', 'ProfileController@index');
-Route::post('/profile/add', 'ProfileController@store');
 Route::post('/profile/update', 'ProfileController@update');
-Route::post('/profile/change_status','ProfileController@change_status');
+Route::post('/profile/password', 'ProfileController@change_password');
 });

@@ -156,11 +156,11 @@
 
                              <div class="form-group" v-if="action==1||action==3">
                                 <label for="pwd">Contraseña:</label>
-                                <input type="text" v-model="password"  class="form-control" placeholder="Enter password" id="password">
+                                <input type="password" v-model="password"  class="form-control" placeholder="Enter password" id="password">
                             </div>
                             <div class="form-group" v-if="action==1||action==3">
                                 <label for="pwd">Confirmar Contraseña:</label>
-                                <input type="text" v-model="password_confirmation"  class="form-control" placeholder="Enter confirm password" id="password_confirmation">
+                                <input type="password" v-model="password_confirmation"  class="form-control" placeholder="Enter confirm password" id="password_confirmation">
                             </div>
                        
                     </div>
@@ -289,9 +289,10 @@
                         'password':this.password,
                         'type':this.type
                     };
-                }else {
+                }else if(action == 3){
                         var url = '/users/password'
                         var data = {
+                            'id': this.id,
                             'password':this.password,
                             'password_confirmation':this.password_confirmation,
                         };
@@ -456,6 +457,7 @@
                                 this.phone = '';
                                 this.email = '';
                                 this.password = '';
+                                this.password_confirm ='',
                                 this.action = 1;
                                 break;
                             }
@@ -465,7 +467,7 @@
                                 this.id = data.id;
                                 this.type = data.type_user_id;
                                 this.name = data.name;
-                                this.name = data.last_name;
+                                this.last_name = data.last_name;
                                 this.phone = data.phone;
                                 this.email = data.email;
                                 this.password = data.password;
@@ -477,6 +479,7 @@
                                 this.titleModal = 'Change password';
                                 this.id = data.id;
                                 this.password ='';
+                                this.password_confirm ='',
                                 this.action = 3;
                                 break;
                             }
@@ -493,7 +496,7 @@
                     this.type ='';
                     this.email = '';
                     this.password = '';
-                    this.action = '';
+                    this.password_confirm ='',
                      $.notifyClose();
                     $("#myModal").modal('hide');
             },

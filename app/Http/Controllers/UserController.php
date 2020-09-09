@@ -54,6 +54,13 @@ class UserController extends Controller
         return response()->json('ready');
     }
 
+    public function change_password(UserPassRequest $request)
+    {   
+        $this->RepositoryUser->update_password($request['id'], $request->only(
+          'password',
+        ));
+    }
+
     public function change_status(Request $request)
     {
         $this->RepositoryUser->updateStatus($request->id);

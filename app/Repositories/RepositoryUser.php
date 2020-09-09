@@ -128,6 +128,33 @@ class RepositoryUser
         });
     }
 
+     /**
+     * @param User  $User
+     * @param array $data
+     *
+     * @throws GeneralException
+     * @throws \Exception
+     * @throws \Throwable
+     * @return User
+     */
+    public function update_password($User_id, array $data): User
+    {
+        
+        $User = $this->model->find($User_id);
+        
+        return DB::transaction(function () use ($User, $data) {
+            if ($User->update([
+                'password' =>Hash::make($data['password']),
+            ])) {
+
+                return $User;
+            }
+
+            throw new GeneralException(__('There was an error updating the User.'));
+        });
+    }
+
+    
     /*
      * @param User $User
      * @param      $status

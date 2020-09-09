@@ -44,6 +44,10 @@
                                 <label for="pwd">Fecha de Creacion:</label>
                                <label v-text="dataUser.created_at"></label>
                             </div>
+                             <div class="form-group">
+                                <label for="pwd">Ultima actualizacion:</label>
+                               <label v-text="dataUser.updated_at"></label>
+                            </div>
                             
                         </div>
                     </div>
@@ -88,7 +92,7 @@
                             </div>
                              <div class="form-group"  v-if="action==1">
                                 <label for="pwd">Confirmar Contraseña:</label>
-                                <input type="text" v-model="password_confirm"  class="form-control" placeholder="Enter password" id="password">
+                                <input type="text" v-model="password_confirmation"  class="form-control" placeholder="Enter password" id="password">
                             </div>
                        
                     </div>
@@ -119,7 +123,7 @@
             phone:'',
             email:'',
             password:'',
-            password_confirm:'',
+            password_confirmation:'',
             type_user:'',
             titleModal:'',
             action:0,
@@ -158,7 +162,9 @@
                  let me = this;
                  var url = '/profile/password'
                  var data = {
-                    'password':this.password,  
+                    'id': this.id,
+                    'password':this.password,
+                    'password_confirmation':this.password_confirmation,  
                 };
 
                 if (action == 2){
@@ -294,6 +300,7 @@
                             case 'password':
                             {
                                 this.titleModal = 'Cambiar Contraseña';
+                                this.id = data.id;
                                 this.password = '';
                                 this.action = 1;
                                 break;
