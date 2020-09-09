@@ -229,7 +229,7 @@
         methods : {
             ListUsers(page){
                 let me = this;
-                var url = '/users?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status;
+                var url = '/tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status;
                  axios.get(url)
                 .then(function (response) {
                     var respuesta= response.data;

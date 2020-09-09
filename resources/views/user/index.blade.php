@@ -2,8 +2,7 @@
 @section('content')
     @switch($dm['type_user'])
         @case(1)
-                <profile-component></profile-component>
-        @break
+                <user-component></user-component>
         @break
         @case(2)
                 <user-component></user-component>

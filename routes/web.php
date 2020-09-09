@@ -34,4 +34,9 @@ Route::post('/users/deleteOrResotore','UserController@deleteOrResotore');
 Route::get('/profile', 'ProfileController@index');
 Route::post('/profile/update', 'ProfileController@update');
 Route::post('/profile/password', 'ProfileController@change_password');
+
+//ManagmentTickets
+Route::get('/tickets', 'ManagementTicketsController@index');
+
+
 });

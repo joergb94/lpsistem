@@ -30,7 +30,7 @@ class UserController extends Controller
     public function index(UserRequest $request){
 
         if (!$request->ajax()) return view('user.index',['dm'=>accesUrl(Auth::user(),1)]);
-
+        
         $search = trim($request->search);
         $criterion = trim($request->criterion);
         $status = ($request->status)? $request->status : 1;
