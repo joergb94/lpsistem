@@ -2513,17 +2513,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       dataUsers: [],
+      dataNumbers: [],
       id: '',
-      name: '',
-      last_name: '',
       phone: '',
-      email: '',
-      password: '',
-      type_user: '',
+      total: 0,
+      subtotal: '',
+      number: '',
       titleModal: '',
       action: 0,
       page: 1,
@@ -2574,6 +2585,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    message: function message(data) {
+      $.notifyClose();
+      $.notify({
+        // options
+        title: data.title,
+        message: data.text
+      }, {
+        // settings
+        type: data.type
+      });
+    },
     ListUsers: function ListUsers(page) {
       var me = this;
       var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status;
@@ -2729,25 +2751,13 @@ __webpack_require__.r(__webpack_exports__);
             switch (action) {
               case 'add':
                 {
-                  this.titleModal = 'New User';
-                  this.name = '';
-                  this.name = '';
+                  this.titleModal = 'Nuevo Ticket';
                   this.phone = '';
-                  this.email = '';
-                  this.password = '';
+                  this.total = '';
+                  this.number = '';
+                  this.subtotal = '';
+                  this.dataNumbers = [];
                   this.action = 1;
-                  break;
-                }
-
-              case 'update':
-                {
-                  this.titleModal = 'Update User';
-                  this.id = data.id;
-                  this.name = data.name;
-                  this.phone = data.phone;
-                  this.email = data.email;
-                  this.password = data.password;
-                  this.action = 2;
                   break;
                 }
             }
@@ -2758,10 +2768,63 @@ __webpack_require__.r(__webpack_exports__);
     },
     closeModal: function closeModal() {
       this.titleModal = '';
-      this.name = '';
-      this.description = '';
+      this.phone = '';
+      this.total = '';
+      this.number = '';
+      this.subtotal = '';
+      this.dataNumbers = [];
       $.notifyClose();
       $("#myModal").modal('hide');
+    },
+    addNumber: function addNumber() {
+      var me = this;
+
+      if (this.number.length == 0) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Numero es requerido',
+          type: 'danger'
+        });
+        return false;
+      }
+
+      if (this.subtotal.length == 0) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Inversion es requerido',
+          type: 'danger'
+        });
+        return false;
+      }
+
+      if (this.dataNumbers.push({
+        number: this.number,
+        subtotal: this.subtotal
+      })) {
+        var sumtotal = me.total > 0 ? parseFloat(me.total) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
+        this.total = parseFloat(sumtotal);
+        this.number = '';
+        this.subtotal = '';
+        me.message({
+          title: 'Listo',
+          text: 'Se AGREGO con exito el Numero',
+          type: 'success'
+        });
+      }
+    },
+    removeNumber: function removeNumber(index) {
+      var me = this;
+      var sub = this.dataNumbers[index];
+      var sumtotal = me.total > 0 ? parseFloat(me.total) - parseFloat(sub.subtotal) : 0;
+      this.total = parseFloat(sumtotal);
+
+      if (this.dataNumbers.splice(index, 1)) {
+        me.message({
+          title: 'Listo',
+          text: 'Se ELIMINO con exito el Numero',
+          type: 'success'
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -39886,7 +39949,7 @@ var render = function() {
               _c("div", { staticClass: "col-sm-5" }, [
                 _c("h4", { staticClass: "card-title mb-0" }, [
                   _vm._v(
-                    "\n                                 User\n                                "
+                    "\n                                 Tickets\n                                "
                   ),
                   _c("div", { staticClass: "btn-group" }, [
                     _c(
@@ -40078,15 +40141,7 @@ var render = function() {
                         }),
                         _vm._v(" "),
                         _c("td", {
-                          domProps: { textContent: _vm._s(item.name) }
-                        }),
-                        _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.last_name) }
-                        }),
-                        _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.phone) }
+                          domProps: { textContent: _vm._s(item.client.phone) }
                         }),
                         _vm._v(" "),
                         _c("td", [
@@ -40111,14 +40166,6 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", {
                           domProps: { textContent: _vm._s(item.created_at) }
-                        }),
-                        _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.updated_at) }
-                        }),
-                        _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.deleted_at) }
                         }),
                         _vm._v(" "),
                         _c("td", [
@@ -40260,7 +40307,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "modal", attrs: { id: "myModal" } }, [
-      _c("div", { staticClass: "modal-dialog" }, [
+      _c("div", { staticClass: "modal-dialog modal-sm modal-lg" }, [
         _c("div", { staticClass: "modal-content" }, [
           _c("div", { staticClass: "modal-header" }, [
             _c("h4", {
@@ -40285,155 +40332,233 @@ var render = function() {
           _vm._v(" "),
           _c("form", { attrs: { action: "" } }, [
             _c("div", { staticClass: "modal-body" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "email" } }, [_vm._v("Nombre:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.name,
-                      expression: "name"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    placeholder: "Enter Name",
-                    id: "name"
-                  },
-                  domProps: { value: _vm.name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+              _c(
+                "div",
+                { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
+                [
+                  _c("label", { attrs: { for: "email" } }, [
+                    _vm._v("Telefono del cliente:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.phone,
+                        expression: "phone"
                       }
-                      _vm.name = $event.target.value
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      placeholder: "Enter phone",
+                      id: "phone"
+                    },
+                    domProps: { value: _vm.phone },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.phone = $event.target.value
+                      }
                     }
-                  }
-                })
-              ]),
+                  })
+                ]
+              ),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "pwd" } }, [_vm._v("Apellido:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.last_name,
-                      expression: "last_name"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    placeholder: "Enter last_name",
-                    id: "last_name"
-                  },
-                  domProps: { value: _vm.last_name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.last_name = $event.target.value
-                    }
-                  }
-                })
-              ]),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                },
+                [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                      [
+                        _c("label", { attrs: { for: "pwd" } }, [
+                          _vm._v("Numero:")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.number,
+                              expression: "number"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "number",
+                            maxlength: "5",
+                            placeholder: "Enter total",
+                            id: "number"
+                          },
+                          domProps: { value: _vm.number },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.number = $event.target.value
+                            }
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                      [
+                        _c("label", { attrs: { for: "pwd" } }, [
+                          _vm._v("Inversion:")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.subtotal,
+                              expression: "subtotal"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "number",
+                            step: "0.01",
+                            placeholder: "Enter total",
+                            id: "subtotal"
+                          },
+                          domProps: { value: _vm.subtotal },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.subtotal = $event.target.value
+                            }
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "form-group col-sm-12 col-md-12 col-lg-12"
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary btn-block",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.addNumber()
+                              }
+                            }
+                          },
+                          [_vm._v("Agregar al tickte")]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "form-group col-sm-12 col-md-12 col-lg-12"
+                      },
+                      [
+                        _c(
+                          "ul",
+                          { staticClass: "list-group" },
+                          [
+                            _vm.dataNumbers.length == 0
+                              ? _c("li", { staticClass: "list-group-item" }, [
+                                  _c("h6", [_vm._v("Jugada vacía")])
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm._l(_vm.dataNumbers, function(item, index) {
+                              return _c(
+                                "li",
+                                { key: index, staticClass: "list-group-item" },
+                                [
+                                  _c("div", { staticClass: "row" }, [
+                                    _c("div", {
+                                      staticClass:
+                                        "col-sm-12 col-md-4 col-lg-4",
+                                      domProps: {
+                                        textContent: _vm._s(item.number)
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("div", {
+                                      staticClass:
+                                        "col-sm-12 col-md-4 col-lg-4",
+                                      domProps: {
+                                        textContent: _vm._s(item.subtotal)
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "col-sm-12 col-md-4 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "button",
+                                          {
+                                            staticClass: "btn btn-danger",
+                                            attrs: { type: "button" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.removeNumber(index)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("-")]
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              ),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "pwd" } }, [_vm._v("Telefono:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.phone,
-                      expression: "phone"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    placeholder: "Enter phone",
-                    id: "phone"
-                  },
-                  domProps: { value: _vm.phone },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.phone = $event.target.value
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "pwd" } }, [_vm._v("Correo:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.email,
-                      expression: "email"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    placeholder: "Enter email",
-                    id: "email"
-                  },
-                  domProps: { value: _vm.email },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.email = $event.target.value
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "pwd" } }, [_vm._v("Contraseña:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.password,
-                      expression: "password"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    placeholder: "Enter password",
-                    id: "password"
-                  },
-                  domProps: { value: _vm.password },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.password = $event.target.value
-                    }
-                  }
-                })
-              ])
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "form-group col-sm-12 col-md-6 col-lg-6 text-left"
+                },
+                [
+                  _c("label", [_vm._v("Total:")]),
+                  _vm._v("\n                            $"),
+                  _c("label", { domProps: { textContent: _vm._s(_vm.total) } })
+                ]
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer" }, [
@@ -40498,19 +40623,11 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nombre")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Apellido")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Telefono")]),
         _vm._v(" "),
         _c("th", [_vm._v("Status")]),
         _vm._v(" "),
         _c("th", [_vm._v("created_at")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Updated_at")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("deleted_at")]),
         _vm._v(" "),
         _c("th", [_vm._v("actions")])
       ])
@@ -40531,6 +40648,14 @@ var staticRenderFns = [
         ])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", [
+      _c("span", { staticClass: "badge badge-warning" }, [_vm._v("Jugada")])
+    ])
   }
 ]
 render._withStripped = true

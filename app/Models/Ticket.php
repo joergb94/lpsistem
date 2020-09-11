@@ -9,7 +9,15 @@ class Ticket extends Model
 {
     protected $guarded=[];
     use SoftDeletes;
-
+    
+    public function sellers()
+    {
+        return $this->belongsTo('App\Models\User','seller_id','id');
+    }
+    public function clients()
+    {
+        return $this->belongsTo('App\Models\Type_user','user_id','id');
+    }
       /**
      * @return bool
      */

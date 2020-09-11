@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-sm-5">
                                  <h4 class="card-title mb-0">
-                                     User
+                                     Tickets
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
                                             <option value="all" >All</option>
@@ -48,13 +48,9 @@
                             <thead class="thead-dark">
                                 <tr>
                                 <th>#</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
                                 <th>Telefono</th>
                                 <th>Status</th>
                                 <th>created_at</th>
-                                <th>Updated_at</th>
-                                <th>deleted_at</th>
                                 <th>actions</th>
                                 </tr>
                             </thead>
@@ -67,9 +63,7 @@
 
                                 <tr v-for="item in dataUsers" :key="item.id">
                                     <td v-text="item.id"></td>
-                                    <td v-text="item.name"></td>
-                                    <td v-text="item.last_name"></td>
-                                    <td v-text="item.phone"></td>
+                                    <td v-text="item.client.phone"></td>
                                     <td>
                                           <div v-if="item.active == 1">
                                             <span class="badge badge-success">Actived</span>
@@ -80,8 +74,6 @@
 
                                     </td>
                                     <td v-text="item.created_at"></td>
-                                    <td v-text="item.updated_at"></td>
-                                    <td v-text="item.deleted_at"></td>
                                     <td>
                                         <button type="button" v-if="item.deleted_at == null" class="btn btn-warning btn-sm" @click="openModal('modal', 'update', item)" >
                                           <i class="ti-pencil"></i>
@@ -116,7 +108,7 @@
             </div>
             <!-- The Modal -->
                 <div class="modal" id="myModal">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-sm modal-lg">
                     <div class="modal-content">
 
                     <!-- Modal Header -->
@@ -127,29 +119,49 @@
 
                     <!-- Modal body -->
                     <form action="">
-                    <div class="modal-body">
-                       
-                            <div class="form-group">
-                                <label for="email">Nombre:</label>
-                                <input type="text"  v-model="name"  class="form-control" placeholder="Enter Name" id="name">
+                    <div class="modal-body"> 
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                <label for="email">Telefono del cliente:</label>
+                                <input type="text"  v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">
                             </div>
-                             <div class="form-group">
-                                <label for="pwd">Apellido:</label>
-                                <input type="text" v-model="last_name"  class="form-control" placeholder="Enter last_name" id="last_name">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
+                                <h3><span class="badge badge-warning">Jugada</span></h3>
+                                    <div class="row">
+                                         <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                            <label for="pwd">Numero:</label>
+                                            <input type="number" maxlength="5" v-model="number"  class="form-control" placeholder="Enter total" id="number">
+                                        </div>
+                                         <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                            <label for="pwd">Inversion:</label>
+                                            <input type="number" step="0.01" v-model="subtotal"  class="form-control" placeholder="Enter total" id="subtotal">
+                                        </div>
+                                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <button type="button" class="btn btn-primary btn-block" @click="addNumber()">Agregar al tickte</button>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <ul class="list-group">
+                                                <li class="list-group-item"  v-if="dataNumbers.length == 0">
+                                                   <h6>Jugada vacía</h6>
+                                                </li>
+                                                <li class="list-group-item"  v-for="(item,index) in dataNumbers" :key="index">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-4 col-lg-4" v-text="item.number">
+                                                        </div>
+                                                         <div class="col-sm-12 col-md-4 col-lg-4" v-text="item.subtotal">
+                                                        </div>
+                                                         <div class="col-sm-12 col-md-4 col-lg-4">
+                                                            <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" >-</button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                             </div>
-                            <div class="form-group">
-                                <label for="pwd">Telefono:</label>
-                                <input type="text" v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">
+                            <div class="form-group col-sm-12 col-md-6 col-lg-6 text-left">
+                                <label>Total:</label>
+                                $<label v-text="total"></label>
                             </div>
-                            <div class="form-group">
-                                <label for="pwd">Correo:</label>
-                                <input type="text" v-model="email"  class="form-control" placeholder="Enter email" id="email">
-                            </div>
-                             <div class="form-group">
-                                <label for="pwd">Contraseña:</label>
-                                <input type="text" v-model="password"  class="form-control" placeholder="Enter password" id="password">
-                            </div>
-                       
                     </div>
 
                     <!-- Modal footer -->
@@ -172,13 +184,12 @@
         data () {
             return {
             dataUsers:[],
+            dataNumbers:[],
             id:'',
-            name:'',
-            last_name:'',
             phone:'',
-            email:'',
-            password:'',
-            type_user:'',
+            total: 0,
+            subtotal:'',
+            number:'',
             titleModal:'',
             action:0,
             page:1,
@@ -227,6 +238,17 @@
             }
         },
         methods : {
+            message(data){
+                $.notifyClose();
+                  $.notify({
+                                // options
+                                title:data.title,
+                                message:data.text,
+                            },{
+                                // settings
+                                type:data.type
+                            });
+            },
             ListUsers(page){
                 let me = this;
                 var url = '/tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status;
@@ -392,25 +414,13 @@
                         switch(action){
                             case 'add':
                             {
-                                this.titleModal = 'New User';
-                                this.name= '';
-                                 this.name = '';
+                                this.titleModal = 'Nuevo Ticket';
                                 this.phone = '';
-                                this.email = '';
-                                this.password = '';
+                                this.total = '';
+                                this.number = '';
+                                this.subtotal = '';
+                                this.dataNumbers =[];
                                 this.action = 1;
-                                break;
-                            }
-                            case 'update':
-                            {
-                                
-                                this.titleModal = 'Update User';
-                                this.id = data.id;
-                                this.name = data.name;
-                                this.phone = data.phone;
-                                this.email = data.email;
-                                this.password = data.password;
-                                this.action = 2;
                                 break;
                             }
                         }
@@ -420,11 +430,54 @@
             },
             closeModal(){
                     this.titleModal = '';
-                    this.name= '';
-                    this.description = '';
+                    this.phone = '';
+                    this.total = '';
+                    this.number = '';
+                    this.subtotal = '';
+                    this.dataNumbers =[];
                      $.notifyClose();
                     $("#myModal").modal('hide');
             },
+            addNumber() {
+                let me = this;
+                    if(this.number.length == 0){
+                        me.message({title:'Error',text:'El campo Numero es requerido',type:'danger'});
+                        return false;
+                    }
+
+                    if(this.subtotal.length == 0){
+                        me.message({title:'Error',text:'El campo Inversion es requerido',type:'danger'});
+                        return false;
+                    }
+                    
+                    if(this.dataNumbers.push({
+                        number: this.number,
+                        subtotal: this.subtotal,
+                    }))
+                    {   
+                        let sumtotal = me.total > 0 ? parseFloat(me.total) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
+                        this.total = parseFloat(sumtotal);
+                        this.number = ''
+                        this.subtotal = ''
+                        me.message({title:'Listo',text:'Se AGREGO con exito el Numero',type:'success'});
+                    }
+                    
+
+
+                   
+            },
+            removeNumber(index){
+                let me = this;
+                let sub = this.dataNumbers[index];
+                let sumtotal = me.total > 0 ? parseFloat(me.total) - parseFloat(sub.subtotal) : 0;
+                this.total = parseFloat(sumtotal);
+
+                 if(this.dataNumbers.splice(index, 1))
+                 {
+                     me.message({title:'Listo',text:'Se ELIMINO con exito el Numero',type:'success'});
+                 }
+                   
+            }
         },
         mounted () {
            this.ListUsers(1);
