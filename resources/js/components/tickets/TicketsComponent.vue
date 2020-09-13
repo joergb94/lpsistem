@@ -48,7 +48,7 @@
                             <thead class="thead-dark">
                                 <tr>
                                 <th>#</th>
-                                <th>Telefono</th>
+                                <th>Total</th>
                                 <th>Status</th>
                                 <th>created_at</th>
                                 <th>actions</th>
@@ -61,9 +61,9 @@
                                     </th>
                                 </tr>
 
-                                <tr v-for="item in dataUsers" :key="item.id">
+                                <tr v-for="item in dataTicktes" :key="item.id">
                                     <td v-text="item.id"></td>
-                                    <td v-text="item.client.phone"></td>
+                                    <td v-text="item.total"></td>
                                     <td>
                                           <div v-if="item.active == 1">
                                             <span class="badge badge-success">Actived</span>
@@ -75,11 +75,8 @@
                                     </td>
                                     <td v-text="item.created_at"></td>
                                     <td>
-                                        <button type="button" v-if="item.deleted_at == null" class="btn btn-warning btn-sm" @click="openModal('modal', 'update', item)" >
-                                          <i class="ti-pencil"></i>
-                                        </button>
                                         <button type="button" v-if="item.deleted_at == null" class="btn btn-danger btn-sm" @click="changeStatus(item)">
-                                          <i class="ti-loop"></i>
+                                          <i class="ti-eye"></i>
                                         </button>
                                         <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                           <i class="ti-trash"></i>
@@ -127,11 +124,20 @@
                             <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                                 <h3><span class="badge badge-warning">Jugada</span></h3>
                                     <div class="row">
-                                         <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                         <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                             <label for="pwd">Numero:</label>
                                             <input type="number" maxlength="5" v-model="number"  class="form-control" placeholder="Enter total" id="number">
                                         </div>
-                                         <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                         <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <label for="pwd">Juego:</label>
+                                            <select class="form-control" v-model="game" id="game" name="game">
+                                                <option value="" >Seleciona un Juego</option>
+                                                <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
+                                                    {{ item.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                         <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                             <label for="pwd">Inversion:</label>
                                             <input type="number" step="0.01" v-model="subtotal"  class="form-control" placeholder="Enter total" id="subtotal">
                                         </div>
@@ -145,11 +151,13 @@
                                                 </li>
                                                 <li class="list-group-item"  v-for="(item,index) in dataNumbers" :key="index">
                                                     <div class="row">
-                                                        <div class="col-sm-12 col-md-4 col-lg-4" v-text="item.number">
+                                                        <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.number">
                                                         </div>
-                                                         <div class="col-sm-12 col-md-4 col-lg-4" v-text="item.subtotal">
+                                                        <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.game.text">
                                                         </div>
-                                                         <div class="col-sm-12 col-md-4 col-lg-4">
+                                                         <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.subtotal">
+                                                        </div>
+                                                         <div class="col-sm-12 col-md-3 col-lg-3">
                                                             <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" >-</button>
                                                         </div>
                                                     </div>
@@ -183,13 +191,15 @@
     export default {
         data () {
             return {
-            dataUsers:[],
+            dataTicktes:[],
             dataNumbers:[],
+            dataGames:[],
             id:'',
             phone:'',
             total: 0,
             subtotal:'',
             number:'',
+            game:'',
             titleModal:'',
             action:0,
             page:1,
@@ -255,7 +265,8 @@
                  axios.get(url)
                 .then(function (response) {
                     var respuesta= response.data;
-                    me.dataUsers = respuesta.Users.data;
+                    me.dataTicktes = respuesta.Tickets.data;
+                    me.dataGames = respuesta.Games;
                     me.pagination= respuesta.pagination;
                 })
                 .catch(function (error) {
@@ -274,25 +285,12 @@
             },
             updateOrCreate(action){
                  let me = this;
-                 var url = '/users/add'
+                 var url = '/tickets/add'
                  var data = {
-                    'name': this.name,
-                    'last_name': this.last_name,
                     'phone': this.phone,
-                    'email':this.email,
-                    'password':this.password,
-                    'type':this.type_user
+                    'total':me.total,
+                    'dataNumbers':me.dataNumbers
                 };
-
-                if (action == 2){
-                    url = '/users/update'
-                    var data = {
-                        'id': this.id,
-                        'name': this.name,
-                        'description': this.description
-                    };
-                }
-               
                 axios.post(url,data).then(function (response) {
 
                     me.closeModal();
@@ -449,9 +447,15 @@
                         me.message({title:'Error',text:'El campo Inversion es requerido',type:'danger'});
                         return false;
                     }
+
+                    if(this.game.length == 0){
+                        me.message({title:'Error',text:'El campo Juego es requerido',type:'danger'});
+                        return false;
+                    }
                     
                     if(this.dataNumbers.push({
                         number: this.number,
+                        game:this.game,
                         subtotal: this.subtotal,
                     }))
                     {   
@@ -459,6 +463,7 @@
                         this.total = parseFloat(sumtotal);
                         this.number = ''
                         this.subtotal = ''
+                        this.game = ''
                         me.message({title:'Listo',text:'Se AGREGO con exito el Numero',type:'success'});
                     }
                     

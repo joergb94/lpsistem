@@ -14,7 +14,7 @@ class TicketStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return validateAccess(Auth::user(),3); 
     }
 
     /**

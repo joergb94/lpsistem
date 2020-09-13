@@ -18,6 +18,7 @@ class TicketDetailsTable extends Migration
             $table->string('mat', 3)->default('TD');
             $table->unsignedBigInteger('ticket_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('game_id')->nullable();
             $table->string('game_number',5)->nullable();
             $table->decimal('bet')->nullable();
             $table->boolean('active')->default(1);
@@ -26,7 +27,8 @@ class TicketDetailsTable extends Migration
 
             //foreing key 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');  
+            $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
+            $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');   
         });
     }
 

@@ -2525,16 +2525,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      dataUsers: [],
+      dataTicktes: [],
       dataNumbers: [],
+      dataGames: [],
       id: '',
       phone: '',
       total: 0,
       subtotal: '',
       number: '',
+      game: '',
       titleModal: '',
       action: 0,
       page: 1,
@@ -2601,7 +2611,8 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
-        me.dataUsers = respuesta.Users.data;
+        me.dataTicktes = respuesta.Tickets.data;
+        me.dataGames = respuesta.Games;
         me.pagination = respuesta.pagination;
       })["catch"](function (error) {
         console.log(error);
@@ -2618,25 +2629,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateOrCreate: function updateOrCreate(action) {
       var me = this;
-      var url = '/users/add';
+      var url = '/tickets/add';
       var data = {
-        'name': this.name,
-        'last_name': this.last_name,
         'phone': this.phone,
-        'email': this.email,
-        'password': this.password,
-        'type': this.type_user
+        'total': me.total,
+        'dataNumbers': me.dataNumbers
       };
-
-      if (action == 2) {
-        url = '/users/update';
-        var data = {
-          'id': this.id,
-          'name': this.name,
-          'description': this.description
-        };
-      }
-
       axios.post(url, data).then(function (response) {
         me.closeModal();
         me.ListUsers('');
@@ -2797,14 +2795,25 @@ __webpack_require__.r(__webpack_exports__);
         return false;
       }
 
+      if (this.game.length == 0) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Juego es requerido',
+          type: 'danger'
+        });
+        return false;
+      }
+
       if (this.dataNumbers.push({
         number: this.number,
+        game: this.game,
         subtotal: this.subtotal
       })) {
         var sumtotal = me.total > 0 ? parseFloat(me.total) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
         this.total = parseFloat(sumtotal);
         this.number = '';
         this.subtotal = '';
+        this.game = '';
         me.message({
           title: 'Listo',
           text: 'Se AGREGO con exito el Numero',
@@ -40134,14 +40143,14 @@ var render = function() {
                       ? _c("tr", { staticClass: "text-center" }, [_vm._m(1)])
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm._l(_vm.dataUsers, function(item) {
+                    _vm._l(_vm.dataTicktes, function(item) {
                       return _c("tr", { key: item.id }, [
                         _c("td", {
                           domProps: { textContent: _vm._s(item.id) }
                         }),
                         _vm._v(" "),
                         _c("td", {
-                          domProps: { textContent: _vm._s(item.client.phone) }
+                          domProps: { textContent: _vm._s(item.total) }
                         }),
                         _vm._v(" "),
                         _c("td", [
@@ -40173,26 +40182,6 @@ var render = function() {
                             ? _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-warning btn-sm",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.openModal(
-                                        "modal",
-                                        "update",
-                                        item
-                                      )
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "ti-pencil" })]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          item.deleted_at == null
-                            ? _c(
-                                "button",
-                                {
                                   staticClass: "btn btn-danger btn-sm",
                                   attrs: { type: "button" },
                                   on: {
@@ -40201,7 +40190,7 @@ var render = function() {
                                     }
                                   }
                                 },
-                                [_c("i", { staticClass: "ti-loop" })]
+                                [_c("i", { staticClass: "ti-eye" })]
                               )
                             : _vm._e(),
                           _vm._v(" "),
@@ -40380,7 +40369,7 @@ var render = function() {
                   _c("div", { staticClass: "row" }, [
                     _c(
                       "div",
-                      { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                      { staticClass: "form-group col-sm-12 col-md-4 col-lg-4" },
                       [
                         _c("label", { attrs: { for: "pwd" } }, [
                           _vm._v("Numero:")
@@ -40417,7 +40406,73 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "div",
-                      { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                      { staticClass: "form-group col-sm-12 col-md-4 col-lg-4" },
+                      [
+                        _c("label", { attrs: { for: "pwd" } }, [
+                          _vm._v("Juego:")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.game,
+                                expression: "game"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { id: "game", name: "game" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.game = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("Seleciona un Juego")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.dataGames, function(item) {
+                              return _c(
+                                "option",
+                                {
+                                  key: item.id,
+                                  domProps: {
+                                    value: { id: item.id, text: item.name }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                                " +
+                                      _vm._s(item.name) +
+                                      "\n                                            "
+                                  )
+                                ]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-sm-12 col-md-4 col-lg-4" },
                       [
                         _c("label", { attrs: { for: "pwd" } }, [
                           _vm._v("Inversion:")
@@ -40498,7 +40553,7 @@ var render = function() {
                                   _c("div", { staticClass: "row" }, [
                                     _c("div", {
                                       staticClass:
-                                        "col-sm-12 col-md-4 col-lg-4",
+                                        "col-sm-12 col-md-3 col-lg-3",
                                       domProps: {
                                         textContent: _vm._s(item.number)
                                       }
@@ -40506,7 +40561,15 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("div", {
                                       staticClass:
-                                        "col-sm-12 col-md-4 col-lg-4",
+                                        "col-sm-12 col-md-3 col-lg-3",
+                                      domProps: {
+                                        textContent: _vm._s(item.game.text)
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("div", {
+                                      staticClass:
+                                        "col-sm-12 col-md-3 col-lg-3",
                                       domProps: {
                                         textContent: _vm._s(item.subtotal)
                                       }
@@ -40516,7 +40579,7 @@ var render = function() {
                                       "div",
                                       {
                                         staticClass:
-                                          "col-sm-12 col-md-4 col-lg-4"
+                                          "col-sm-12 col-md-3 col-lg-3"
                                       },
                                       [
                                         _c(
@@ -40623,7 +40686,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Telefono")]),
+        _c("th", [_vm._v("Total")]),
         _vm._v(" "),
         _c("th", [_vm._v("Status")]),
         _vm._v(" "),

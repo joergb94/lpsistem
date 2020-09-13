@@ -4,9 +4,13 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralException;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Game;
+use App\Models\TicketDetail;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class TicketRepository.
@@ -18,9 +22,10 @@ class RepositoryManagmentTickets
      *
      * @param  Ticket  $model
      */
-    public function __construct(Ticket $model)
+    public function __construct(Ticket $model, TicketDetail $model_detail)
     {
         $this->model = $model;
+        $this->model_detail = $model_detail;
     }
 
 
@@ -35,8 +40,8 @@ class RepositoryManagmentTickets
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->whereIn('type_Ticket_id',[2,3])
-                     : $this->model->where('id','>',0)->whereIn('type_Ticket_id',[2,3]);
+                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->where('seller_id',Auth::user()->id)
+                     : $this->model->where('id','>',0)->where('seller_id',Auth::user()->id);
                 
                 if($status != 'all'){
 
@@ -56,7 +61,6 @@ class RepositoryManagmentTickets
                 }
                 
                 $Tickets = $rg->orderBy('id', 'desc')->paginate(10);
-
         return [
                 'pagination' => [
                     'total'        => $Tickets->total(),
@@ -66,7 +70,8 @@ class RepositoryManagmentTickets
                     'from'         => $Tickets->firstItem(),
                     'to'           => $Tickets->lastItem(),
                 ],
-                'Tickets' => $Tickets
+                'Tickets' => $Tickets,
+                'Games'=>Game::all(),
             ];
     }
 
@@ -78,20 +83,46 @@ class RepositoryManagmentTickets
      * @throws \Throwable
      * @return Ticket
      */
-    public function create(array $data): Ticket
+    public function create(array $data)
     {
         return DB::transaction(function () use ($data) {
-            $Ticket = $this->model::create([
-                'type_Ticket_id'=>$data['type'],
-                'name' => $data['name'],
-                'last_name' => $data['last_name'],
+            
+            $Client = User::create([
+                'type_user_id'=>4,
+                'name' => $data['phone'],
                 'phone' => $data['phone'],
-                'email' => $data['email'],
-                'password' =>Hash::make($data['password']),
+                'email' => $data['phone'].'@lp.com',
+                'password' =>Hash::make($data['phone']),
             ]);
+            if ($Client) {
+                    $Ticket = $this->model::create([
+                        'seller_id'=>Auth::user()->id,
+                        'user_id' => $Client['id'],
+                        'total' => $data['total'],
+                        'active'=>true,
+                    ]);
 
-            if ($Ticket) {
-                return $Ticket;
+                    if ($Ticket) {
+                        
+                        foreach ($data['dataNumbers'] as $detail){
+                            $this->model_detail::create([
+                                'ticket_id'=>$Ticket['id'],
+                                'user_id' => $Client['id'],
+                                'game_id'=>$detail['game']['id'],
+                                'game_number' => $detail['number'],
+                                'bet' => $detail['subtotal'],
+                                'active'=>true,
+                            ]);
+                        }
+                        
+                        if($this->model_detail
+                            ->where('ticket_id',$Ticket['id'])
+                            ->count() > 0)
+                        {
+                            return $Ticket;
+                        }
+                        
+                    }
             }
 
             throw new GeneralException(__('There was an error created the Ticket.'));

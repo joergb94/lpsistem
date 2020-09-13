@@ -11,10 +11,10 @@
                 <management-tickets-component></management-tickets-component>
         @break
         @case(4)
-                <profile-component></profile-component>
+                <management-tickets-component></management-tickets-component>
         @break
         @default
-                <profile-component></profile-component>
+                <management-tickets-component></management-tickets-component>
     @endswitch
         
 @endsection

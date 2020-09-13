@@ -38,6 +38,7 @@ class ManagementTicketsController extends Controller
         return $this->RepositoryManagmentTickets->getSearchPaginated($criterion, $search, $status);
     }
     public function store(TicketStoreRequest $request){
+        
         $this->RepositoryManagmentTickets->create($request->input());
         return response()->json('ready');
     }
