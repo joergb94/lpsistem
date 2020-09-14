@@ -2533,6 +2533,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2558,7 +2588,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      criterion: 'name',
+      criterion: 'phone',
       status: 1,
       search: ''
     };
@@ -2606,14 +2636,14 @@ __webpack_require__.r(__webpack_exports__);
         type: data.type
       });
     },
-    ListUsers: function ListUsers(page) {
+    ListTickets: function ListTickets(page) {
       var me = this;
       var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status;
       axios.get(url).then(function (response) {
-        var respuesta = response.data;
-        me.dataTicktes = respuesta.Tickets.data;
-        me.dataGames = respuesta.Games;
-        me.pagination = respuesta.pagination;
+        var answer = response.data;
+        me.dataTicktes = answer.Tickets.data;
+        me.dataGames = answer.Games;
+        me.pagination = answer.pagination;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2625,7 +2655,7 @@ __webpack_require__.r(__webpack_exports__);
 
       me.pagination.current_page = page; //Envia la petición para visualizar la data de esa página
 
-      me.ListUsers(page);
+      me.ListTickets(page);
     },
     updateOrCreate: function updateOrCreate(action) {
       var me = this;
@@ -2637,7 +2667,7 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post(url, data).then(function (response) {
         me.closeModal();
-        me.ListUsers('');
+        me.ListTickets('');
         $.notify({
           // options
           title: "Success!",
@@ -2667,13 +2697,13 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "Do you want to deleted User?";
-      var mt = "The User will be delete";
+      var m = "Do you want to deleted Ticket?";
+      var mt = "The Ticket will be delete";
       var btn = "Delete";
 
       if (item.deleted_at != null) {
-        m = "Do you want to restored User?";
-        mt = "The User will be restore";
+        m = "Do you want to restored Ticket?";
+        mt = "The Ticket will be restore";
         btn = "Restore";
       }
 
@@ -2687,8 +2717,8 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Si, eliminalo!'
       }).then(function (result) {
         if (result.value) {
-          axios.post('/users/deleteOrResotore', data).then(function (response) {
-            me.ListUsers();
+          axios.post('/tickets/deleteOrResotore', data).then(function (response) {
+            me.ListTickets();
             $.notify({
               // options
               title: "Success!",
@@ -2706,13 +2736,13 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "Do you want to deactived User?";
-      var mt = "The User will be deactived";
+      var m = "Do you want to deactived Ticket?";
+      var mt = "The Ticket will be deactived";
       var btn = "Deactived";
 
       if (item.active == 0) {
-        m = "Do you want to actived User?";
-        mt = "The User will be actived";
+        m = "Do you want to actived Ticket?";
+        mt = "The Ticket will be actived";
         btn = "Actived";
       }
 
@@ -2726,8 +2756,8 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Si, eliminalo!'
       }).then(function (result) {
         if (result.value) {
-          axios.post('/users/change_status', data).then(function (response) {
-            me.ListUsers();
+          axios.post('/tickets/change_status', data).then(function (response) {
+            me.ListTickets();
             $.notify({
               // options
               title: "Success!",
@@ -2741,7 +2771,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     openModal: function openModal(model, action) {
-      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
 
       switch (model) {
         case 'modal':
@@ -2756,11 +2786,33 @@ __webpack_require__.r(__webpack_exports__);
                   this.subtotal = '';
                   this.dataNumbers = [];
                   this.action = 1;
+                  $("#myModal").modal('show');
+                  break;
+                }
+
+              case 'detail':
+                {
+                  var me = this;
+                  me.action = 2;
+                  axios.get('/tickets/detail?id=' + data.id).then(function (response) {
+                    var answer = response.data;
+                    console.log(answer);
+                    me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
+                    me.dataNumbers = answer.ticketDetail;
+                    me.total = answer.ticket.total;
+                    me.phone = answer.client.phone;
+
+                    if (answer.client.created_at == answer.client.updated_at) {
+                      $('#send-text').html("<a class=\"btn btn-block btn-primary text-white\" href=\"https://wa.me/52".concat(answer.client.phone, "?text=USUARIO%20").concat(answer.client.email, "%20CONTRASE\xD1A:%20").concat(answer.client.phone, "%20\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar Usuario y Contrase\xF1a &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>\n                                                    <a class=\"btn btn-block btn-success text-white\" href=\"https://wa.me/52").concat(answer.client.phone, "\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar mensaje &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>"));
+                    } else {
+                      $('#send-text').html("<a class=\"btn btn-block btn-success text-white\" href=\"https://wa.me/52".concat(answer.client.phone, "\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar mensaje &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>"));
+                    }
+
+                    $("#myModal").modal('show');
+                  })["catch"](function (error) {});
                   break;
                 }
             }
-
-            $("#myModal").modal('show');
           }
       }
     },
@@ -2771,6 +2823,8 @@ __webpack_require__.r(__webpack_exports__);
       this.number = '';
       this.subtotal = '';
       this.dataNumbers = [];
+      this.client = '';
+      $('#send-text').html('');
       $.notifyClose();
       $("#myModal").modal('hide');
     },
@@ -2837,7 +2891,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.ListUsers(1);
+    this.ListTickets(1);
   }
 });
 
@@ -39990,16 +40044,8 @@ var render = function() {
                         }
                       },
                       [
-                        _c("option", { attrs: { value: "all" } }, [
-                          _vm._v("All")
-                        ]),
-                        _vm._v(" "),
                         _c("option", { attrs: { value: "1" } }, [
                           _vm._v("Actived")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "2" } }, [
-                          _vm._v("Deactived")
                         ]),
                         _vm._v(" "),
                         _c("option", { attrs: { value: "D" } }, [
@@ -40031,7 +40077,7 @@ var render = function() {
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "form-group row" }, [
               _c("div", { staticClass: "col-md-12" }, [
-                _c("div", { staticClass: "input-group" }, [
+                _c("div", { staticClass: "row" }, [
                   _c(
                     "select",
                     {
@@ -40043,7 +40089,7 @@ var render = function() {
                           expression: "criterion"
                         }
                       ],
-                      staticClass: "form-control col-sm-2",
+                      staticClass: "form-control col-sm-12 col-md-6 col-lg-2",
                       on: {
                         change: function($event) {
                           var $$selectedVal = Array.prototype.filter
@@ -40061,17 +40107,11 @@ var render = function() {
                       }
                     },
                     [
-                      _c("option", { attrs: { value: "name" } }, [
-                        _vm._v("name")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "last_name" } }, [
-                        _vm._v("Apellido")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "Phone" } }, [
+                      _c("option", { attrs: { value: "phone" } }, [
                         _vm._v("Telefono")
-                      ])
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "id" } }, [_vm._v("#")])
                     ]
                   ),
                   _vm._v(" "),
@@ -40084,7 +40124,7 @@ var render = function() {
                         expression: "search"
                       }
                     ],
-                    staticClass: "form-control",
+                    staticClass: "form-control col-sm-12 col-md-6 col-lg-8",
                     attrs: { type: "text", placeholder: "Texto a buscar" },
                     domProps: { value: _vm.search },
                     on: {
@@ -40101,7 +40141,7 @@ var render = function() {
                         ) {
                           return null
                         }
-                        return _vm.ListUsers(1)
+                        return _vm.ListTickets(1)
                       },
                       input: function($event) {
                         if ($event.target.composing) {
@@ -40115,11 +40155,12 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "submit" },
+                      staticClass:
+                        "btn btn-primary col-sm-12 col-md-12 col-lg-2",
+                      attrs: { type: "button" },
                       on: {
                         click: function($event) {
-                          return _vm.ListUsers(1)
+                          return _vm.ListTickets(1)
                         }
                       }
                     },
@@ -40177,37 +40218,49 @@ var render = function() {
                           domProps: { textContent: _vm._s(item.created_at) }
                         }),
                         _vm._v(" "),
-                        _c("td", [
-                          item.deleted_at == null
-                            ? _c(
+                        item.deleted_at == null
+                          ? _c("td", [
+                              _c(
                                 "button",
                                 {
                                   staticClass: "btn btn-danger btn-sm",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.changeStatus(item)
+                                      return _vm.openModal(
+                                        "modal",
+                                        "detail",
+                                        item
+                                      )
                                     }
                                   }
                                 },
                                 [_c("i", { staticClass: "ti-eye" })]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary btn-sm",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.DeleteOrRestore(item)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "ti-trash" })]
                               )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary btn-sm",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.DeleteOrRestore(item)
-                                }
-                              }
-                            },
-                            [_c("i", { staticClass: "ti-trash" })]
-                          )
-                        ])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        item.deleted_at !== null
+                          ? _c("td", [
+                              _vm._v(
+                                "\n                                        No actions\n                                    "
+                              )
+                            ])
+                          : _vm._e()
                       ])
                     })
                   ],
@@ -40319,358 +40372,478 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("form", { attrs: { action: "" } }, [
-            _c("div", { staticClass: "modal-body" }, [
-              _c(
-                "div",
-                { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
-                [
-                  _c("label", { attrs: { for: "email" } }, [
-                    _vm._v("Telefono del cliente:")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.phone,
-                        expression: "phone"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      placeholder: "Enter phone",
-                      id: "phone"
-                    },
-                    domProps: { value: _vm.phone },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.phone = $event.target.value
-                      }
-                    }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "form-group col-sm-12 col-md-12 col-lg-12 text-center"
-                },
-                [
-                  _vm._m(2),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-sm-12 col-md-4 col-lg-4" },
-                      [
-                        _c("label", { attrs: { for: "pwd" } }, [
-                          _vm._v("Numero:")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.number,
-                              expression: "number"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "number",
-                            maxlength: "5",
-                            placeholder: "Enter total",
-                            id: "number"
-                          },
-                          domProps: { value: _vm.number },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.number = $event.target.value
-                            }
-                          }
-                        })
-                      ]
-                    ),
+          _vm.action == 1
+            ? _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Telefono del cliente:")
+                    ]),
                     _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-sm-12 col-md-4 col-lg-4" },
-                      [
-                        _c("label", { attrs: { for: "pwd" } }, [
-                          _vm._v("Juego:")
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.phone,
+                          expression: "phone"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Enter phone",
+                        id: "phone"
+                      },
+                      domProps: { value: _vm.phone },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.phone = $event.target.value
+                        }
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                  },
+                  [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "form-group col-sm-12 col-md-4 col-lg-4"
+                        },
+                        [
+                          _c("label", { attrs: { for: "pwd" } }, [
+                            _vm._v("Numero:")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
                             directives: [
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.game,
-                                expression: "game"
+                                value: _vm.number,
+                                expression: "number"
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { id: "game", name: "game" },
+                            attrs: {
+                              type: "number",
+                              maxlength: "5",
+                              placeholder: "Enter total",
+                              id: "number"
+                            },
+                            domProps: { value: _vm.number },
                             on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.game = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.number = $event.target.value
                               }
                             }
-                          },
-                          [
-                            _c("option", { attrs: { value: "" } }, [
-                              _vm._v("Seleciona un Juego")
-                            ]),
-                            _vm._v(" "),
-                            _vm._l(_vm.dataGames, function(item) {
-                              return _c(
-                                "option",
-                                {
-                                  key: item.id,
-                                  domProps: {
-                                    value: { id: item.id, text: item.name }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                                " +
-                                      _vm._s(item.name) +
-                                      "\n                                            "
-                                  )
-                                ]
-                              )
-                            })
-                          ],
-                          2
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-sm-12 col-md-4 col-lg-4" },
-                      [
-                        _c("label", { attrs: { for: "pwd" } }, [
-                          _vm._v("Inversion:")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "form-group col-sm-12 col-md-4 col-lg-4"
+                        },
+                        [
+                          _c("label", { attrs: { for: "pwd" } }, [
+                            _vm._v("Juego:")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
                             {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.subtotal,
-                              expression: "subtotal"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "number",
-                            step: "0.01",
-                            placeholder: "Enter total",
-                            id: "subtotal"
-                          },
-                          domProps: { value: _vm.subtotal },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.game,
+                                  expression: "game"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { id: "game", name: "game" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.game = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
                               }
-                              _vm.subtotal = $event.target.value
-                            }
-                          }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "form-group col-sm-12 col-md-12 col-lg-12"
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary btn-block",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                return _vm.addNumber()
-                              }
-                            }
-                          },
-                          [_vm._v("Agregar al tickte")]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "form-group col-sm-12 col-md-12 col-lg-12"
-                      },
-                      [
-                        _c(
-                          "ul",
-                          { staticClass: "list-group" },
-                          [
-                            _vm.dataNumbers.length == 0
-                              ? _c("li", { staticClass: "list-group-item" }, [
-                                  _c("h6", [_vm._v("Jugada vacía")])
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm._l(_vm.dataNumbers, function(item, index) {
-                              return _c(
-                                "li",
-                                { key: index, staticClass: "list-group-item" },
-                                [
-                                  _c("div", { staticClass: "row" }, [
-                                    _c("div", {
-                                      staticClass:
-                                        "col-sm-12 col-md-3 col-lg-3",
-                                      domProps: {
-                                        textContent: _vm._s(item.number)
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("div", {
-                                      staticClass:
-                                        "col-sm-12 col-md-3 col-lg-3",
-                                      domProps: {
-                                        textContent: _vm._s(item.game.text)
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("div", {
-                                      staticClass:
-                                        "col-sm-12 col-md-3 col-lg-3",
-                                      domProps: {
-                                        textContent: _vm._s(item.subtotal)
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "col-sm-12 col-md-3 col-lg-3"
-                                      },
-                                      [
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass: "btn btn-danger",
-                                            attrs: { type: "button" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.removeNumber(index)
-                                              }
-                                            }
-                                          },
-                                          [_vm._v("-")]
-                                        )
-                                      ]
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }, [
+                                _vm._v("Seleciona un Juego")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(_vm.dataGames, function(item) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: item.id,
+                                    domProps: {
+                                      value: { id: item.id, text: item.name }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                                    " +
+                                        _vm._s(item.name) +
+                                        "\n                                                "
                                     )
+                                  ]
+                                )
+                              })
+                            ],
+                            2
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "form-group col-sm-12 col-md-4 col-lg-4"
+                        },
+                        [
+                          _c("label", { attrs: { for: "pwd" } }, [
+                            _vm._v("Inversion:")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.subtotal,
+                                expression: "subtotal"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "number",
+                              step: "0.01",
+                              placeholder: "Enter total",
+                              id: "subtotal"
+                            },
+                            domProps: { value: _vm.subtotal },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.subtotal = $event.target.value
+                              }
+                            }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "form-group col-sm-12 col-md-12 col-lg-12"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary btn-block",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.addNumber()
+                                }
+                              }
+                            },
+                            [_vm._v("Agregar al tickte")]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "form-group col-sm-12 col-md-12 col-lg-12"
+                        },
+                        [
+                          _c(
+                            "ul",
+                            { staticClass: "list-group" },
+                            [
+                              _vm.dataNumbers.length == 0
+                                ? _c("li", { staticClass: "list-group-item" }, [
+                                    _c("h6", [_vm._v("Jugada vacía")])
                                   ])
-                                ]
-                              )
-                            })
-                          ],
-                          2
-                        )
-                      ]
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm._l(_vm.dataNumbers, function(item, index) {
+                                return _c(
+                                  "li",
+                                  {
+                                    key: index,
+                                    staticClass: "list-group-item"
+                                  },
+                                  [
+                                    _c("div", { staticClass: "row" }, [
+                                      _c("div", {
+                                        staticClass:
+                                          "col-sm-12 col-md-3 col-lg-3",
+                                        domProps: {
+                                          textContent: _vm._s(item.number)
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("div", {
+                                        staticClass:
+                                          "col-sm-12 col-md-3 col-lg-3",
+                                        domProps: {
+                                          textContent: _vm._s(item.game.text)
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("div", {
+                                        staticClass:
+                                          "col-sm-12 col-md-3 col-lg-3",
+                                        domProps: {
+                                          textContent: _vm._s(item.subtotal)
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "col-sm-12 col-md-3 col-lg-3"
+                                        },
+                                        [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass: "btn btn-danger",
+                                              attrs: { type: "button" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.removeNumber(index)
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("-")]
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ]
+                                )
+                              })
+                            ],
+                            2
+                          )
+                        ]
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-6 col-lg-6 text-left"
+                  },
+                  [
+                    _c("label", [_vm._v("Total:")]),
+                    _vm._v("\n                                $"),
+                    _c("label", {
+                      domProps: { textContent: _vm._s(_vm.total) }
+                    })
+                  ]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.action == 2
+            ? _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Telefono del cliente:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [
+                      _c("strong", {
+                        domProps: { textContent: _vm._s(_vm.phone) }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", {
+                      staticClass: "col-sm-12",
+                      attrs: { id: "send-text" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
+                  [
+                    _c(
+                      "ul",
+                      { staticClass: "list-group" },
+                      [
+                        _vm.dataNumbers.length == 0
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _c("h6", [_vm._v("Jugada vacía")])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._l(_vm.dataNumbers, function(item) {
+                          return _c(
+                            "li",
+                            { key: item.id, staticClass: "list-group-item" },
+                            [
+                              _c("div", { staticClass: "row" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                  },
+                                  [
+                                    _vm._v("Numero:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.game_number)
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                  },
+                                  [
+                                    _vm._v("Juego:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.game_number)
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                  },
+                                  [
+                                    _vm._v("Inversion:$"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.bet)
+                                      }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        })
+                      ],
+                      2
                     )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "form-group col-sm-12 col-md-6 col-lg-6 text-left"
-                },
-                [
-                  _c("label", [_vm._v("Total:")]),
-                  _vm._v("\n                            $"),
-                  _c("label", { domProps: { textContent: _vm._s(_vm.total) } })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer" }, [
-              _vm.action == 1
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.updateOrCreate(1)
-                        }
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Total:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", {
+                      domProps: { textContent: _vm._s(_vm.total) }
+                    })
+                  ]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-footer" }, [
+            _vm.action == 1
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.updateOrCreate(1)
                       }
-                    },
-                    [_vm._v("Save")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.action == 2
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.updateOrCreate(2)
-                        }
-                      }
-                    },
-                    [_vm._v("Update")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      return _vm.closeModal()
                     }
+                  },
+                  [_vm._v("Save")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.closeModal()
                   }
-                },
-                [_vm._v("Close")]
-              )
-            ])
+                }
+              },
+              [_vm._v("Close")]
+            )
           ])
         ])
       ])

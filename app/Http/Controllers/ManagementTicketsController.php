@@ -43,6 +43,11 @@ class ManagementTicketsController extends Controller
         return response()->json('ready');
     }
 
+    public function detail(Request $request)
+    {
+        return response()->json($this->RepositoryManagmentTickets->detail($request['id']));
+    } 
+
     public function change_status(Request $request)
     {
         $this->RepositoryManagmentTickets->updateStatus($request->id);
@@ -51,13 +56,7 @@ class ManagementTicketsController extends Controller
 
     public function deleteOrResotore(Request $request)
     {    
-        $roll = Ticket::withTrashed()->find($request->id)->trashed();
-
-            if($roll){
-                Ticket::withTrashed()->find($request->id)->restore();
-            }else{
-                Ticket::find($request->id)->delete();
-            }
+        Ticket::find($request->id)->delete();
         return response()->json('exito');
     }
 }
