@@ -2012,15 +2012,9 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post(url, data).then(function (response) {
         me.closeModal();
+        var answer = response.data;
+        me.message(answer);
         me.ListTickets('');
-        $.notify({
-          // options
-          title: "Success!",
-          message: "Exito"
-        }, {
-          // settings
-          type: 'success'
-        });
       })["catch"](function (error) {
         console.log(error.response.data.errors);
         var e = error.response.data.errors;
@@ -2063,15 +2057,9 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.value) {
           axios.post('/tickets/deleteOrResotore', data).then(function (response) {
+            var answer = response.data;
+            me.message(answer);
             me.ListTickets();
-            $.notify({
-              // options
-              title: "Success!",
-              message: "Exito"
-            }, {
-              // settings
-              type: 'success'
-            });
           })["catch"](function (error) {});
         }
       });
@@ -2176,10 +2164,10 @@ __webpack_require__.r(__webpack_exports__);
     addNumber: function addNumber() {
       var me = this;
 
-      if (this.number.length == 0) {
+      if (this.number.length == 0 || this.number.length > 5) {
         me.message({
           title: 'Error',
-          text: 'El campo Numero es requerido',
+          text: 'El campo Numero es incorrecto',
           type: 'danger'
         });
         return false;
@@ -2189,6 +2177,13 @@ __webpack_require__.r(__webpack_exports__);
         me.message({
           title: 'Error',
           text: 'El campo Inversion es requerido',
+          type: 'danger'
+        });
+        return false;
+      } else if (this.subtotal > 500) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Inversion debe ser menor a 500.00 pesos',
           type: 'danger'
         });
         return false;
@@ -2206,7 +2201,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.dataNumbers.push({
         number: this.number,
         game: this.game,
-        subtotal: this.subtotal
+        subtotal: Number.parseFloat(this.subtotal)
       })) {
         var sumtotal = me.total > 0 ? parseFloat(me.total) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
         this.total = parseFloat(sumtotal);
@@ -39680,13 +39675,26 @@ var render = function() {
                                         }
                                       }),
                                       _vm._v(" "),
-                                      _c("div", {
-                                        staticClass:
-                                          "col-sm-12 col-md-3 col-lg-3",
-                                        domProps: {
-                                          textContent: _vm._s(item.subtotal)
-                                        }
-                                      }),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "col-sm-12 col-md-3 col-lg-3"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                            $"
+                                          ),
+                                          _c("span", {
+                                            domProps: {
+                                              textContent: _vm._s(item.subtotal)
+                                            }
+                                          }),
+                                          _vm._v(
+                                            " pesos\n                                                        "
+                                          )
+                                        ]
+                                      ),
                                       _vm._v(" "),
                                       _c(
                                         "div",
@@ -39734,7 +39742,8 @@ var render = function() {
                     _vm._v("\n                                $"),
                     _c("label", {
                       domProps: { textContent: _vm._s(_vm.total) }
-                    })
+                    }),
+                    _vm._v(" pesos\n                            ")
                   ]
                 )
               ])
@@ -39830,7 +39839,8 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" pesos")
                                   ]
                                 )
                               ])

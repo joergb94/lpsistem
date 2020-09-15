@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralException;
 use App\Models\User;
+use App\Models\Tickets;
+//use App\Models\Deposits;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -188,10 +190,11 @@ class RepositoryUser
         $Bval = User::withTrashed()->find($User_id)->trashed();
 
             if($Bval){
-                $User = User::withTrashed()->find($User_id)->restore();
+                User::withTrashed()->find($User_id)->restore();
                 $b=4;
             }else{
                 $User = User::find($User_id)->delete();
+                Ticket::where('user_id',$User_id)->delete();
                 $b=3;
             }
 

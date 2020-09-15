@@ -40,7 +40,7 @@ class ManagementTicketsController extends Controller
     public function store(TicketStoreRequest $request){
         
         $this->RepositoryManagmentTickets->create($request->input());
-        return response()->json('ready');
+        return response()->json(Answer('success','Ticket'));
     }
 
     public function detail(Request $request)
@@ -51,12 +51,12 @@ class ManagementTicketsController extends Controller
     public function change_status(Request $request)
     {
         $this->RepositoryManagmentTickets->updateStatus($request->id);
-        return response()->json('exito');
+        return response()->json(Answer('success','Ticket'));
     } 
 
     public function deleteOrResotore(Request $request)
     {    
         Ticket::find($request->id)->delete();
-        return response()->json('exito');
+        return response()->json(Answer('success','Ticket'));
     }
 }

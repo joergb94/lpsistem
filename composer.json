@@ -45,7 +45,9 @@
     "autoload-dev": {
         "files": [
             "app/Helpers/UserAccessUrl.php",
-            "app/Helpers/ValidateAccess.php"
+            "app/Helpers/ValidateAccess.php",
+            "app/Helpers/Answer.php"
+
         ],
         "psr-4": {
             "Tests\\": "tests/"

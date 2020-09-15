@@ -69,13 +69,8 @@ class UserController extends Controller
 
     public function deleteOrResotore(Request $request)
     {    
-        $roll = User::withTrashed()->find($request->id)->trashed();
-
-            if($roll){
-                User::withTrashed()->find($request->id)->restore();
-            }else{
-                User::find($request->id)->delete();
-            }
+        $data = $this->RepositoryUser->deleteOrResotore($request['id']);
+        
         return response()->json('exito');
     }
 }

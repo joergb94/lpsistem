@@ -104,17 +104,10 @@ export default {
             axios.post(url,data).then(function (response) {
 
                 me.closeModal();
+                var answer = response.data;
+                me.message(answer);
+
                 me.ListTickets('');
-
-                 $.notify({
-                            // options
-                            title: "Success!",
-                            message:"Exito",
-                        },{
-                            // settings
-                            type: 'success'
-                        });
-
             }).catch(function (error) {
                 console.log(error.response.data.errors);
                 var e = error.response.data.errors;
@@ -159,17 +152,13 @@ export default {
                 }).then((result) => {
                     if (result.value) {
                          axios.post('/tickets/deleteOrResotore',data).then(function (response) {
+                                var answer = response.data;
+                                me.message(answer);
                                 me.ListTickets();
-                                $.notify({
-                                            // options
-                                            title: "Success!",
-                                            message:"Exito",
-                                        },{
-                                            // settings
-                                            type: 'success'
-                                        });
-
-                            }).catch(function (error) {}) 
+                            
+                            }).catch(function (error) {
+                               
+                            }) 
                     }
                 }) 
         },
@@ -283,13 +272,17 @@ export default {
         },
         addNumber() {
             let me = this;
-                if(this.number.length == 0){
-                    me.message({title:'Error',text:'El campo Numero es requerido',type:'danger'});
+                if(this.number.length == 0 || this.number.length > 5){
+                    me.message({title:'Error',text:'El campo Numero es incorrecto',type:'danger'});
                     return false;
                 }
 
                 if(this.subtotal.length == 0){
                     me.message({title:'Error',text:'El campo Inversion es requerido',type:'danger'});
+                    return false;
+
+                }else if(this.subtotal > 500){
+                    me.message({title:'Error',text:'El campo Inversion debe ser menor a 500.00 pesos',type:'danger'});
                     return false;
                 }
 
@@ -301,7 +294,7 @@ export default {
                 if(this.dataNumbers.push({
                     number: this.number,
                     game:this.game,
-                    subtotal: this.subtotal,
+                    subtotal: Number.parseFloat(this.subtotal),
                 }))
                 {   
                     let sumtotal = me.total > 0 ? parseFloat(me.total) + parseFloat(this.subtotal) : parseFloat(this.subtotal);

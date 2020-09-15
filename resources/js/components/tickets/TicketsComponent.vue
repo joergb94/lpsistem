@@ -156,7 +156,8 @@
                                                             </div>
                                                             <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.game.text">
                                                             </div>
-                                                            <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.subtotal">
+                                                            <div class="col-sm-12 col-md-3 col-lg-3">
+                                                                $<span v-text="item.subtotal"></span> pesos
                                                             </div>
                                                             <div class="col-sm-12 col-md-3 col-lg-3">
                                                                 <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" >-</button>
@@ -169,7 +170,7 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 text-left">
                                     <label>Total:</label>
-                                    $<label v-text="total"></label>
+                                    $<label v-text="total"></label> pesos
                                 </div>
                     </div>
                     <!-- End Modal body  Create/Edit-->
@@ -191,7 +192,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Numero:<strong v-text="item.game_number"></strong></div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Inversion:$<strong v-text="item.bet"></strong></div>                  
+                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos</div>                  
                                     </div>
                                 </li>
                             </ul>
