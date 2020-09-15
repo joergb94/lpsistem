@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     @switch($dm['type_user'])
-        @case(0)
+        @case(1)
                 <management-tickets-component></management-tickets-component>
         @break
         @case(2)
