@@ -40,8 +40,8 @@ class RepositoryManagmentTickets
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->where('seller_id',Auth::user()->id)
-                     : $this->model->where('id','>',0)->where('seller_id',Auth::user()->id);
+                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->where('user_id',Auth::user()->id)
+                     : $this->model->where('id','>',0)->where('user_id',Auth::user()->id);
                 
                 if($status != 'all'){
 
@@ -87,28 +87,14 @@ class RepositoryManagmentTickets
     {
         return DB::transaction(function () use ($data) {
 
-            $Client = (User::where('phone',$data['phone'])->count() == 0)
-            ? User::create([
-                'type_user_id'=>4,
-                'name' => $data['phone'],
-                'phone' => $data['phone'],
-                'email' => $data['phone'].'@lp.com',
-                'password' =>Hash::make($data['phone']),
-            ])
-            : User::where('phone',$data['phone'])
-                    ->where('type_user_id',4)
-                    ->first();
-
-            if ($Client) {
-                    $Ticket = $this->model::create([
-                        'seller_id'=>Auth::user()->id,
-                        'user_id' => $Client['id'],
+                $Ticket = $this->model::create([
+                        'user_id' => Auth::user()->id,
                         'total' => $data['total'],
                         'active'=>true,
                     ]);
 
-                    if ($Ticket) {
-                        
+                if ($Ticket) {
+     
                         foreach ($data['dataNumbers'] as $detail){
                             $this->model_detail::create([
                                 'ticket_id'=>$Ticket['id'],
@@ -129,8 +115,7 @@ class RepositoryManagmentTickets
                       throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
                     }
                 throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));
-            }
-            throw new GeneralException(__('El numero que esta Ingresando no es valido.'));
+          
         });
     }
 
@@ -145,9 +130,6 @@ class RepositoryManagmentTickets
      */
     public function detail($Ticket_id)
     {
-        
-        
-        
         return DB::transaction(function () use ($Ticket_id) {
             if ($Ticket = $this->model->find($Ticket_id)) {
                 
@@ -160,7 +142,6 @@ class RepositoryManagmentTickets
             throw new GeneralException(__('There was an error on show the Ticket.'));
         });
     }
-
     
     /*
      * @param Ticket $Ticket
@@ -208,7 +189,5 @@ class RepositoryManagmentTickets
     
             throw new GeneralException(__('Error deleteOrResotore of Ticket.'));
     }
-
-
 
 }

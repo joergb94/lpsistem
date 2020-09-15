@@ -60,14 +60,76 @@ export default {
     methods : {
         message(data){
             $.notifyClose();
-              $.notify({
-                            // options
-                            title:data.title,
-                            message:data.text,
-                        },{
-                            // settings
-                            type:data.type
-                        });
+            $.notify({
+                // options
+                icon: 'glyphicon glyphicon-warning-sign',
+                title: data.title,
+                message: data.text,
+            },{
+                // settings
+                element: 'body',
+                position: null,
+                type: data.type,
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+                icon_type: 'class',
+                template: '<div data-notify="container" class="col-xs-10 col-sm-3 alert alert-{0} text-center" role="alert">' +
+                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                    '<span data-notify="icon"></span> ' +
+                    '<span data-notify="title">{1}</span> ' +
+                    '<span data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar">' +
+                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                    '</div>' +
+                '</div>' 
+            });
+        },
+        erros(e){
+            $.notifyClose();
+            $.each(e,function (k,message) {
+               $.notify({
+                   // options
+                   icon: 'glyphicon glyphicon-warning-sign',
+                   title: "Error!",
+                   message: message,
+               },{
+                   // settings
+                   element: 'body',
+                   position: null,
+                   type: "danger",
+                   allow_dismiss: true,
+                   newest_on_top: false,
+                   showProgressbar: false,
+                   animate: {
+                       enter: 'animated fadeInDown',
+                       exit: 'animated fadeOutUp'
+                   },
+                   onShow: null,
+                   onShown: null,
+                   onClose: null,
+                   onClosed: null,
+                   icon_type: 'class',
+                   template: '<div data-notify="container" class="col-xs-10 col-sm-3 alert alert-{0} text-center" role="alert">' +
+                       '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                       '<span data-notify="icon"></span> ' +
+                       '<span data-notify="title">{1}</span> ' +
+                       '<span data-notify="message">{2}</span>' +
+                       '<div class="progress" data-notify="progressbar">' +
+                           '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                       '</div>' +
+                   '</div>' 
+               });
+
+            });
         },
         ListTickets(page){
             let me = this;
@@ -111,18 +173,7 @@ export default {
             }).catch(function (error) {
                 console.log(error.response.data.errors);
                 var e = error.response.data.errors;
-                  $.notifyClose();
-                
-                 $.each(e,function (k,message) {
-                        $.notify({
-                            // options
-                            title: "Error!",
-                            message:message,
-                        },{
-                            // settings
-                            type: 'danger'
-                        });
-                    });
+                me.erros(e);
             })              
         },
         DeleteOrRestore(item){
@@ -282,7 +333,10 @@ export default {
                     return false;
 
                 }else if(this.subtotal > 500){
-                    me.message({title:'Error',text:'El campo Inversion debe ser menor a 500.00 pesos',type:'danger'});
+                    me.message({title:'Error',text:'El campo Inversion debe ser menor a 500.00',type:'danger'});
+                    return false;
+                }else if(this.subtotal <= 0){
+                    me.message({title:'Error',text:'El campo Inversion debe ser mayor a 0',type:'danger'});
                     return false;
                 }
 
