@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     @switch($dm['type_user'])
-        @case(1)
+        @case(0)
                 <management-tickets-component></management-tickets-component>
         @break
         @case(2)
@@ -11,10 +11,10 @@
                 <management-tickets-component></management-tickets-component>
         @break
         @case(4)
-                <management-tickets-component></management-tickets-component>
+                <user-tickets-component></management-tickets-component>
         @break
         @default
-                <management-tickets-component></management-tickets-component>
+                <user-tickets-component></management-tickets-component>
     @endswitch
         
 @endsection

@@ -3,17 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\Ticket\TicketRequest;
+use App\Http\Requests\Ticket\TicketIdRequest;
+use App\Http\Requests\Ticket\TicketPassRequest;
+use App\Http\Requests\Ticket\TicketUpdateRequest;
+use App\Http\Requests\Ticket\TicketStoreRequest;
+use App\Models\Ticket;
+use App\Repositories\RepositoryUserTickets;
+use Carbon\Carbon; 
+use Illuminate\Support\Facades\Auth;
+
 
 class UserTicketsController extends Controller
 {
       /**
      * CompanyController constructor.
      *
-     * @param RepositoryManagmentTickets $RepositoryManagmentTickets
+     * @param RepositoryUserTickets $RepositoryUserTickets
      */
-    public function __construct(RepositoryManagmentTickets $RepositoryManagmentTickets)
+    public function __construct(RepositoryUserTickets $RepositoryUserTickets)
     {
-        $this->RepositoryManagmentTickets = $RepositoryManagmentTickets;
+        $this->RepositoryUserTickets = $RepositoryUserTickets;
     }
 
 
@@ -25,28 +35,28 @@ class UserTicketsController extends Controller
         $criterion = trim($request->criterion);
         $status = ($request->status)? $request->status : 1;
   
-        return $this->RepositoryManagmentTickets->getSearchPaginated($criterion, $search, $status);
+        return $this->RepositoryUserTickets->getSearchPaginated($criterion, $search, $status);
     }
-    public function store(TicketStoreRequest $request){
+    public function store(Request $request){
         
-        $this->RepositoryManagmentTickets->create($request->input());
+        $this->RepositoryUserTickets->create($request->input());
         return response()->json(Answer('success','Ticket'));
     }
 
     public function detail(Request $request)
     {
-        return response()->json($this->RepositoryManagmentTickets->detail($request['id']));
+        return response()->json($this->RepositoryUserTickets->detail($request['id']));
     } 
 
     public function change_status(Request $request)
     {
-        $this->RepositoryManagmentTickets->updateStatus($request->id);
+        $this->RepositoryUserTickets->updateStatus($request->id);
         return response()->json(Answer('success','Ticket'));
     } 
 
     public function deleteOrResotore(Request $request)
     {    
-        Ticket::find($request->id)->delete();
+        $this->RepositoryUserTickets->deleteOrResotore($request->id);
         return response()->json(Answer('success','Ticket'));
     }
 }

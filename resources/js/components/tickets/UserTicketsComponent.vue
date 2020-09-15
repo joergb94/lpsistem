@@ -13,71 +13,41 @@
                             <div class="col-sm-7 text-right">
                                  <button class="btn btn-success" @click="openModal('modal', 'add')">New</button>
                             </div>
-                                   
-         
                         </div>
                     </div>
                     <div class="card-body">
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <div class="row">
-                                         <select class="form-control col-sm-12 col-md-6 col-lg-2" v-model="criterion">
-                                    <option value="id">#</option>
-                                </select>
-                                    
-                                <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-6 col-lg-8" placeholder="Texto a buscar">
-                            
-                                 <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
+                                <div class="btn-group col-sm-12">
+                                    <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-10" placeholder="buscar No.ticket">
+                                    <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
                          <!-- The table-->
                             <div class="table-responsive">
-                                <table class="table table-bordered">
-                                <thead class="thead-dark">
-                                    <tr>
-                                    <th>#</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                    <th>created_at</th>
-                                    <th>actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-if="pagination.total == 0" class="text-center">
-                                        <th colspan="9" class="text-center no-data">
-                                            <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
-                                        </th>
-                                    </tr>
-
-                                    <tr v-for="item in dataTicktes" :key="item.id">
-                                        <td v-text="item.id"></td>
-                                        <td v-text="item.total"></td>
-                                        <td>
-                                            <div v-if="item.active == 1">
-                                                <span class="badge badge-success">Actived</span>
+                                <ul class="list-group">
+                                    <li class="list-group-item text-center"  v-if="dataTicktes.length == 0">
+                                         <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                    </li>
+                                    <li class="list-group-item"  v-for="item in dataTicktes" :key="item.id">
+                                        <div class="row text-center">
+                                            <div class="col-sm-12 col-md-3 col-lg-3"><strong>No.ticket: <span v-text="item.id"></span></strong></div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.created_at"></div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3">$<span v-text="item.total"></span> pesos</div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3">
+                                                <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
+                                                    <i class="ti-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
+                                                    <i class="ti-trash"></i>
+                                                </button>
                                             </div>
-                                            <div v-else-if="item.active == 0">
-                                                <span class="badge badge-danger">Deactivated</span>
-                                            </div>
-
-                                        </td>
-                                        <td v-text="item.created_at"></td>
-                                        <td v-if="item.deleted_at == null" >
-                                            <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
-                                            <i class="ti-eye"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
-                                            <i class="ti-trash"></i>
-                                            </button>
-                                        </td>
-                                        <td v-if="item.deleted_at !== null">
-                                            No actions
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                </table>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <br>
                                 <nav>
                                 <ul class="pagination">
                                     <li class="page-item" v-if="pagination.current_page > 1">
@@ -111,12 +81,7 @@
 
                     <!-- Modal body Create/Edit -->
                     <div class="modal-body" v-if="action==1"> 
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <label for="email">Telefono del cliente:</label>
-                                    <input type="text"  v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">
-                                </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                                    <h3><span class="badge badge-warning">Jugada</span></h3>
                                         <div class="row">
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label for="pwd">Numero:</label>
@@ -153,7 +118,7 @@
                                                                 $<span v-text="item.subtotal"></span> pesos
                                                             </div>
                                                             <div class="col-sm-12 col-md-3 col-lg-3">
-                                                                <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" >-</button>
+                                                                <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" ><i class="ti-trash"></i></button>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -169,13 +134,6 @@
                     <!-- End Modal body  Create/Edit-->
                     <!-- Modal body Detail-->
                     <div class="modal-body" v-if="action==2">
-                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                            <label for="email">Telefono del cliente:</label>
-                            <label><strong v-text="phone"></strong></label>
-                            <div class="col-sm-12" id="send-text">
-                            </div>
-                             
-                         </div>
                          <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <ul class="list-group">
                                 <li class="list-group-item"  v-if="dataNumbers.length == 0">
@@ -210,4 +168,4 @@
              
     </div>
 </template>
-<script src="./js/ticket.js"></script>
+<script src="./js/usertickets.js"></script>

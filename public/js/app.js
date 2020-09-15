@@ -2279,6 +2279,375 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/tickets/js/usertickets.js?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./resources/js/components/tickets/js/usertickets.js?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      dataTicktes: [],
+      dataNumbers: [],
+      dataGames: [],
+      id: '',
+      total: 0,
+      subtotal: '',
+      number: '',
+      game: '',
+      titleModal: '',
+      action: 0,
+      page: 1,
+      users: 1,
+      pagination: {
+        'total': 0,
+        'current_page': 0,
+        'per_page': 0,
+        'last_page': 0,
+        'from': 0,
+        'to': 0
+      },
+      offset: 3,
+      criterion: 'id',
+      status: 1,
+      search: ''
+    };
+  },
+  computed: {
+    isActived: function isActived() {
+      return this.pagination.current_page;
+    },
+    pagesNumber: function pagesNumber() {
+      if (!this.pagination.to) {
+        return [];
+      }
+
+      var from = this.pagination.current_page - this.offset;
+
+      if (from < 1) {
+        from = 1;
+      }
+
+      var to = from + this.offset * 2;
+
+      if (to >= this.pagination.last_page) {
+        to = this.pagination.last_page;
+      }
+
+      var pagesArray = [];
+
+      while (from <= to) {
+        pagesArray.push(from);
+        from++;
+      }
+
+      return pagesArray;
+    }
+  },
+  methods: {
+    message: function message(data) {
+      $.notifyClose();
+      $.notify({
+        // options
+        icon: 'glyphicon glyphicon-warning-sign',
+        title: data.title,
+        message: data.text
+      }, {
+        // settings
+        element: 'body',
+        position: null,
+        type: data.type,
+        allow_dismiss: true,
+        newest_on_top: false,
+        showProgressbar: false,
+        animate: {
+          enter: 'animated fadeInDown',
+          exit: 'animated fadeOutUp'
+        },
+        onShow: null,
+        onShown: null,
+        onClose: null,
+        onClosed: null,
+        icon_type: 'class',
+        template: '<div data-notify="container" class="col-xs-10 col-sm-3 alert alert-{0} text-center" role="alert">' + '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' + '<span data-notify="icon"></span> ' + '<span data-notify="title">{1}</span> ' + '<span data-notify="message">{2}</span>' + '<div class="progress" data-notify="progressbar">' + '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' + '</div>' + '</div>'
+      });
+    },
+    erros: function erros(e) {
+      $.notifyClose();
+      $.each(e, function (k, message) {
+        $.notify({
+          // options
+          icon: 'glyphicon glyphicon-warning-sign',
+          title: "Error!",
+          message: message
+        }, {
+          // settings
+          element: 'body',
+          position: null,
+          type: "danger",
+          allow_dismiss: true,
+          newest_on_top: false,
+          showProgressbar: false,
+          animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp'
+          },
+          onShow: null,
+          onShown: null,
+          onClose: null,
+          onClosed: null,
+          icon_type: 'class',
+          template: '<div data-notify="container" class="col-xs-10 col-sm-3 alert alert-{0} text-center" role="alert">' + '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' + '<span data-notify="icon"></span> ' + '<span data-notify="title">{1}</span> ' + '<span data-notify="message">{2}</span>' + '<div class="progress" data-notify="progressbar">' + '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' + '</div>' + '</div>'
+        });
+      });
+    },
+    ListTickets: function ListTickets(page) {
+      var me = this;
+      var url = '/my-tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status;
+      axios.get(url).then(function (response) {
+        var answer = response.data;
+        me.dataTicktes = answer.Tickets.data;
+        me.dataGames = answer.Games;
+        me.pagination = answer.pagination;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    pageChange: function pageChange(page) {
+      var me = this;
+      console.log(me.pagination.current_page);
+      console.log(page); //Actualiza la página actual
+
+      me.pagination.current_page = page; //Envia la petición para visualizar la data de esa página
+
+      me.ListTickets(page);
+    },
+    updateOrCreate: function updateOrCreate(action) {
+      var me = this;
+      var url = '/my-tickets/add';
+      var data = {
+        'total': me.total,
+        'dataNumbers': me.dataNumbers
+      };
+      axios.post(url, data).then(function (response) {
+        me.closeModal();
+        var answer = response.data;
+        me.message(answer);
+        me.ListTickets('');
+      })["catch"](function (error) {
+        console.log(error.response.data.errors);
+        var e = error.response.data.errors;
+        me.erros(e);
+      });
+    },
+    DeleteOrRestore: function DeleteOrRestore(item) {
+      var me = this;
+      var data = {
+        'id': item.id
+      };
+      var m = "Do you want to deleted Ticket?";
+      var mt = "The Ticket will be delete";
+      var btn = "Delete";
+
+      if (item.deleted_at != null) {
+        m = "Do you want to restored Ticket?";
+        mt = "The Ticket will be restore";
+        btn = "Restore";
+      }
+
+      Swal.fire({
+        title: m,
+        text: mt,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminalo!'
+      }).then(function (result) {
+        if (result.value) {
+          axios.post('/my-tickets/deleteOrResotore', data).then(function (response) {
+            var answer = response.data;
+            me.message(answer);
+            me.ListTickets();
+          })["catch"](function (error) {});
+        }
+      });
+    },
+    changeStatus: function changeStatus(item) {
+      var me = this;
+      var data = {
+        'id': item.id
+      };
+      var m = "Do you want to deactived Ticket?";
+      var mt = "The Ticket will be deactived";
+      var btn = "Deactived";
+
+      if (item.active == 0) {
+        m = "Do you want to actived Ticket?";
+        mt = "The Ticket will be actived";
+        btn = "Actived";
+      }
+
+      Swal.fire({
+        title: m,
+        text: mt,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminalo!'
+      }).then(function (result) {
+        if (result.value) {
+          axios.post('/my-tickets/change_status', data).then(function (response) {
+            me.ListTickets();
+            $.notify({
+              // options
+              title: "Success!",
+              message: "Exito"
+            }, {
+              // settings
+              type: 'success'
+            });
+          })["catch"](function (error) {});
+        }
+      });
+    },
+    openModal: function openModal(model, action) {
+      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+      switch (model) {
+        case 'modal':
+          {
+            switch (action) {
+              case 'add':
+                {
+                  this.titleModal = 'Nuevo Ticket';
+                  this.total = '';
+                  this.number = '';
+                  this.subtotal = '';
+                  this.dataNumbers = [];
+                  this.action = 1;
+                  $("#myModal").modal('show');
+                  break;
+                }
+
+              case 'detail':
+                {
+                  var me = this;
+                  me.action = 2;
+                  axios.get('/my-tickets/detail?id=' + data.id).then(function (response) {
+                    var answer = response.data;
+                    console.log(answer);
+                    me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
+                    me.dataNumbers = answer.ticketDetail;
+                    me.total = answer.ticket.total;
+                    $("#myModal").modal('show');
+                  })["catch"](function (error) {});
+                  break;
+                }
+            }
+          }
+      }
+    },
+    closeModal: function closeModal() {
+      this.titleModal = '';
+      this.phone = '';
+      this.total = '';
+      this.number = '';
+      this.subtotal = '';
+      this.dataNumbers = [];
+      this.client = '';
+      $('#send-text').html('');
+      $.notifyClose();
+      $("#myModal").modal('hide');
+    },
+    addNumber: function addNumber() {
+      var me = this;
+
+      if (this.number.length == 0 || this.number.length > 5) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Numero es incorrecto',
+          type: 'danger'
+        });
+        return false;
+      }
+
+      if (this.subtotal.length == 0) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Inversion es requerido',
+          type: 'danger'
+        });
+        return false;
+      } else if (this.subtotal > 500) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Inversion debe ser menor a 500.00',
+          type: 'danger'
+        });
+        return false;
+      } else if (this.subtotal <= 0) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Inversion debe ser mayor a 0',
+          type: 'danger'
+        });
+        return false;
+      }
+
+      if (this.game.length == 0) {
+        me.message({
+          title: 'Error',
+          text: 'El campo Juego es requerido',
+          type: 'danger'
+        });
+        return false;
+      }
+
+      if (this.dataNumbers.push({
+        number: this.number,
+        game: this.game,
+        subtotal: Number.parseFloat(this.subtotal)
+      })) {
+        var sumtotal = me.total > 0 ? parseFloat(me.total) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
+        this.total = parseFloat(sumtotal);
+        this.number = '';
+        this.subtotal = '';
+        this.game = '';
+        me.message({
+          title: 'Listo',
+          text: 'Se AGREGO con exito el Numero',
+          type: 'success'
+        });
+      }
+    },
+    removeNumber: function removeNumber(index) {
+      var me = this;
+      var sub = this.dataNumbers[index];
+      var sumtotal = me.total > 0 ? parseFloat(me.total) - parseFloat(sub.subtotal) : 0;
+      this.total = parseFloat(sumtotal);
+
+      if (this.dataNumbers.splice(index, 1)) {
+        me.message({
+          title: 'Listo',
+          text: 'Se ELIMINO con exito el Numero',
+          type: 'success'
+        });
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.ListTickets(1);
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/user/js/profile.js?vue&type=script&lang=js&":
 /*!***********************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./resources/js/components/user/js/profile.js?vue&type=script&lang=js& ***!
@@ -40043,38 +40412,7 @@ var render = function() {
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "form-group row" }, [
               _c("div", { staticClass: "col-md-12" }, [
-                _c("div", { staticClass: "row" }, [
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.criterion,
-                          expression: "criterion"
-                        }
-                      ],
-                      staticClass: "form-control col-sm-12 col-md-6 col-lg-2",
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.criterion = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [_c("option", { attrs: { value: "id" } }, [_vm._v("#")])]
-                  ),
-                  _vm._v(" "),
+                _c("div", { staticClass: "btn-group col-sm-12" }, [
                   _c("input", {
                     directives: [
                       {
@@ -40084,8 +40422,8 @@ var render = function() {
                         expression: "search"
                       }
                     ],
-                    staticClass: "form-control col-sm-12 col-md-6 col-lg-8",
-                    attrs: { type: "text", placeholder: "Texto a buscar" },
+                    staticClass: "form-control col-sm-12 col-md-12 col-lg-10",
+                    attrs: { type: "text", placeholder: "buscar No.ticket" },
                     domProps: { value: _vm.search },
                     on: {
                       keyup: function($event) {
@@ -40134,52 +40472,56 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "table-responsive" }, [
-              _c("table", { staticClass: "table table-bordered" }, [
-                _vm._m(1),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  [
-                    _vm.pagination.total == 0
-                      ? _c("tr", { staticClass: "text-center" }, [_vm._m(2)])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm._l(_vm.dataTicktes, function(item) {
-                      return _c("tr", { key: item.id }, [
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.id) }
-                        }),
-                        _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.total) }
-                        }),
-                        _vm._v(" "),
-                        _c("td", [
-                          item.active == 1
-                            ? _c("div", [
-                                _c(
-                                  "span",
-                                  { staticClass: "badge badge-success" },
-                                  [_vm._v("Actived")]
-                                )
+              _c(
+                "ul",
+                { staticClass: "list-group" },
+                [
+                  _vm.dataTicktes.length == 0
+                    ? _c("li", { staticClass: "list-group-item text-center" }, [
+                        _vm._m(1)
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._l(_vm.dataTicktes, function(item) {
+                    return _c(
+                      "li",
+                      { key: item.id, staticClass: "list-group-item" },
+                      [
+                        _c("div", { staticClass: "row text-center" }, [
+                          _c(
+                            "div",
+                            { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                            [
+                              _c("strong", [
+                                _vm._v("No.ticket: "),
+                                _c("span", {
+                                  domProps: { textContent: _vm._s(item.id) }
+                                })
                               ])
-                            : item.active == 0
-                            ? _c("div", [
-                                _c(
-                                  "span",
-                                  { staticClass: "badge badge-danger" },
-                                  [_vm._v("Deactivated")]
-                                )
-                              ])
-                            : _vm._e()
-                        ]),
-                        _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.created_at) }
-                        }),
-                        _vm._v(" "),
-                        item.deleted_at == null
-                          ? _c("td", [
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", {
+                            staticClass: "col-sm-12 col-md-3 col-lg-3",
+                            domProps: { textContent: _vm._s(item.created_at) }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                            [
+                              _vm._v("$"),
+                              _c("span", {
+                                domProps: { textContent: _vm._s(item.total) }
+                              }),
+                              _vm._v(" pesos")
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                            [
                               _c(
                                 "button",
                                 {
@@ -40211,22 +40553,17 @@ var render = function() {
                                 },
                                 [_c("i", { staticClass: "ti-trash" })]
                               )
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        item.deleted_at !== null
-                          ? _c("td", [
-                              _vm._v(
-                                "\n                                        No actions\n                                    "
-                              )
-                            ])
-                          : _vm._e()
-                      ])
-                    })
-                  ],
-                  2
-                )
-              ]),
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("br"),
               _vm._v(" "),
               _c("nav", [
                 _c(
@@ -40336,49 +40673,11 @@ var render = function() {
             ? _c("div", { staticClass: "modal-body" }, [
                 _c(
                   "div",
-                  { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
-                  [
-                    _c("label", { attrs: { for: "email" } }, [
-                      _vm._v("Telefono del cliente:")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.phone,
-                          expression: "phone"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        placeholder: "Enter phone",
-                        id: "phone"
-                      },
-                      domProps: { value: _vm.phone },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.phone = $event.target.value
-                        }
-                      }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
                   {
                     staticClass:
                       "form-group col-sm-12 col-md-12 col-lg-12 text-center"
                   },
                   [
-                    _vm._m(3),
-                    _vm._v(" "),
                     _c("div", { staticClass: "row" }, [
                       _c(
                         "div",
@@ -40631,7 +40930,11 @@ var render = function() {
                                                 }
                                               }
                                             },
-                                            [_vm._v("-")]
+                                            [
+                                              _c("i", {
+                                                staticClass: "ti-trash"
+                                              })
+                                            ]
                                           )
                                         ]
                                       )
@@ -40668,30 +40971,6 @@ var render = function() {
           _vm._v(" "),
           _vm.action == 2
             ? _c("div", { staticClass: "modal-body" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
-                  },
-                  [
-                    _c("label", { attrs: { for: "email" } }, [
-                      _vm._v("Telefono del cliente:")
-                    ]),
-                    _vm._v(" "),
-                    _c("label", [
-                      _c("strong", {
-                        domProps: { textContent: _vm._s(_vm.phone) }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", {
-                      staticClass: "col-sm-12",
-                      attrs: { id: "send-text" }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
                 _c(
                   "div",
                   { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
@@ -40842,42 +41121,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", { staticClass: "thead-dark" }, [
-      _c("tr", [
-        _c("th", [_vm._v("#")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Total")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Status")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("created_at")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("actions")])
+    return _c("h2", [
+      _c("span", { staticClass: "badge  badge-pill badge-info" }, [
+        _vm._v("Data Not Found")
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "th",
-      { staticClass: "text-center no-data", attrs: { colspan: "9" } },
-      [
-        _c("h2", [
-          _c("span", { staticClass: "badge  badge-pill badge-info" }, [
-            _vm._v("Data Not Found")
-          ])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h3", [
-      _c("span", { staticClass: "badge badge-warning" }, [_vm._v("Jugada")])
     ])
   }
 ]
@@ -54928,7 +55175,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UserTicketsComponent_vue_vue_type_template_id_4309f158___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserTicketsComponent.vue?vue&type=template&id=4309f158& */ "./resources/js/components/tickets/UserTicketsComponent.vue?vue&type=template&id=4309f158&");
-/* harmony import */ var _js_ticket_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/ticket.js?vue&type=script&lang=js& */ "./resources/js/components/tickets/js/ticket.js?vue&type=script&lang=js&");
+/* harmony import */ var _js_usertickets_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/usertickets.js?vue&type=script&lang=js& */ "./resources/js/components/tickets/js/usertickets.js?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -54938,7 +55185,7 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _js_ticket_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _js_usertickets_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _UserTicketsComponent_vue_vue_type_template_id_4309f158___WEBPACK_IMPORTED_MODULE_0__["render"],
   _UserTicketsComponent_vue_vue_type_template_id_4309f158___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -54984,6 +55231,20 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_ticket_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!./ticket.js?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/tickets/js/ticket.js?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_ticket_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/tickets/js/usertickets.js?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/tickets/js/usertickets.js?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_usertickets_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!./usertickets.js?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/tickets/js/usertickets.js?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_usertickets_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 

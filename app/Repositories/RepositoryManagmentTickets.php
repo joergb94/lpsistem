@@ -6,6 +6,7 @@ use App\Exceptions\GeneralException;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Game;
+use App\Models\Coin_purse;
 use App\Models\TicketDetail;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -100,6 +101,11 @@ class RepositoryManagmentTickets
                     ->first();
 
             if ($Client) {
+                if(Coin_purse::create(['user_id' => $Client->id,
+                                        'coins' => 0]))
+                {
+                
+                
                     $Ticket = $this->model::create([
                         'seller_id'=>Auth::user()->id,
                         'user_id' => $Client['id'],
@@ -129,6 +135,7 @@ class RepositoryManagmentTickets
                       throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
                     }
                 throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));
+                }
             }
             throw new GeneralException(__('El numero que esta Ingresando no es valido.'));
         });

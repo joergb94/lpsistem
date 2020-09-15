@@ -41,4 +41,11 @@ Route::post('/tickets/add', 'ManagementTicketsController@store');
 Route::get('/tickets/detail', 'ManagementTicketsController@detail');
 Route::post('/tickets/deleteOrResotore','ManagementTicketsController@deleteOrResotore');
 
+//UserTickets
+Route::get('/my-tickets', 'UserTicketsController@index');
+Route::post('/my-tickets/add', 'UserTicketsController@store');
+Route::get('/my-tickets/detail', 'UserTicketsController@detail');
+Route::post('/my-tickets/deleteOrResotore','UserTicketsController@deleteOrResotore');
+
+
 });

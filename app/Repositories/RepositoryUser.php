@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\GeneralException;
 use App\Models\User;
 use App\Models\Tickets;
-//use App\Models\Deposits;
+use App\Models\Coin_purse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -93,7 +93,12 @@ class RepositoryUser
             ]);
 
             if ($User) {
-                return $User;
+                if( Coin_purse::create(['user_id' => $User->id,
+                                        'coins' => 0]))
+                {
+                    return $User;
+                }
+                
             }
 
             throw new GeneralException(__('There was an error created the User.'));

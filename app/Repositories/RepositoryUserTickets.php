@@ -6,6 +6,7 @@ use App\Exceptions\GeneralException;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Game;
+use App\Models\Coin_purse;
 use App\Models\TicketDetail;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 /**
  * Class TicketRepository.
  */
-class RepositoryManagmentTickets
+class RepositoryUserTickets
 {
     /**
      * TicketRepository constructor.
@@ -84,39 +85,51 @@ class RepositoryManagmentTickets
      * @return Ticket
      */
     public function create(array $data)
-    {
-        return DB::transaction(function () use ($data) {
+    {  
+        
+        $coins = Coin_purse::where('user_id',Auth::user()->id)->first();
 
-                $Ticket = $this->model::create([
-                        'user_id' => Auth::user()->id,
-                        'total' => $data['total'],
-                        'active'=>true,
-                    ]);
+        $tcoins = $coins['coins'] - $data['total'];
+        if($tcoins > 0){
+            return DB::transaction(function () use ($data) {
+                
+                    $Ticket = $this->model::create([
+                            'user_id' => Auth::user()->id,
+                            'total' => $data['total'],
+                            'active'=>true,
+                        ]);
 
-                if ($Ticket) {
-     
-                        foreach ($data['dataNumbers'] as $detail){
-                            $this->model_detail::create([
-                                'ticket_id'=>$Ticket['id'],
-                                'user_id' => $Client['id'],
-                                'game_id'=>$detail['game']['id'],
-                                'game_number' => $detail['number'],
-                                'bet' => $detail['subtotal'],
-                                'active'=>true,
-                            ]);
+                    if($Ticket)
+                    {
+                        $coins =Coin_purse::find(Auth::user()->id);
+                        $coins->coins -= $data['total'];
+
+                        if ($coins->save()) {
+            
+                                foreach ($data['dataNumbers'] as $detail){
+                                    $this->model_detail::create([
+                                        'ticket_id'=>$Ticket['id'],
+                                        'user_id' => Auth::user()->id,
+                                        'game_id'=>$detail['game']['id'],
+                                        'game_number' => $detail['number'],
+                                        'bet' => $detail['subtotal'],
+                                        'active'=>true,
+                                    ]);
+                                }
+                                
+                                if($this->model_detail
+                                    ->where('ticket_id',$Ticket['id'])
+                                    ->count() > 0)
+                                {
+                                    return $Ticket;
+                                }
+                            }
+                        throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
                         }
-                        
-                        if($this->model_detail
-                            ->where('ticket_id',$Ticket['id'])
-                            ->count() > 0)
-                        {
-                            return $Ticket;
-                        }
-                      throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
-                    }
-                throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));
-          
-        });
+                    throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));
+            });
+        }
+        throw new GeneralException(__('Tu saldo actual es de $'.$coins['coins'].'pesos y no es suficiente.'));
     }
 
     /**
@@ -172,22 +185,24 @@ class RepositoryManagmentTickets
     }
 
     public function deleteOrResotore($Ticket_id)
-    {    
-        $Bval = Ticket::withTrashed()->find($Ticket_id)->trashed();
+    {   
+        
+        return DB::transaction(function () use ($Ticket_id) {
+        
+            $ticket = Ticket::find($Ticket_id);
+            $coins =Coin_purse::find(Auth::user()->id);
+            $coins->coins += $ticket['total'];
 
-            if($Bval){
-                $Ticket = Ticket::withTrashed()->find($Ticket_id)->restore();
-                $b=4;
-            }else{
-                $Ticket = Ticket::find($Ticket_id)->delete();
-                $b=3;
+            if ($coins->save()) {
+                    if(Ticket::find($ticket['id'])->delete()){
+                        return $coins;
+                    }
+                throw new GeneralException(__('Error deleteOrResotore of Ticket.'));
             }
-
-            if ($b) {
-                return $b;
-            }
-    
             throw new GeneralException(__('Error deleteOrResotore of Ticket.'));
+        });
+    
+        
     }
 
 }
