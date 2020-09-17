@@ -12,6 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon; 
 
 /**
  * Class TicketRepository.
@@ -37,13 +38,18 @@ class RepositoryManagmentTickets
      *
      * @return mixed
      */
-    public function getSearchPaginated($criterion, $search, $status)
+    public function getSearchPaginated($criterion, $search, $status, $date)
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
                      ? $this->model->where($criterion, 'like', '%'. $search . '%')->where('seller_id',Auth::user()->id)
                      : $this->model->where('id','>',0)->where('seller_id',Auth::user()->id);
                 
+                
+                   
+                    $rg->whereDate('created_at',$date);
+            
+                    
                 if($status != 'all'){
 
                         switch ($status) {
@@ -109,6 +115,7 @@ class RepositoryManagmentTickets
                     $Ticket = $this->model::create([
                         'seller_id'=>Auth::user()->id,
                         'user_id' => $Client['id'],
+                        'phone' => $data['phone'],
                         'total' => $data['total'],
                         'active'=>true,
                     ]);

@@ -25,7 +25,7 @@ class TicketStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => 'required|max:40',
+            'phone' => 'required|string|max:15',
             'total' => 'required|numeric|gt:0',
             'dataNumbers'=>'required',
         ];

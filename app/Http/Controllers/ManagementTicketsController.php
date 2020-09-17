@@ -34,8 +34,9 @@ class ManagementTicketsController extends Controller
         $search = trim($request->search);
         $criterion = trim($request->criterion);
         $status = ($request->status)? $request->status : 1;
-  
-        return $this->RepositoryManagmentTickets->getSearchPaginated($criterion, $search, $status);
+        $date =($request->date)? Carbon::parse($request['date']): Carbon::now();
+        
+        return $this->RepositoryManagmentTickets->getSearchPaginated($criterion, $search, $status ,$date);
     }
     public function store(TicketStoreRequest $request){
         

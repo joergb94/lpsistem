@@ -24,6 +24,7 @@ export default {
             },
         offset : 3,
         criterion : 'phone',
+        date:'',
         status : 1,
         search : ''
 
@@ -133,7 +134,7 @@ export default {
         },
         ListTickets(page){
             let me = this;
-            var url = '/tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status;
+            var url = '/tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status+'&date='+this.date;
              axios.get(url)
             .then(function (response) {
                 var answer= response.data;

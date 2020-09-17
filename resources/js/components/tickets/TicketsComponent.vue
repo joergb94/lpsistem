@@ -28,14 +28,15 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <div class="row">
-                                         <select class="form-control col-sm-12 col-md-6 col-lg-2" v-model="criterion">
-                                    <option value="phone">Telefono</option>
-                                    <option value="id">#</option>
-                                </select>
-                                    
-                                <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-6 col-lg-8" placeholder="Texto a buscar">
-                            
-                                 <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="date" v-model="date" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
+                                    <select class="form-control col-sm-12 col-md-6 col-lg-2" v-model="criterion">
+                                        <option value="phone">Telefono</option>
+                                        <option value="id">#</option>
+                                    </select>
+                                        
+                                    <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-6 col-lg-8" placeholder="Texto a buscar">
+                                
+                                    <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -45,6 +46,7 @@
                                 <thead class="thead-dark">
                                     <tr>
                                     <th>#</th>
+                                    <th>Telefono</th>
                                     <th>Total</th>
                                     <th>Status</th>
                                     <th>created_at</th>
@@ -60,6 +62,7 @@
 
                                     <tr v-for="item in dataTicktes" :key="item.id">
                                         <td v-text="item.id"></td>
+                                         <td v-text="item.phone"></td>
                                         <td v-text="item.total"></td>
                                         <td>
                                             <div v-if="item.active == 1">
@@ -70,7 +73,7 @@
                                             </div>
 
                                         </td>
-                                        <td v-text="item.created_at"></td>
+                                        <td v-text="new Date(item.created_at).toLocaleDateString()"></td>
                                         <td v-if="item.deleted_at == null" >
                                             <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                             <i class="ti-eye"></i>
@@ -120,7 +123,7 @@
                     <div class="modal-body" v-if="action==1"> 
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label for="email">Telefono del cliente:</label>
-                                    <input type="text"  v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">
+                                    <input type="number"  v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                                     <h3><span class="badge badge-warning">Jugada</span></h3>

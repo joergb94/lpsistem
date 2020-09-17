@@ -1934,6 +1934,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       offset: 3,
       criterion: 'phone',
+      date: '',
       status: 1,
       search: ''
     };
@@ -2028,7 +2029,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     ListTickets: function ListTickets(page) {
       var me = this;
-      var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status;
+      var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status + '&date=' + this.date;
       axios.get(url).then(function (response) {
         var answer = response.data;
         me.dataTicktes = answer.Tickets.data;
@@ -39532,6 +39533,43 @@ var render = function() {
             _c("div", { staticClass: "form-group row" }, [
               _c("div", { staticClass: "col-md-12" }, [
                 _c("div", { staticClass: "row" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.date,
+                        expression: "date"
+                      }
+                    ],
+                    staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
+                    attrs: { type: "date", placeholder: "Texto a buscar" },
+                    domProps: { value: _vm.date },
+                    on: {
+                      keyup: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.ListTickets(1)
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.date = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
                   _c(
                     "select",
                     {
@@ -39645,6 +39683,10 @@ var render = function() {
                         }),
                         _vm._v(" "),
                         _c("td", {
+                          domProps: { textContent: _vm._s(item.phone) }
+                        }),
+                        _vm._v(" "),
+                        _c("td", {
                           domProps: { textContent: _vm._s(item.total) }
                         }),
                         _vm._v(" "),
@@ -39669,7 +39711,11 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("td", {
-                          domProps: { textContent: _vm._s(item.created_at) }
+                          domProps: {
+                            textContent: _vm._s(
+                              new Date(item.created_at).toLocaleDateString()
+                            )
+                          }
                         }),
                         _vm._v(" "),
                         item.deleted_at == null
@@ -39847,7 +39893,7 @@ var render = function() {
                       ],
                       staticClass: "form-control",
                       attrs: {
-                        type: "text",
+                        type: "number",
                         placeholder: "Enter phone",
                         id: "phone"
                       },
@@ -40327,6 +40373,8 @@ var staticRenderFns = [
     return _c("thead", { staticClass: "thead-dark" }, [
       _c("tr", [
         _c("th", [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Telefono")]),
         _vm._v(" "),
         _c("th", [_vm._v("Total")]),
         _vm._v(" "),
