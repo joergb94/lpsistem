@@ -41,11 +41,21 @@ Route::post('/tickets/add', 'ManagementTicketsController@store');
 Route::get('/tickets/detail', 'ManagementTicketsController@detail');
 Route::post('/tickets/deleteOrResotore','ManagementTicketsController@deleteOrResotore');
 
+<<<<<<< Updated upstream
 //UserTickets
 Route::get('/my-tickets', 'UserTicketsController@index');
 Route::post('/my-tickets/add', 'UserTicketsController@store');
 Route::get('/my-tickets/detail', 'UserTicketsController@detail');
 Route::post('/my-tickets/deleteOrResotore','UserTicketsController@deleteOrResotore');
+=======
+//deposits
+Route::get('/deposits', 'DepositsController@index');
+//Route::post('/deposits/add', 'DepositsController@store');
+//Route::get('/deposits/detail', 'DepositsController@detail');
+//Route::post('/deposits/deleteOrResotore','DepositsController@deleteOrResotore');
+//Route::post('/deposits/update', 'DepositsController@update');
+
+>>>>>>> Stashed changes
 
 
 });
