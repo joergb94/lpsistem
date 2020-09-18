@@ -39,5 +39,35 @@ const app = new Vue({
     el: '#app',
     data:{
         menu: 0
-    }
+    },
+    methods :{
+        general(){
+            $.ajax({
+                type: "GET",
+                url:'/coins',
+                success: function (data) {
+                    console.log(data)
+                    var coins = data['coins'] > 0 ? { class:'text-success', quantity:data['coins']}:{ class:'text-danger', quantity:'00.00'} ;
+                    console.log(coins)
+                    info = `<a class="nav-link ${coins['class']}" href="#">
+                                <i class="fa fa-money"></i> 
+                                    ${coins['quantity']}
+                                </a>`
+            
+                    $("#coins-user").html(info); 
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                    $("#coins-user").html(`<a class="nav-link text-danger" href="#">
+                                            <i class="fa fa-money"></i> 
+                                                00.00
+                                            </a>`);   
+                }
+            }); 
+        }
+    },
+    mounted () {
+        setInterval( this.general(), 3000);
+     }
 });
+ 

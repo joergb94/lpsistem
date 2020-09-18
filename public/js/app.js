@@ -54602,6 +54602,34 @@ var app = new Vue({
   el: '#app',
   data: {
     menu: 0
+  },
+  methods: {
+    general: function general() {
+      $.ajax({
+        type: "GET",
+        url: '/coins',
+        success: function success(data) {
+          console.log(data);
+          var coins = data['coins'] > 0 ? {
+            "class": 'text-success',
+            quantity: data['coins']
+          } : {
+            "class": 'text-danger',
+            quantity: '00.00'
+          };
+          console.log(coins);
+          info = "<a class=\"nav-link ".concat(coins['class'], "\" href=\"#\">\n                                <i class=\"fa fa-money\"></i> \n                                    ").concat(coins['quantity'], "\n                                </a>");
+          $("#coins-user").html(info);
+        },
+        error: function error(data) {
+          console.log('Error:', data);
+          $("#coins-user").html("<a class=\"nav-link text-danger\" href=\"#\">\n                                            <i class=\"fa fa-money\"></i> \n                                                00.00\n                                            </a>");
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    setInterval(this.general(), 3000);
   }
 });
 

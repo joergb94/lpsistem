@@ -2,6 +2,7 @@
 
 use App\Models\Data_menu;
 use App\Models\Type_user_detail;
+use App\Models\Coin_purse;
 
 if (!function_exists('accesUrl')) {
  
@@ -17,7 +18,9 @@ if (!function_exists('accesUrl')) {
         if($access == true){
           //get all data for user menu
           $menuU = Type_user_detail::where('type_user_id',  $user->type_user_id);
-              
+
+          $coins = Coin_purse::where('user_id',$user->id)->first();
+
           $menuU->with(['data_menu' => function($query) {
               $query->orderby('prioridad');
             }]);
@@ -29,6 +32,7 @@ if (!function_exists('accesUrl')) {
           
            $data_menu=[];
            $type_user =0;
+           $coins =0;
         }
        
 
@@ -36,6 +40,7 @@ if (!function_exists('accesUrl')) {
           'data_menu'=>$data_menu,
           'access'=>$access,
           'type_user'=>$type_user,
+          'coins'=>$coins,
         ];  
    
       return $menu;

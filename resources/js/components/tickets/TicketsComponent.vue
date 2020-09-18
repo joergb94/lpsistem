@@ -220,4 +220,5 @@
              
     </div>
 </template>
+<script src="main.js"></script>
 <script src="./js/ticket.js"></script>

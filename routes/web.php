@@ -55,6 +55,8 @@ Route::get('/deposits', 'DepositsController@index');
 //Route::post('/deposits/update', 'DepositsController@update');
 
 
+//GeneralServies 
+Route::get('/coins', 'GeneralServiceController@get_coins');
 
 
 });
