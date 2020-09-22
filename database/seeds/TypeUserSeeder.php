@@ -37,9 +37,10 @@ class TypeUserSeeder extends Seeder
       
       
                 //Vendedor
-                  ['type_user_id'=> 4,'data_menu_id'=> 1,'active'=> 1,],
-                  ['type_user_id'=> 4,'data_menu_id'=> 2,'active'=> 1,],
-                  ['type_user_id'=> 4,'data_menu_id'=> 3,'active'=> 1,],
+                  ['type_user_id'=> 3,'data_menu_id'=> 1,'active'=> 1,],
+                  ['type_user_id'=> 3,'data_menu_id'=> 2,'active'=> 1,],
+                  ['type_user_id'=> 3,'data_menu_id'=> 3,'active'=> 1,],
+
                 //cliente
                   ['type_user_id'=> 4,'data_menu_id'=> 1,'active'=> 1,],
                   ['type_user_id'=> 4,'data_menu_id'=> 2,'active'=> 1,],

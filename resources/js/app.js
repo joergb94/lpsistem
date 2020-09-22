@@ -67,7 +67,7 @@ const app = new Vue({
         }
     },
     mounted () {
-        setInterval( this.general(), 3000);
+        
      }
 });
  
