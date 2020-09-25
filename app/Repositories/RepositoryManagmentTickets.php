@@ -6,6 +6,8 @@ use App\Exceptions\GeneralException;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Game;
+use App\Models\Day;
+use App\Models\Day_ticket;
 use App\Models\Coin_purse;
 use App\Models\TicketDetail;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -79,6 +81,7 @@ class RepositoryManagmentTickets
                 ],
                 'Tickets' => $Tickets,
                 'Games'=>Game::all(),
+                'Days'=>Day::all(),
             ];
     }
 
@@ -110,39 +113,64 @@ class RepositoryManagmentTickets
                 if(Coin_purse::create(['user_id' => $Client->id,
                                         'coins' => 0]))
                 {
-                
-                
+
+                $type = ($data['ticket_type'] > 1)? 4 : 0;
+
+                for ($i=0; $i <= $type; $i++) { 
+                   
                     $Ticket = $this->model::create([
                         'seller_id'=>Auth::user()->id,
                         'user_id' => $Client['id'],
+                        'ticket_type'=>$data['ticket_type'],
                         'phone' => $data['phone'],
                         'total' => $data['total'],
                         'active'=>true,
                     ]);
-
+                    
+            
                     if ($Ticket) {
-                        
+                        $now = Carbon::now();
+                        $totalDetail = 0;
+                       
                         foreach ($data['dataNumbers'] as $detail){
+                            $totalDetail +=$detail['subtotal'];
+                            
                             $this->model_detail::create([
                                 'ticket_id'=>$Ticket['id'],
                                 'user_id' => $Client['id'],
-                                'game_id'=>$detail['game']['id'],
+                                'game_id'=>$data['game']['id'],
                                 'game_number' => $detail['number'],
                                 'bet' => $detail['subtotal'],
                                 'active'=>true,
                             ]);
                         }
-                        
-                        if($this->model_detail
-                            ->where('ticket_id',$Ticket['id'])
-                            ->count() > 0)
-                        {
-                            return $Ticket;
+
+                        foreach ($data['dataNewDays'] as $item){
+                          
+                            $date = ($item['day']['value'] > 0)
+                                    ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks($i)
+                                    : Carbon::now()->startOfWeek()->addWeeks($i);
+                            if($date >= $now){
+
+                                Day_ticket::create([
+                                    'ticket_id'=>$Ticket['id'],
+                                    'day_id' => $item['day']['id'],
+                                    'game_date'=>$date,
+                                ]);
+
+                            }
                         }
-                      throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
+
+                        $noDays = Day_ticket::where('ticket_id',$Ticket['id'])->count();
+                        $totalDays = $totalDetail * $noDays;
+                        $this->model->find($Ticket['id'])->update(['total'=>$totalDays]);
                     }
-                throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));
+               
                 }
+                    
+                        
+                return 'exito';
+             }
             }
             throw new GeneralException(__('El numero que esta Ingresando no es valido.'));
         });
@@ -167,13 +195,18 @@ class RepositoryManagmentTickets
                 
                 $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->get();
                 $client = User::find($Ticket['user_id']);
+                $days = Day_ticket::select('day.name as name', 'day_tickets.game_date as date')
+                                    ->join('days as day','day.id', "=", 'day_tickets.day_id')
+                                    ->where('day_tickets.ticket_id',$Ticket_id)
+                                    ->get();
 
-                return ['ticket' => $Ticket, 'ticketDetail'=>$detail,'client'=>$client];
+                return ['ticket' => $Ticket, 'ticketDetail'=>$detail,'client'=>$client,'days'=>$days];
             }
 
             throw new GeneralException(__('There was an error on show the Ticket.'));
         });
     }
+
 
     
     /*

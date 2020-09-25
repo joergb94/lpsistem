@@ -30,7 +30,7 @@ class ManagementTicketsController extends Controller
     public function index(TicketRequest $request){
         
         if (!$request->ajax()) return view('tickets.index',['dm'=>accesUrl(Auth::user(),3)]);
-        
+       
         $search = trim($request->search);
         $criterion = trim($request->criterion);
         $status = ($request->status)? $request->status : 1;

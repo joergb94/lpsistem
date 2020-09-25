@@ -4,12 +4,18 @@ export default {
         dataTicktes:[],
         dataNumbers:[],
         dataGames:[],
+        dataDays:[],
+        dataNewDays:[],
         id:'',
         phone:'',
         total: 0,
         subtotal:'',
         number:'',
         game:'',
+        day:'',
+        multiplier:0,
+        mTotal:0,
+        ticket_type:'1',
         titleModal:'',
         action:0,
         page:1,
@@ -26,7 +32,8 @@ export default {
         criterion : 'phone',
         date:'',
         status : 1,
-        search : ''
+        search : '',
+        norepeat: 0
 
         }
     },
@@ -140,6 +147,7 @@ export default {
                 var answer= response.data;
                 me.dataTicktes = answer.Tickets.data;
                 me.dataGames = answer.Games;
+                me.dataDays = answer.Days;
                 me.pagination= answer.pagination;
             })
             .catch(function (error) {
@@ -161,8 +169,11 @@ export default {
              var url = '/tickets/add'
              var data = {
                 'phone': this.phone,
+                'game':this.game,
+                'ticket_type':this.ticket_type,
                 'total':me.total,
-                'dataNumbers':me.dataNumbers
+                'dataNumbers':me.dataNumbers,
+                'dataNewDays':me.dataNewDays,
             };
             axios.post(url,data).then(function (response) {
 
@@ -267,8 +278,13 @@ export default {
                             this.total = '';
                             this.number = '';
                             this.subtotal = '';
+                            this.multiplier = 0;
+                            this.mTotal = 0;
+                            this.ticket_type = '1';
                             this.dataNumbers =[];
+                            this.dataNewDays = [];
                             this.action = 1;
+
                             $("#myModal").modal('show');
                             break;
                         }
@@ -282,7 +298,7 @@ export default {
                                 me.dataNumbers = answer.ticketDetail;
                                 me.total = answer.ticket.total;
                                 me.phone =answer.client.phone;
-
+                                me.dataNewDays = answer.days;
                                 if(answer.client.created_at == answer.client.updated_at){
                                      $('#send-text').html(`<a class="btn btn-block btn-primary text-white" href="https://wa.me/52${answer.client.phone}?text=USUARIO%20${answer.client.email}%20CONTRASEÑA:%20${answer.client.phone}%20" target="_blank" style="color:#000;">
                                                         Enviar Usuario y Contraseña &nbsp; 
@@ -315,8 +331,12 @@ export default {
                 this.phone = '';
                 this.total = '';
                 this.number = '';
+                this.multiplier = 0;
+                this.mTotal = 0;
+                this.ticket_type = '1';
                 this.subtotal = '';
                 this.dataNumbers =[];
+                this.dataNewDays = [];
                 this.client ='';
                 $('#send-text').html('');
                  $.notifyClose();
@@ -341,22 +361,25 @@ export default {
                     return false;
                 }
 
-                if(this.game.length == 0){
-                    me.message({title:'Error',text:'El campo Juego es requerido',type:'danger'});
-                    return false;
-                }
-                
                 if(this.dataNumbers.push({
                     number: this.number,
-                    game:this.game,
                     subtotal: Number.parseFloat(this.subtotal),
                 }))
                 {   
-                    let sumtotal = me.total > 0 ? parseFloat(me.total) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
-                    this.total = parseFloat(sumtotal);
+                    let sumtotal = me.total > 0 
+                                    ? parseFloat(me.mTotal) + parseFloat(this.subtotal) 
+                                    : parseFloat(this.subtotal);
+                    
+                    this.mTotal = sumtotal;
+
+                    let multipliert = me.dataNewDays.length > 0 
+                                    ? parseFloat(me.mTotal) * parseFloat(me.dataNewDays.length) 
+                                    : parseFloat(me.mTotal);
+                                    
+                    this.total = parseFloat(multipliert);
+
                     this.number = ''
                     this.subtotal = ''
-                    this.game = ''
                     me.message({title:'Listo',text:'Se AGREGO con exito el Numero',type:'success'});
                 }
                 
@@ -367,12 +390,78 @@ export default {
         removeNumber(index){
             let me = this;
             let sub = this.dataNumbers[index];
-            let sumtotal = me.total > 0 ? parseFloat(me.total) - parseFloat(sub.subtotal) : 0;
-            this.total = parseFloat(sumtotal);
+            let sumtotal = me.total > 0 
+                                    ? parseFloat(me.mTotal) - parseFloat(sub.subtotal)
+                                    : 0;
+                    
+            this.mTotal = sumtotal;
+
+            let multipliert = me.dataNewDays.length > 0 
+                                    ? parseFloat(me.mTotal) * parseFloat(me.dataNewDays.length) 
+                                    : parseFloat(me.mTotal);
+                                    
+            this.total = parseFloat(multipliert);
 
              if(this.dataNumbers.splice(index, 1))
              {
                  me.message({title:'Listo',text:'Se ELIMINO con exito el Numero',type:'success'});
+             }
+               
+        },
+        addDay() {
+            let me = this;
+            let uniqueNames = 0;
+            let day = this.day.id;
+            
+            $.each(me.dataNewDays, function(i, el){
+                if(el.day.id == day){
+                    uniqueNames +=1;
+                }
+            });
+            
+            if(uniqueNames > 0){
+                me.message({title:'Error',text:'El Dia no se puede repetir',type:'danger'});
+                return false;
+
+            }
+            
+            if(this.day.length == 0){
+                    me.message({title:'Error',text:'El campo Dia es requerido',type:'danger'});
+                    return false;
+
+            }
+
+            if(this.dataNewDays.push({
+                    day: this.day,
+                }))
+                {   
+
+                    
+                    let multipliert = me.dataNewDays.length > 0 
+                    ? parseFloat(me.mTotal) * parseFloat(me.dataNewDays.length) 
+                    : parseFloat(me.mTotal)*1;
+                    
+                    this.total = parseFloat(multipliert);
+
+                     this.day = ''
+                    me.message({title:'Listo',text:'Se AGREGO con exito el Dia',type:'success'});
+                }
+                
+
+
+               
+        },
+        removeDay(index){
+            let me = this;
+             if(this.dataNewDays.splice(index, 1))
+             {  
+                let multipliert = me.dataNewDays.length > 0 
+                    ? parseFloat(me.mTotal) * parseFloat(me.dataNewDays.length) 
+                    : parseFloat(me.mTotal)*1;
+                    
+                    this.total = parseFloat(multipliert);
+
+                me.message({title:'Listo',text:'Se ELIMINO con exito el Dia',type:'success'});
              }
                
         }
