@@ -7,7 +7,7 @@ use App\Models\Deposit;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 /**
  * Class UserRepository.
  */
@@ -35,8 +35,8 @@ class RepositoryDeposit
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->whereIn('type_user_id',[2,3,4])
-                     : $this->model->where('id','>',0)->whereIn('type_user_id',[2,3,4]);
+                     ? $this->model->where($criterion, 'like', '%'. $search . '%')
+                     : $this->model->where('id','>',0);
                 
                 if($status != 'all'){
 
@@ -81,13 +81,15 @@ class RepositoryDeposit
     public function create(array $data): User
     {
         return DB::transaction(function () use ($data) {
+
             $User = $this->model::create([
-                'type_user_id'=>$data['type'],
-                'name' => $data['name'],
-                'last_name' => $data['last_name'],
-                'phone' => $data['phone'],
-                'email' => $data['email'],
-                'password' =>Hash::make($data['password']),
+                'bank' => $data['bank'],
+                'numDep' => $data['numDep'],
+                'imageDep' => $data['imageDep'],
+                'amount' => $data['amount'],
+                'description' => $data['description'],
+                'id_user' => Auth::id(),
+                'status' => 1,
             ]);
 
             if ($User) {
@@ -163,21 +165,13 @@ class RepositoryDeposit
      * @return User
      */
      
-    public function updateStatus($User_id): User
+    public function updateStatus($deposit_id): User
     {
-        $User = $this->model->find($User_id);
+        $deposit = $this->model->find($deposit_id->id);
+        $deposit->status = $deposit_id->nStatus;  
 
-        switch ($User->active) {
-            case 0:
-                $User->active = 1;
-            break;
-            case 1:
-                $User->active = 0;  
-            break;
-        }
-
-        if ($User->save()) {
-            return $User;
+        if ($deposit->save()) {
+            return $deposit;
         }
 
         throw new GeneralException(__('Error changing status of User.'));
@@ -185,13 +179,13 @@ class RepositoryDeposit
 
     public function deleteOrResotore($User_id)
     {    
-        $Bval = User::withTrashed()->find($User_id)->trashed();
+        $Bval = Deposit::withTrashed()->find($User_id)->trashed();
 
             if($Bval){
-                $User = User::withTrashed()->find($User_id)->restore();
+                $User = Deposit::withTrashed()->find($User_id)->restore();
                 $b=4;
             }else{
-                $User = User::find($User_id)->delete();
+                $User = Deposit::find($User_id)->delete();
                 $b=3;
             }
 

@@ -2,19 +2,19 @@
 @section('content')
     @switch($dm['type_user'])
         @case(1)
-                <user-component></user-component>
+                <deposit-component></deposit-component>
         @break
         @case(2)
-                <user-component></user-component>
+                <deposit-component></deposit-component>
         @break
         @case(3)
-                <user-component></user-component>
+                <deposit-component></deposit-component>
         @break
         @case(4)
-                <profile-component></profile-component>
+                <deposit-component></deposit-component>
         @break
         @default
-                <profile-component></profile-component>
+                <deposit-component></deposit-component>
     @endswitch
         
 @endsection

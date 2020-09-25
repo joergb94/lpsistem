@@ -13,9 +13,19 @@ class CreateDepostisTable extends Migration
      */
     public function up()
     {
-        Schema::create('depostis', function (Blueprint $table) {
+        Schema::create('deposits', function (Blueprint $table) {
             $table->id();
+            $table->string('mat', 3)->default('DEP');
+            $table->string('bank');
+            $table->string('numDep', 20)->nullable;
+            $table->string('imageDep')->default('');
+            $table->decimal('amount', 6,2);
+            $table->string('id_user');
+            $table->string('description');            
+            $table->integer('status');
+            $table->boolean('active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +36,6 @@ class CreateDepostisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('depostis');
+        Schema::dropIfExists('deposits');
     }
 }

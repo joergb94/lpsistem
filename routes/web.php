@@ -47,12 +47,12 @@ Route::post('/my-tickets/add', 'UserTicketsController@store');
 Route::get('/my-tickets/detail', 'UserTicketsController@detail');
 Route::post('/my-tickets/deleteOrResotore','UserTicketsController@deleteOrResotore');
 
-//UserTickets
+//depossit
 Route::get('/deposits', 'DepositsController@index');
-//Route::post('/deposits/add', 'DepositsController@store');
-//Route::get('/deposits/detail', 'DepositsController@detail');
-//Route::post('/deposits/deleteOrResotore','DepositsController@deleteOrResotore');
-//Route::post('/deposits/update', 'DepositsController@update');
+Route::post('/deposits/add', 'DepositsController@store');
+Route::get('/deposits/detail', 'DepositsController@detail');
+Route::post('/deposits/deleteOrResotore','DepositsController@deleteOrResotore');
+Route::post('/deposits/change_status', 'DepositsController@change_status');
 
 
 //GeneralServies 

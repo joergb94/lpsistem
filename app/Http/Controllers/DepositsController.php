@@ -52,9 +52,29 @@ class DepositsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(DepositStoreRequest $request)
+    {   
+        echo 'hola';
+        
+        $base64_str = substr($request->imageDep, strpos($request->imageDep, ",")+1); 
+
+        $image = base64_decode($base64_str); 
+        $png_url = "Deposit-".time()."-".Auth::id().".png"; 
+        $path = public_path('images/deposits/' . $png_url); 
+
+        file_put_contents($path, $image);
+        $data = array(
+            'bank' =>$request->bank ,
+            'numDep' => $request->numDep,
+            'imageDep' => $png_url,
+            'amount' => $request->amount,
+            'description' => $request->description,
+            'id_user' => Auth::id(),
+            'status' => 1,
+        );
+
+        $this->RepositoryDeposit->create($data);
+        return response()->json(Answer('success','Ticket'));
     }
 
     /**
@@ -97,8 +117,22 @@ class DepositsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function change_status(Request $request)
+    {   
+        //dd($request->input());
+        $this->RepositoryDeposit->updateStatus($request);
+        return response()->json('exito');
+    } 
+
+    public function deleteOrResotore(Request $request)
+    {    
+        $roll = Deposit::withTrashed()->find($request->id)->trashed();
+
+            if($roll){
+                Deposit::withTrashed()->find($request->id)->restore();
+            }else{
+                Deposit::find($request->id)->delete();
+            }
+        return response()->json('exito');
     }
 }

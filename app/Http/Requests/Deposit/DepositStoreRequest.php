@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Deposit;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class DepositStoreRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class DepositStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return validateAccess(Auth::user(),3); 
     }
 
     /**
