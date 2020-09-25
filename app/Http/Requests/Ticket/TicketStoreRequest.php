@@ -27,7 +27,8 @@ class TicketStoreRequest extends FormRequest
         return [
             'phone' => 'required|string|max:15',
             'total' => 'required|numeric|gt:0',
-            'dataNumbers'=>'required',
+            'dataNumbers' =>'required|array',
+        
         ];
     }
 }

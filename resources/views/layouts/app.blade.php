@@ -68,8 +68,8 @@
     <script src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('vendors/popper.js/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('js/sweetalert2.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     <!--<script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
@@ -79,7 +79,7 @@
     <script src="{{ asset('vendors/jqvmap/examples/js/jquery.vmap.sampledata.js') }}"></script>
     <script src="{{ asset('vendors/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>-->
     @yield('js')
-    
+
 </body>
 
 </html>

@@ -182,6 +182,7 @@ return [
         'subcategory'           => 'subcategoria',
         'quantity'              => 'cantidad',
         'measure'               => 'peso',
-        'dataNumbers'           =>'Jugada'
+        'dataNumbers'           =>'Jugada',
+        'dataNewDays'           =>'Dias',
     ],
 ];
