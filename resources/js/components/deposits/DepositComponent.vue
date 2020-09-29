@@ -7,13 +7,13 @@
                         <div class="row">
                             <div class="col-sm-5">
                                  <h4 class="card-title mb-0">
-                                     User
+                                     Depositos
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
-                                            <option value="all" >All</option>
-                                            <option value="1" >Actived</option>
-                                            <option value="2">Deactived</option>
-                                            <option value="D">Delete</option>
+                                            <option value="all" >Todos</option>
+                                            <option value="1" >Confirmados</option>
+                                            <option value="2">En Espera</option>
+                                            <option value="D">Rechazado</option>
                                         </select>
                                     </div> 
                                 </h4>
@@ -31,9 +31,8 @@
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <select class="form-control col-sm-2" v-model="criterion">
-                                        <option value="name">name</option>
-                                        <option value="last_name">Apellido</option>
-                                        <option value="Phone">Telefono</option>
+                                        <option value="name">No. Deposito</option>
+                                        <option value="last_name">Usuario</option>
                                     </select>
                                     
                                     <input type="text" v-model="search" @keyup.enter="ListUsers(1)" class="form-control" placeholder="Texto a buscar">
@@ -47,15 +46,12 @@
                             <table class="table table-bordered">
                             <thead class="thead-dark">
                                 <tr>
-                                <th>#</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Telefono</th>
-                                <th>Status</th>
-                                <th>created_at</th>
-                                <th>Updated_at</th>
-                                <th>deleted_at</th>
-                                <th>actions</th>
+                                    <th>No. Deposito</th>
+                                    <th>Usuario</th>
+                                    <th>Cantidad</th>
+                                    <th>Estado</th>
+
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,28 +62,33 @@
                                 </tr>
 
                                 <tr v-for="item in dataUsers" :key="item.id">
-                                    <td v-text="item.id"></td>
+                                    <td v-text="item.numDep"></td>
                                     <td v-text="item.name"></td>
-                                    <td v-text="item.last_name"></td>
-                                    <td v-text="item.phone"></td>
+                                    <td v-text="item.amount"></td>
                                     <td>
-                                          <div v-if="item.active == 1">
-                                            <span class="badge badge-success">Actived</span>
+                                        <div v-if="item.status == 1">
+                                            <span class="badge badge-warning">En Espera</span>
                                         </div>
-                                        <div v-else-if="item.active == 0">
-                                            <span class="badge badge-danger">Deactivated</span>
+                                        <div v-else-if="item.status == 0">
+                                            <span class="badge badge-danger">Rechazado</span>
+                                        </div>
+                                        <div v-else-if="item.status == 2">
+                                            <span class="badge badge-success">Confirmado</span>
                                         </div>
 
                                     </td>
-                                    <td v-text="item.created_at"></td>
-                                    <td v-text="item.updated_at"></td>
-                                    <td v-text="item.deleted_at"></td>
                                     <td>
-                                        <button type="button" v-if="item.deleted_at == null" class="btn btn-warning btn-sm" @click="openModal('modal', 'update', item)" >
-                                          <i class="ti-pencil"></i>
+                                        <button type="button" style="background-color:#263238; color:#fff;" v-if="item.deleted_at == null" class="btn btn-default btn-sm" @click="openModal('modal', 'update', item)" >
+                                          <i class="fa fa-eye"></i>
                                         </button>
-                                        <button type="button" v-if="item.deleted_at == null" class="btn btn-danger btn-sm" @click="changeStatus(item)">
-                                          <i class="ti-loop"></i>
+                                        <button type="button" v-if="item.deleted_at == null && item.status == 2" class="btn btn-warning btn-sm" @click="changeStatus(item,1)" >
+                                          <i class="fa fa-undo"></i>
+                                        </button>
+                                        <button type="button" v-if="item.deleted_at == null && item.status != 2 "  class="btn btn-success btn-sm" @click="changeStatus(item,2)" >
+                                          <i class="fa fa-check-square"></i>
+                                        </button>
+                                        <button type="button" v-if="item.deleted_at == null && item.status == 1" class="btn btn-danger btn-sm" @click="changeStatus(item,0)">
+                                          <i class="fa fa-ban"></i>
                                         </button>
                                         <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                           <i class="ti-trash"></i>
@@ -126,28 +127,34 @@
                     </div>
 
                     <!-- Modal body -->
-                    <form action="">
+                    <form action="" enctype="multipart/form-data" >
                     <div class="modal-body">
                        
                             <div class="form-group">
-                                <label for="email">Nombre:</label>
-                                <input type="text"  v-model="name"  class="form-control" placeholder="Enter Name" id="name">
+                                <label for="email">Tipo de Deposito:</label>
+                                <select class="form-control" name="bank" id="bank" v-model="bank">
+                                    <option  value="">Ingrese tipo de deposito</option>
+                                    <option value="1">Banco</option>
+                                    <option value="2">Oxxo</option>
+                                    <option value="3">Banco Movil</option>
+                                </select>
                             </div>
                              <div class="form-group">
-                                <label for="pwd">Apellido:</label>
-                                <input type="text" v-model="last_name"  class="form-control" placeholder="Enter last_name" id="last_name">
+                                <label for="pwd">Numero de Deposito:</label>
+                                <input type="number" v-model="numDep" class="form-control has-error "  onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"  min="1" id="numDep" name="numDep" placeholder="Ingrese numero de deposito" value="">
                             </div>
                             <div class="form-group">
-                                <label for="pwd">Telefono:</label>
-                                <input type="text" v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">
+                                <label for="pwd">Image o Foto del Ticket:</label>
+                                <input type="file"  accept="image/*" class="form-control-file" id="imageDep" name="imageDep" @change="onFileChanged($event)">
+                                <a href="javascript:void(0);" id="img-deposit" style="display:none;"></a>
                             </div>
                             <div class="form-group">
-                                <label for="pwd">Correo:</label>
-                                <input type="text" v-model="email"  class="form-control" placeholder="Enter email" id="email">
+                                <label for="pwd">Cantidad:</label>
+                                <input type="number" v-model="amount" step='0.01' min="1" max="10000" class="form-control" id="amount" name="amount" placeholder="00.00" value="">
                             </div>
                              <div class="form-group">
-                                <label for="pwd">Contraseña:</label>
-                                <input type="text" v-model="password"  class="form-control" placeholder="Enter password" id="password">
+                                <label for="pwd">Descripcion:</label>
+                                <textarea name="description" id="description" class="form-control" cols="10" rows="5" v-model="description"></textarea>
                             </div>
                        
                     </div>
@@ -167,267 +174,5 @@
     </div>
 </template>
 
-<script>
-    export default {
-        data () {
-            return {
-            dataUsers:[],
-            id:'',
-            name:'',
-            last_name:'',
-            phone:'',
-            email:'',
-            password:'',
-            type_user:'',
-            titleModal:'',
-            action:0,
-            page:1,
-            users: 1,
-            pagination : {
-                    'total' : 0,
-                    'current_page' : 0,
-                    'per_page' : 0,
-                    'last_page' : 0,
-                    'from' : 0,
-                    'to' : 0,
-                },
-            offset : 3,
-            criterion : 'name',
-            status : 1,
-            search : ''
-
-            }
-        },
-        computed:{
-            isActived: function(){
-              return this.pagination.current_page;
-            },
-            pagesNumber: function(){
-                if(!this.pagination.to) {
-                    return [];
-                }
-                
-                var from = this.pagination.current_page - this.offset; 
-                if(from < 1) {
-                    from = 1;
-                }
-
-                var to = from + (this.offset * 2); 
-                if(to >= this.pagination.last_page){
-                    to = this.pagination.last_page;
-                }  
-
-                var pagesArray = [];
-                while(from <= to) {
-                    pagesArray.push(from);
-                    from++;
-                }
-                return pagesArray;             
-
-            }
-        },
-        methods : {
-            ListUsers(page){
-                let me = this;
-                var url = '/users?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status;
-                 axios.get(url)
-                .then(function (response) {
-                    var respuesta= response.data;
-                    me.dataUsers = respuesta.Users.data;
-                    me.pagination= respuesta.pagination;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
-            pageChange(page){
-                let me = this;
-                console.log(me.pagination.current_page)
-                console.log(page)
-
-                //Actualiza la página actual
-                me.pagination.current_page = page;
-                //Envia la petición para visualizar la data de esa página
-                me.ListUsers(page)
-            },
-            updateOrCreate(action){
-                 let me = this;
-                 var url = '/users/add'
-                 var data = {
-                    'name': this.name,
-                    'last_name': this.last_name,
-                    'phone': this.phone,
-                    'email':this.email,
-                    'password':this.password,
-                    'type':this.type_user
-                };
-
-                if (action == 2){
-                    url = '/users/update'
-                    var data = {
-                        'id': this.id,
-                        'name': this.name,
-                        'description': this.description
-                    };
-                }
-               
-                axios.post(url,data).then(function (response) {
-
-                    me.closeModal();
-                    me.ListUsers('');
-
-                     $.notify({
-                                // options
-                                title: "Success!",
-                                message:"Exito",
-                            },{
-                                // settings
-                                type: 'success'
-                            });
-
-                }).catch(function (error) {
-                    console.log(error.response.data.errors);
-                    var e = error.response.data.errors;
-                      $.notifyClose();
-                    
-                     $.each(e,function (k,message) {
-                            $.notify({
-                                // options
-                                title: "Error!",
-                                message:message,
-                            },{
-                                // settings
-                                type: 'danger'
-                            });
-                        });
-                })              
-            },
-            DeleteOrRestore(item){
-                let me = this;
-                var data = {
-                    'id': item.id,
-                    };
-                 var m = "Do you want to deleted User?";
-                 var mt = "The User will be delete";
-                 var btn = "Delete";
-
-
-                if(item.deleted_at != null){
-                     m = "Do you want to restored User?";
-                     mt = "The User will be restore";
-                     btn = "Restore";
-                }
-
-                    Swal.fire({
-                        title: m,
-                        text:  mt,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Si, eliminalo!'
-                    }).then((result) => {
-                        if (result.value) {
-                             axios.post('/users/deleteOrResotore',data).then(function (response) {
-                                    me.ListUsers();
-                                    $.notify({
-                                                // options
-                                                title: "Success!",
-                                                message:"Exito",
-                                            },{
-                                                // settings
-                                                type: 'success'
-                                            });
-
-                                }).catch(function (error) {}) 
-                        }
-                    }) 
-            },
-            changeStatus(item){
-                let me = this;
-                var data = {
-                    'id': item.id,
-                    };
-                 var m = "Do you want to deactived User?";
-                 var mt = "The User will be deactived";
-                 var btn = "Deactived";
-
-
-                if(item.active == 0){
-                     m = "Do you want to actived User?";
-                     mt = "The User will be actived";
-                     btn = "Actived";
-                }
-                 Swal.fire({
-                        title: m,
-                        text:  mt,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Si, eliminalo!'
-                    }).then((result) => {
-                        if (result.value) {
-                             axios.post('/users/change_status',data).then(function (response) {
-                                    me.ListUsers();
-                                    $.notify({
-                                                // options
-                                                title: "Success!",
-                                                message:"Exito",
-                                            },{
-                                                // settings
-                                                type: 'success'
-                                            });
-
-                                }).catch(function (error) {}) 
-                        }
-                    }) 
-                   
-            },
-            openModal(model, action, data = []){
-               
-                switch(model){
-                    case 'modal':
-                    {
-                        switch(action){
-                            case 'add':
-                            {
-                                this.titleModal = 'New User';
-                                this.name= '';
-                                 this.name = '';
-                                this.phone = '';
-                                this.email = '';
-                                this.password = '';
-                                this.action = 1;
-                                break;
-                            }
-                            case 'update':
-                            {
-                                
-                                this.titleModal = 'Update User';
-                                this.id = data.id;
-                                this.name = data.name;
-                                this.phone = data.phone;
-                                this.email = data.email;
-                                this.password = data.password;
-                                this.action = 2;
-                                break;
-                            }
-                        }
-                        $("#myModal").modal('show');
-                    }
-                }
-            },
-            closeModal(){
-                    this.titleModal = '';
-                    this.name= '';
-                    this.description = '';
-                     $.notifyClose();
-                    $("#myModal").modal('hide');
-            },
-        },
-        mounted () {
-           this.ListUsers(1);
-        }
-    }
-</script>
+<script src="main.js"></script>
+<script src="./js/deposit.js"></script>

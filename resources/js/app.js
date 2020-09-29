@@ -26,6 +26,7 @@ Vue.component('user-tickets-component', require('./components/tickets/UserTicket
 Vue.component('user-component', require('./components/user/UsersComponent.vue').default);
 Vue.component('profile-component', require('./components/user/ProfileComponent.vue').default);
 Vue.component('home-component', require('./components/home/HomeComponent.vue').default);
+Vue.component('deposit-component', require('./components/deposits/DepositComponent.vue').default);
 
 
 
