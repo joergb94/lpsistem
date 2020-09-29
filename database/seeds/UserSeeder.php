@@ -41,5 +41,7 @@ class UserSeeder extends Seeder
       {
             DB::table('users')->insert($admin);
         }
+
+        DB::table('coin_purses')->insert(['user_id' => 4,'coins' => 1000]);
     }
 }

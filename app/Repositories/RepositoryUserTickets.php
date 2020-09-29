@@ -107,16 +107,12 @@ class RepositoryUserTickets
 
                     if($Ticket)
                     {
-                        $coins =Coin_purse::where('user_id',Auth::user()->id)->first();
-              
-                        //operations 
-                        $totalC = $coins['coins'] - $data['total'];
-                        $ct = ($totalC > 0)? $totalC : 0;
-                       
-                        if ($coins->update(['coins'=>$ct])) 
-                        {
+                        
+            
                             $now = Carbon::now();
+                            $totalDetail = 0;
                                 foreach ($data['dataNumbers'] as $detail){
+                                    $totalDetail +=$detail['subtotal'];
                                     $this->model_detail::create([
                                         'ticket_id'=>$Ticket['id'],
                                         'user_id' => Auth::user()->id,
@@ -132,26 +128,37 @@ class RepositoryUserTickets
                                             ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks(0)
                                             : Carbon::now()->startOfWeek()->addWeeks(0);
 
-                                    if($date >= $now){
-
+                                
                                         Day_ticket::create([
                                             'ticket_id'=>$Ticket['id'],
                                             'day_id' => $item['day']['id'],
                                             'game_date'=>$date,
                                         ]);
 
-                                    }
-                                   
+                                
                                 }
                                 
                                 if($this->model_detail
                                     ->where('ticket_id',$Ticket['id'])
                                     ->count() > 0)
                                 {
-                                    return $Ticket;
+                                    $noDays = Day_ticket::where('ticket_id',$Ticket['id'])->count();
+                                    $totalDays = $totalDetail * $noDays;
+                                    $this->model->find($Ticket['id'])->update(['total'=>$totalDays]);
+
+                                    $coin =Coin_purse::where('user_id',Auth::user()->id)->first();
+                                    //operations 
+                                    $totalC = $coin['coins'] - $totalDays;
+                                    $ct = ($totalC > 0)? $totalC : 0;
+                                    
+                                    
+                                    if($coin->update(['coins'=>$ct])){
+                                        return $Ticket;
+                                    }
+                                    throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
                                 }
-                            }
-                        throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
+                            
+                            throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));   
                         }
                     throw new GeneralException(__('No se pudo crear el ticket intente nuevamente.'));
             });

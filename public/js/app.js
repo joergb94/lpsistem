@@ -1939,7 +1939,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      criterion: 'phone',
+      criterion: 'tickets.phone',
       date: '',
       status: 1,
       search: '',
@@ -2039,6 +2039,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status + '&date=' + this.date;
       axios.get(url).then(function (response) {
         var answer = response.data;
+        console.log(answer.jas);
         me.dataTicktes = answer.Tickets.data;
         me.dataGames = answer.Games;
         me.dataDays = answer.Days;
@@ -2083,14 +2084,14 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "Do you want to deleted Ticket?";
-      var mt = "The Ticket will be delete";
-      var btn = "Delete";
+      var m = "¿Deseas Eliminar el Ticket?";
+      var mt = "El Ticket sera eliminado";
+      var btn = "eliminalo";
 
       if (item.deleted_at != null) {
-        m = "Do you want to restored Ticket?";
-        mt = "The Ticket will be restore";
-        btn = "Restore";
+        m = "¿Deseas Recuperar el Ticket?";
+        mt = "El Ticket sera recuperado";
+        btn = "recuperalo";
       }
 
       Swal.fire({
@@ -2100,7 +2101,7 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminalo!'
+        confirmButtonText: 'Si, ' + btn + '!'
       }).then(function (result) {
         if (result.value) {
           axios.post('/tickets/deleteOrResotore', data).then(function (response) {
@@ -2116,14 +2117,14 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "Do you want to deactived Ticket?";
-      var mt = "The Ticket will be deactived";
-      var btn = "Deactived";
+      var m = "¿Deseas confirmar que el Ticket esta pagado?";
+      var mt = "El Ticket sera pagado";
+      var btn = "pagalo";
 
-      if (item.active == 0) {
-        m = "Do you want to actived Ticket?";
-        mt = "The Ticket will be actived";
-        btn = "Actived";
+      if (item.active == 1) {
+        m = "¿Deseas cancelar que el Ticket esta pagado?";
+        mt = "El Ticket sera cancelado";
+        btn = "cancelalo";
       }
 
       Swal.fire({
@@ -2133,10 +2134,10 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminalo!'
+        confirmButtonText: 'Si, ' + btn + '!'
       }).then(function (result) {
         if (result.value) {
-          axios.post('/tickets/change_status', data).then(function (response) {
+          axios.post('/tickets/payment', data).then(function (response) {
             me.ListTickets();
             $.notify({
               // options
@@ -39011,12 +39012,16 @@ var render = function() {
                         }
                       },
                       [
-                        _c("option", { attrs: { value: "1" } }, [
-                          _vm._v("Actived")
+                        _c("option", { attrs: { value: "all" } }, [
+                          _vm._v("Todos")
                         ]),
                         _vm._v(" "),
-                        _c("option", { attrs: { value: "D" } }, [
-                          _vm._v("Delete")
+                        _c("option", { attrs: { value: "1" } }, [
+                          _vm._v("Pagados")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "2" } }, [
+                          _vm._v("Por pagar")
                         ])
                       ]
                     )
@@ -39111,11 +39116,13 @@ var render = function() {
                       }
                     },
                     [
-                      _c("option", { attrs: { value: "phone" } }, [
+                      _c("option", { attrs: { value: "tickets.phone" } }, [
                         _vm._v("Telefono")
                       ]),
                       _vm._v(" "),
-                      _c("option", { attrs: { value: "id" } }, [_vm._v("#")])
+                      _c("option", { attrs: { value: "tickets.id" } }, [
+                        _vm._v("#")
+                      ])
                     ]
                   ),
                   _vm._v(" "),
@@ -39208,7 +39215,7 @@ var render = function() {
                                 _c(
                                   "span",
                                   { staticClass: "badge badge-success" },
-                                  [_vm._v("Actived")]
+                                  [_vm._v("Pagado")]
                                 )
                               ])
                             : item.active == 0
@@ -39216,18 +39223,14 @@ var render = function() {
                                 _c(
                                   "span",
                                   { staticClass: "badge badge-danger" },
-                                  [_vm._v("Deactivated")]
+                                  [_vm._v("Por Pagar")]
                                 )
                               ])
                             : _vm._e()
                         ]),
                         _vm._v(" "),
                         _c("td", {
-                          domProps: {
-                            textContent: _vm._s(
-                              new Date(item.created_at).toLocaleDateString()
-                            )
-                          }
+                          domProps: { textContent: _vm._s(item.date) }
                         }),
                         _vm._v(" "),
                         item.deleted_at == null
@@ -39249,6 +39252,38 @@ var render = function() {
                                 },
                                 [_c("i", { staticClass: "ti-eye" })]
                               ),
+                              _vm._v(" "),
+                              item.active == 0
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-success btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.changeStatus(item)
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "ti-money" })]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              item.active == 1
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-secondary btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.changeStatus(item)
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "ti-na" })]
+                                  )
+                                : _vm._e(),
                               _vm._v(" "),
                               _c(
                                 "button",
@@ -40220,7 +40255,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Status")]),
         _vm._v(" "),
-        _c("th", [_vm._v("created_at")]),
+        _c("th", [_vm._v("Fecha")]),
         _vm._v(" "),
         _c("th", [_vm._v("actions")])
       ])
@@ -40591,7 +40626,7 @@ var render = function() {
             ? _c("div", { staticClass: "modal-body" }, [
                 _c(
                   "div",
-                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                  { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
                   [
                     _c("label", { attrs: { for: "pwd" } }, [_vm._v("Juego:")]),
                     _vm._v(" "),
@@ -40649,54 +40684,6 @@ var render = function() {
                         })
                       ],
                       2
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
-                  [
-                    _c("label", { attrs: { for: "pwd" } }, [_vm._v("Tipo:")]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.ticket_type,
-                            expression: "ticket_type"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { id: "ticket_type", name: "ticket_type" },
-                        on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.ticket_type = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { value: "1" } }, [
-                          _vm._v("No recurrente")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "2" } }, [
-                          _vm._v("Recurrente")
-                        ])
-                      ]
                     )
                   ]
                 ),
@@ -41075,10 +41062,42 @@ var render = function() {
                   "div",
                   {
                     staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Total Jugadas:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [_vm._v("$ " + _vm._s(_vm.mTotal) + " Pesos")])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Numero de dias:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", {
+                      domProps: { textContent: _vm._s(_vm.dataNewDays.length) }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
                       "form-group col-sm-12 col-md-6 col-lg-6 text-left"
                   },
                   [
-                    _c("label", [_vm._v("Total:")]),
+                    _c("label", [_vm._v("Total por dias:")]),
                     _vm._v("\n                                $"),
                     _c("label", {
                       domProps: { textContent: _vm._s(_vm.total) }
@@ -41231,38 +41250,6 @@ var render = function() {
                       ],
                       2
                     )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
-                  },
-                  [
-                    _c("label", { attrs: { for: "email" } }, [
-                      _vm._v("Total Jugadas:")
-                    ]),
-                    _vm._v(" "),
-                    _c("label", [_vm._v("$ " + _vm._s(_vm.mTotal) + " Pesos")])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
-                  },
-                  [
-                    _c("label", { attrs: { for: "email" } }, [
-                      _vm._v("Numero de dias:")
-                    ]),
-                    _vm._v(" "),
-                    _c("label", {
-                      domProps: { textContent: _vm._s(_vm.dataNewDays.length) }
-                    })
                   ]
                 ),
                 _vm._v(" "),

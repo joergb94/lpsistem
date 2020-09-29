@@ -39,8 +39,9 @@ Route::post('/profile/password', 'ProfileController@change_password');
 Route::get('/tickets', 'ManagementTicketsController@index');
 Route::post('/tickets/add', 'ManagementTicketsController@store');
 Route::get('/tickets/detail', 'ManagementTicketsController@detail');
+Route::post('/tickets/payment','ManagementTicketsController@payment');
 Route::post('/tickets/deleteOrResotore','ManagementTicketsController@deleteOrResotore');
-
+ 
 //UserTickets
 Route::get('/my-tickets', 'UserTicketsController@index');
 Route::post('/my-tickets/add', 'UserTicketsController@store');

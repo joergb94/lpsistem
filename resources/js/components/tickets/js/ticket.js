@@ -29,7 +29,7 @@ export default {
                 'to' : 0,
             },
         offset : 3,
-        criterion : 'phone',
+        criterion : 'tickets.phone',
         date:'',
         status : 1,
         search : '',
@@ -145,6 +145,7 @@ export default {
              axios.get(url)
             .then(function (response) {
                 var answer= response.data;
+                console.log(answer.jas)
                 me.dataTicktes = answer.Tickets.data;
                 me.dataGames = answer.Games;
                 me.dataDays = answer.Days;
@@ -193,15 +194,15 @@ export default {
             var data = {
                 'id': item.id,
                 };
-             var m = "Do you want to deleted Ticket?";
-             var mt = "The Ticket will be delete";
-             var btn = "Delete";
+             var m = "¿Deseas Eliminar el Ticket?";
+             var mt = "El Ticket sera eliminado";
+             var btn = "eliminalo";
 
 
             if(item.deleted_at != null){
-                 m = "Do you want to restored Ticket?";
-                 mt = "The Ticket will be restore";
-                 btn = "Restore";
+                 m = "¿Deseas Recuperar el Ticket?";
+                 mt = "El Ticket sera recuperado";
+                 btn = "recuperalo";
             }
 
                 Swal.fire({
@@ -211,7 +212,7 @@ export default {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, eliminalo!'
+                    confirmButtonText: 'Si, '+btn+'!'
                 }).then((result) => {
                     if (result.value) {
                          axios.post('/tickets/deleteOrResotore',data).then(function (response) {
@@ -230,15 +231,15 @@ export default {
             var data = {
                 'id': item.id,
                 };
-             var m = "Do you want to deactived Ticket?";
-             var mt = "The Ticket will be deactived";
-             var btn = "Deactived";
+             var m = "¿Deseas confirmar que el Ticket esta pagado?";
+             var mt = "El Ticket sera pagado";
+             var btn = "pagalo";
 
 
-            if(item.active == 0){
-                 m = "Do you want to actived Ticket?";
-                 mt = "The Ticket will be actived";
-                 btn = "Actived";
+            if(item.active == 1){
+                 m = "¿Deseas cancelar que el Ticket esta pagado?";
+                 mt = "El Ticket sera cancelado";
+                 btn = "cancelalo";
             }
              Swal.fire({
                     title: m,
@@ -247,10 +248,10 @@ export default {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, eliminalo!'
+                    confirmButtonText: 'Si, '+btn+'!'
                 }).then((result) => {
                     if (result.value) {
-                         axios.post('/tickets/change_status',data).then(function (response) {
+                         axios.post('/tickets/payment',data).then(function (response) {
                                 me.ListTickets();
                                 $.notify({
                                             // options

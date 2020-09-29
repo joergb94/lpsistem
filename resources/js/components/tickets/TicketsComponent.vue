@@ -10,8 +10,9 @@
                                      Tickets
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
-                                            <option value="1" >Actived</option>
-                                            <option value="D">Delete</option>
+                                            <option value="all" >Todos</option>
+                                            <option value="1" >Pagados</option>
+                                            <option value="2" >Por pagar</option>
                                         </select>
                                     </div> 
                                 </h4>
@@ -28,8 +29,8 @@
                                 <div class="row">
                                     <input type="date" v-model="date" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
                                     <select class="form-control col-sm-12 col-md-6 col-lg-2" v-model="criterion">
-                                        <option value="phone">Telefono</option>
-                                        <option value="id">#</option>
+                                        <option value="tickets.phone">Telefono</option>
+                                        <option value="tickets.id">#</option>
                                     </select>
                                         
                                     <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-6 col-lg-8" placeholder="Texto a buscar">
@@ -47,7 +48,7 @@
                                     <th>Telefono</th>
                                     <th>Total</th>
                                     <th>Status</th>
-                                    <th>created_at</th>
+                                    <th>Fecha</th>
                                     <th>actions</th>
                                     </tr>
                                 </thead>
@@ -64,20 +65,26 @@
                                         <td v-text="item.total"></td>
                                         <td>
                                             <div v-if="item.active == 1">
-                                                <span class="badge badge-success">Actived</span>
+                                                <span class="badge badge-success">Pagado</span>
                                             </div>
                                             <div v-else-if="item.active == 0">
-                                                <span class="badge badge-danger">Deactivated</span>
+                                                <span class="badge badge-danger">Por Pagar</span>
                                             </div>
 
                                         </td>
-                                        <td v-text="new Date(item.created_at).toLocaleDateString()"></td>
+                                        <td v-text="item.date"></td>
                                         <td v-if="item.deleted_at == null" >
                                             <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
-                                            <i class="ti-eye"></i>
+                                                <i class="ti-eye"></i>
+                                            </button>
+                                            <button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
+                                                <i class="ti-money"></i>
+                                            </button>
+                                            <button v-if="item.active == 1" type="button" class="btn btn-secondary btn-sm" @click="changeStatus(item)">
+                                                <i class="ti-na"></i>
                                             </button>
                                             <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
-                                            <i class="ti-trash"></i>
+                                                <i class="ti-trash"></i>
                                             </button>
                                         </td>
                                         <td v-if="item.deleted_at !== null">

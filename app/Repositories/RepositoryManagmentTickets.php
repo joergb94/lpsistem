@@ -26,10 +26,11 @@ class RepositoryManagmentTickets
      *
      * @param  Ticket  $model
      */
-    public function __construct(Ticket $model, TicketDetail $model_detail)
+    public function __construct(Ticket $model, TicketDetail $model_detail,Day_ticket $modelDAT)
     {
         $this->model = $model;
         $this->model_detail = $model_detail;
+        $this->modelDAT = $modelDAT;
     }
 
 
@@ -42,34 +43,40 @@ class RepositoryManagmentTickets
      */
     public function getSearchPaginated($criterion, $search, $status, $date)
     {
-            
-        $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->where('seller_id',Auth::user()->id)
-                     : $this->model->where('id','>',0)->where('seller_id',Auth::user()->id);
+        $rg = $this->modelDAT->select( 'tickets.id as id',
+                                        'tickets.phone as phone',
+                                        'tickets.active as active',
+                                        'tickets.total as total',
+                                        'tickets.deleted_at as deleted_at',
+                                        'day_tickets.game_date as date')
+                            ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
+
+            (strlen($criterion) > 0 &&  strlen($search) > 0) 
+                     ? $rg->where($criterion, 'like', '%'. $search . '%')->where('tickets.seller_id',Auth::user()->id)
+                     : $rg->where('tickets.id','>',0)->where('tickets.seller_id',Auth::user()->id);
                 
                 
-                   
-                    $rg->whereDate('created_at',$date);
+                   if($date){
+                    $rg->whereDate('day_tickets.game_date',$date);
+                   }
+                    
             
                     
                 if($status != 'all'){
 
                         switch ($status) {
                             case 1:
-                                $rg->active();
+                                $rg->where('tickets.active',true);
                             break;
                             case 2:
-                                $rg->active(false);
-                            break;
-                            case 'D':
-                                $rg->onlyTrashed();
+                                $rg->where('tickets.active',false);
                             break;
                             default:
-                                $rg->active();
+                                $rg->where('tickets.active',true);
                         } 
                 }
                 
-                $Tickets = $rg->orderBy('id', 'desc')->paginate(10);
+                $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('tickets.id', 'desc')->paginate(10);
         return [
                 'pagination' => [
                     'total'        => $Tickets->total(),
@@ -124,7 +131,7 @@ class RepositoryManagmentTickets
                         'ticket_type'=>$data['ticket_type'],
                         'phone' => $data['phone'],
                         'total' => $data['total'],
-                        'active'=>true,
+                        'active'=>false,
                     ]);
                     
             
@@ -141,7 +148,7 @@ class RepositoryManagmentTickets
                                 'game_id'=>$data['game']['id'],
                                 'game_number' => $detail['number'],
                                 'bet' => $detail['subtotal'],
-                                'active'=>true,
+                                'active'=>false,
                             ]);
                         }
 

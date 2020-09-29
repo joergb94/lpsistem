@@ -81,20 +81,13 @@
 
                     <!-- Modal body Create/Edit -->
                     <div class="modal-body" v-if="action==1"> 
-                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label for="pwd">Juego:</label>
                                     <select class="form-control" v-model="game" id="game" name="game">
                                         <option value="" >Seleciona un Juego</option>
                                         <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
                                             {{ item.name }}
                                         </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label for="pwd">Tipo:</label>
-                                    <select class="form-control" v-model="ticket_type" id="ticket_type" name="ticket_type">
-                                        <option value="1">No recurrente</option>
-                                        <option value="2">Recurrente</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
@@ -164,8 +157,16 @@
                                             </div>
                                         </div>
                                 </div>
+                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
+                                    <label for="email">Total Jugadas:</label>
+                                    <label >$ {{mTotal}} Pesos</label>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
+                                    <label for="email">Numero de dias:</label>
+                                    <label v-text="dataNewDays.length" ></label>
+                                </div>
                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 text-left">
-                                    <label>Total:</label>
+                                    <label>Total por dias:</label>
                                     $<label v-text="total"></label> pesos
                                 </div>
                     </div>
@@ -204,14 +205,6 @@
                                     </div>
                                 </li>
                             </ul>
-                        </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
-                            <label for="email">Total Jugadas:</label>
-                            <label >$ {{mTotal}} Pesos</label>
-                        </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
-                            <label for="email">Numero de dias:</label>
-                            <label v-text="dataNewDays.length" ></label>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
                             <label for="email">Total por dias:</label>

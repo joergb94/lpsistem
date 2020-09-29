@@ -49,7 +49,7 @@ class ManagementTicketsController extends Controller
         return response()->json($this->RepositoryManagmentTickets->detail($request['id']));
     } 
 
-    public function change_status(Request $request)
+    public function payment(Request $request)
     {
         $this->RepositoryManagmentTickets->updateStatus($request->id);
         return response()->json(Answer('success','Ticket'));

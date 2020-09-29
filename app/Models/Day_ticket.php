@@ -10,4 +10,8 @@ class Day_ticket extends Model
     protected $guarded=[];
     use SoftDeletes;
 
+    public function tickets()
+    {
+        return $this->belongsTo('App\Models\Ticket','ticket_id','id');
+    }
 }
