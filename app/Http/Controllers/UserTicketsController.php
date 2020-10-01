@@ -33,9 +33,10 @@ class UserTicketsController extends Controller
         
         $search = trim($request->search);
         $criterion = trim($request->criterion);
-        $status = ($request->status)? $request->status : 1;
+        $status = ($request->status)? $request->status : 'all';
+        $date =($request->date)? Carbon::parse($request['date']): Carbon::now();
   
-        return $this->RepositoryUserTickets->getSearchPaginated($criterion, $search, $status);
+        return $this->RepositoryUserTickets->getSearchPaginated($criterion, $search, $status, $date);
     }
     public function store(Request $request){
         
@@ -48,7 +49,7 @@ class UserTicketsController extends Controller
         return response()->json($this->RepositoryUserTickets->detail($request['id']));
     } 
 
-    public function change_status(Request $request)
+    public function payment(Request $request)
     {
         $this->RepositoryUserTickets->updateStatus($request->id);
         return response()->json(Answer('success','Ticket'));

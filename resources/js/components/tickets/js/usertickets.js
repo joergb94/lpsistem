@@ -28,10 +28,10 @@ export default {
                 'to' : 0,
             },
         offset : 3,
-        criterion : 'id',
-        status : 1,
-        search : ''
-
+        criterion : 'tickets.id',
+        status : 'all',
+        search : '',
+        date:'',
         }
     },
     computed:{
@@ -138,14 +138,16 @@ export default {
         },
         ListTickets(page){
             let me = this;
-            var url = '/my-tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status;
+            var url = '/my-tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status+'&date='+this.date;
              axios.get(url)
             .then(function (response) {
                 var answer= response.data;
-                me.dataTicktes = answer.Tickets.data;
+                me.dataTicktes = answer.Tickets.data;  
+                me.date =(this.date == answer.Date)?answer.Date:this.date;
                 me.dataGames = answer.Games;
                 me.dataDays = answer.Days;
                 me.pagination= answer.pagination;
+                
             })
             .catch(function (error) {
                 console.log(error);
@@ -246,7 +248,7 @@ export default {
                     confirmButtonText: 'Si, eliminalo!'
                 }).then((result) => {
                     if (result.value) {
-                         axios.post('/my-tickets/change_status',data).then(function (response) {
+                         axios.post('/my-tickets/payment',data).then(function (response) {
                                 me.ListTickets();
                                 $.notify({
                                             // options
@@ -257,7 +259,10 @@ export default {
                                             type: 'success'
                                         });
 
-                            }).catch(function (error) {}) 
+                            }).catch(function (error) {
+                                var e = error.response.data.errors;
+                                me.erros(e);
+                            }) 
                     }
                 }) 
                

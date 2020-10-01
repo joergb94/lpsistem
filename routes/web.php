@@ -46,6 +46,7 @@ Route::post('/tickets/deleteOrResotore','ManagementTicketsController@deleteOrRes
 Route::get('/my-tickets', 'UserTicketsController@index');
 Route::post('/my-tickets/add', 'UserTicketsController@store');
 Route::get('/my-tickets/detail', 'UserTicketsController@detail');
+Route::post('/my-tickets/payment','UserTicketsController@payment');
 Route::post('/my-tickets/deleteOrResotore','UserTicketsController@deleteOrResotore');
 
 //depossit
@@ -55,9 +56,15 @@ Route::get('/deposits/detail', 'DepositsController@detail');
 Route::post('/deposits/deleteOrResotore','DepositsController@deleteOrResotore');
 Route::post('/deposits/change_status', 'DepositsController@change_status');
 
+//game schedule
+Route::get('/schedule', 'GameScheduleController@index');
+Route::post('/schedule/add', 'GameScheduleController@store');
+Route::post('/schedule/update', 'GameScheduleController@update');
+Route::post('/schedule/deleteOrResotore','GameScheduleController@deleteOrResotore');
+Route::post('/schedule/change_status', 'GameScheduleController@change_status');
 
 //GeneralServies 
-Route::get('/coins', 'GeneralServiceController@get_coins');
+Route::get('/get_data', 'GeneralServiceController@get_coins');
 
 
 });

@@ -26,10 +26,11 @@ class RepositoryUserTickets
      *
      * @param  Ticket  $model
      */
-    public function __construct(Ticket $model, TicketDetail $model_detail)
+    public function __construct(Ticket $model, TicketDetail $model_detail, Day_ticket $modelDAT)
     {
         $this->model = $model;
         $this->model_detail = $model_detail;
+        $this->modelDAT = $modelDAT;
     }
 
 
@@ -40,31 +41,43 @@ class RepositoryUserTickets
      *
      * @return mixed
      */
-    public function getSearchPaginated($criterion, $search, $status)
+    public function getSearchPaginated($criterion, $search, $status, $date)
     {
             
-        $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->where('user_id',Auth::user()->id)
-                     : $this->model->where('id','>',0)->where('user_id',Auth::user()->id);
-                
-                if($status != 'all'){
+        $rg = $this->modelDAT->select( 'tickets.id as id',
+                                        'tickets.phone as phone',
+                                        'tickets.active as active',
+                                        'tickets.total as total',
+                                        'tickets.deleted_at as deleted_at',
+                                        'day_tickets.game_date as date')
+                                ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
 
-                        switch ($status) {
-                            case 1:
-                                $rg->active();
-                            break;
-                            case 2:
-                                $rg->active(false);
-                            break;
-                            case 'D':
-                                $rg->onlyTrashed();
-                            break;
-                            default:
-                                $rg->active();
-                        } 
-                }
-                
-                $Tickets = $rg->orderBy('id', 'desc')->paginate(10);
+                        (strlen($criterion) > 0 &&  strlen($search) > 0) 
+                            ? $rg->where($criterion, 'like', '%'. $search . '%')->where('tickets.user_id',Auth::user()->id)
+                            : $rg->where('tickets.id','>',0)->where('tickets.user_id',Auth::user()->id);
+
+
+                        if($date){
+                             $rg->whereDate('day_tickets.game_date',$date);
+                        }
+
+
+
+                        if($status != 'all'){
+
+                            switch ($status) {
+                                case 1:
+                                $rg->where('tickets.active',true);
+                                break;
+                                case 2:
+                                $rg->where('tickets.active',false);
+                                break;
+                                default:
+                                $rg->where('tickets.active',true);
+                            } 
+                        }
+
+        $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('tickets.id','desc')->paginate(10);
         return [
                 'pagination' => [
                     'total'        => $Tickets->total(),
@@ -77,6 +90,8 @@ class RepositoryUserTickets
                 'Tickets' => $Tickets,
                 'Games'=>Game::all(),
                 'Days'=>Day::all(),
+                'Date' =>Carbon::now()->toDateString(),
+                'Coins'=>Coin_purse::select('coins')->where('user_id',Auth::user()->id)->first(),
             ];
     }
 
@@ -124,16 +139,18 @@ class RepositoryUserTickets
                                 }
 
                                 foreach ($data['dataNewDays'] as $item){
-                                    $date = ($item['day']['value'] == 0)
-                                            ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks(0)
-                                            : Carbon::now()->startOfWeek()->addWeeks(0);
+                                    $date = ($item['day']['value'] > 0)
+                                            ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])
+                                            : Carbon::now()->startOfWeek();
 
-                                
-                                        Day_ticket::create([
+                                if($date > $now){
+                                     Day_ticket::create([
                                             'ticket_id'=>$Ticket['id'],
                                             'day_id' => $item['day']['id'],
                                             'game_date'=>$date,
                                         ]);
+                                }
+                                       
 
                                 
                                 }
@@ -204,22 +221,29 @@ class RepositoryUserTickets
      
     public function updateStatus($Ticket_id): Ticket
     {
+        
         $Ticket = $this->model->find($Ticket_id);
-
-        switch ($Ticket->active) {
-            case 0:
-                $Ticket->active = 1;
-            break;
-            case 1:
-                $Ticket->active = 0;  
-            break;
-        }
-
-        if ($Ticket->save()) {
-            return $Ticket;
-        }
-
-        throw new GeneralException(__('Error changing status of Ticket.'));
+        $coins = Coin_purse::where('user_id',Auth::user()->id)->first();
+           
+            switch ($Ticket->active) {
+                case 0:
+                    $Ticket->active = 1;
+                    $tcoins = $coins['coins'] - $Ticket['total'];
+                break;
+                case 1:
+                    $Ticket->active = 0;
+                    $tcoins = $coins['coins'] + $Ticket['total'];
+                break;
+            }
+                if($tcoins > 0){
+                    if($coins->update(['coins'=>$tcoins])){
+                        if ($Ticket->save()) {
+                            return $Ticket;
+                        }
+                    }
+                }
+    
+        throw new GeneralException(__('Tu saldo actual es de $'.$coins['coins'].'pesos y no es suficiente.'));
     }
 
     public function deleteOrResotore($Ticket_id)

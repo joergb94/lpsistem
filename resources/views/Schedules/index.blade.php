@@ -1,0 +1,20 @@
+@extends('layouts.app')
+@section('content')
+    @switch($dm['type_user'])
+        @case(1)
+                <schedule-component></schedule-component>
+        @break
+        @case(2)
+                <schedule-component></schedule-component>
+        @break
+        @case(3)
+                <schedule-component></schedule-component>
+        @break
+        @case(4)
+                <schedule-component></schedule-component>
+        @break
+        @default
+                <schedule-component></schedule-component>
+    @endswitch
+        
+@endsection

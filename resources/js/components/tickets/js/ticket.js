@@ -31,7 +31,7 @@ export default {
         offset : 3,
         criterion : 'tickets.phone',
         date:'',
-        status : 1,
+        status : 'all',
         search : '',
         norepeat: 0
 
@@ -147,9 +147,11 @@ export default {
                 var answer= response.data;
                 console.log(answer.jas)
                 me.dataTicktes = answer.Tickets.data;
+                me.date = answer.Date;
                 me.dataGames = answer.Games;
                 me.dataDays = answer.Days;
                 me.pagination= answer.pagination;
+                dataC();
             })
             .catch(function (error) {
                 console.log(error);

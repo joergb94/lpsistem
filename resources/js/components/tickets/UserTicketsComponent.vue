@@ -18,7 +18,11 @@
                     <div class="card-body">
 
                         <div class="form-group row">
-                            <div class="col-md-12">
+                            <div class="col-sm-12">
+                                 <input type="date" v-model="date" @keyup.enter="ListTickets(1)" class="form-control col-sm-12" placeholder="Texto a buscar">
+                                <br>
+                            </div>
+                            <div class="col-sm-12">
                                 <div class="btn-group col-sm-12">
                                     <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-10" placeholder="buscar No.ticket">
                                     <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
@@ -39,6 +43,12 @@
                                             <div class="col-sm-12 col-md-3 col-lg-3">
                                                 <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                                     <i class="ti-eye"></i>
+                                                </button>
+                                                 <button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
+                                                <i class="ti-money"></i>
+                                                </button>
+                                                <button v-if="item.active == 1" type="button" class="btn btn-secondary btn-sm" @click="changeStatus(item)">
+                                                    <i class="ti-na"></i>
                                                 </button>
                                                 <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                                     <i class="ti-trash"></i>

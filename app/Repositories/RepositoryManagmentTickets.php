@@ -77,6 +77,7 @@ class RepositoryManagmentTickets
                 }
                 
                 $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('tickets.id', 'desc')->paginate(10);
+               
         return [
                 'pagination' => [
                     'total'        => $Tickets->total(),
@@ -89,6 +90,7 @@ class RepositoryManagmentTickets
                 'Tickets' => $Tickets,
                 'Games'=>Game::all(),
                 'Days'=>Day::all(),
+                'Date' =>Carbon::now()->toDateString(),
             ];
     }
 
