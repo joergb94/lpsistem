@@ -10,10 +10,8 @@
                                      Depositos
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
-                                            <option value="all" >Todos</option>
-                                            <option value="1" >Confirmados</option>
-                                            <option value="2">En Espera</option>
-                                            <option value="D">Rechazado</option>
+                                            <option value="1" >Actived</option>
+                                            <option value="D">Delete</option>
                                         </select>
                                     </div> 
                                 </h4>
@@ -132,8 +130,8 @@
                        
                             <div class="form-group">
                                 <label for="email">Tipo de Deposito:</label>
-                                <select class="form-control" name="bank" id="bank" v-model="bank">
-                                    <option  value="">Ingrese tipo de deposito</option>
+                                <select class="form-control" name="bank" id="bank" >
+                                    <option  value="0">Ingrese tipo de deposito</option>
                                     <option value="1">Banco</option>
                                     <option value="2">Oxxo</option>
                                     <option value="3">Banco Movil</option>
@@ -162,7 +160,7 @@
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Save</button>
-                        <button type="button" class="btn btn-primary" v-if="action==2" @click="updateOrCreate(2)">Update</button>
+                        <!--<button type="button" class="btn btn-primary" v-if="action==2" @click="updateOrCreate(2)">Update</button>-->
                         <button type="button" class="btn btn-danger" @click="closeModal()" >Close</button>
                     </div>
                      </form>
