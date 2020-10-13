@@ -237,10 +237,14 @@ export default {
                         {
                             $('#imageDep').css('display','block');
                             $('#img-deposit').css('display','none');
+                            $('#bank').prop("disabled", false);
+                            $('#numDep').prop("disabled", false);
+                            $('#amount').prop("disabled", false);
+                            $('#description').prop("disabled", false);
                             this.titleModal = 'New Deposit';
                             this.bank= '';
                             this.numDep = '';
-                            this.imageDep = '';
+                            $('#imageDep').val('')
                             this.email = '';
                             this.amount = '';
                             this.description = '';
@@ -252,14 +256,19 @@ export default {
                             
                             this.titleModal = 'View Deposit';
                             this.id = data.id;
-                            this.bank = data.bank;
+                            $('#bank').prop("disabled", true);
+                            $('#numDep').prop("disabled", true);
+                            $('#amount').prop("disabled", true);
+                            $('#description').prop("disabled", true);
                             this.numDep = data.numDep;
+                            $("#bank option[value='"+data.bank+"']").prop("selected", true);
                             $('#imageDep').css('display','none');
                             $('#img-deposit').css('display','block');
                             $('#img-deposit').html('<img src="images/deposits/'+data.imageDep+'" style="display: block; margin-left: auto; margin-right: auto;" alt="Img" width="200" height="250">');
                             this.amount = data.amount;
                             this.description = data.description;
                             this.action = 2;
+                            
                             break;
                         }
                     }
