@@ -90,7 +90,7 @@ class RepositoryUserTickets
                 'Tickets' => $Tickets,
                 'Games'=>Game::all(),
                 'Days'=>Day::all(),
-                'Date' =>Carbon::now()->toDateString(),
+                'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
                 'Coins'=>Coin_purse::select('coins')->where('user_id',Auth::user()->id)->first(),
             ];
     }

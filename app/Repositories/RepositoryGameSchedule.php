@@ -36,8 +36,8 @@ class RepositoryGameSchedule
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')
-                     : $this->model->where('id','>',0);
+                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->with('games')
+                     : $this->model->where('id','>',0)->with('games');
                 
                 if($status != 'all'){
 
@@ -85,7 +85,8 @@ class RepositoryGameSchedule
         return DB::transaction(function () use ($data) {
             $Game_schedule = $this->model::create([
                 'game_id' => $data['game_id'],
-                'name' => $data['name'],
+                'number_win' => $data['number_win'],
+                'number_win2' => $data['number_win2'],
                 'date' => $data['date'],
             ]);
 
@@ -116,7 +117,8 @@ class RepositoryGameSchedule
         return DB::transaction(function () use ($Game_schedule, $data) {
             if ($Game_schedule->update([
                 'game_id' => $data['game_id'],
-                'name' => $data['name'],
+                'number_win' => $data['number_win'],
+                'number_win2' => $data['number_win2'],
                 'date' => $data['date'],
             ])) {
 

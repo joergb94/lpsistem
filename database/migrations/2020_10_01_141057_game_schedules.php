@@ -16,7 +16,8 @@ class GameSchedules extends Migration
         Schema::create('game_schedules', function (Blueprint $table) {
             $table->id();
             $table->string('mat', 3)->default('GS');
-            $table->string('name')->nullable();
+            $table->string('number_win',5)->nullable();
+            $table->string('number_win2',5)->nullable();
             $table->unsignedBigInteger('game_id')->nullable();
             $table->date('date')->nullable();
             $table->boolean('active')->default(1);

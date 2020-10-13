@@ -19,7 +19,7 @@ use Carbon\Carbon;
 /**
  * Class TicketRepository.
  */
-class RepositoryManagmentTickets
+class RepositoryGameWinner
 {
     /**
      * TicketRepository constructor.
@@ -42,39 +42,28 @@ class RepositoryManagmentTickets
      * @return mixed
      */
     public function getSearchPaginated($criterion, $search, $status, $date)
-    {
+    {      
         $rg = $this->modelDAT->select( 'tickets.id as id',
                                         'tickets.phone as phone',
-                                        'tickets.active as active',
-                                        'tickets.total as total',
+                                        'ticket_details.game_number as number',
+                                        'ticket_details.bet as bet',
                                         'tickets.deleted_at as deleted_at',
                                         'day_tickets.game_date as date')
-                            ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
+                            ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
+                            ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id');
 
             (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $rg->where($criterion, 'like', '%'. $search . '%')->where('tickets.seller_id',Auth::user()->id)
-                     : $rg->where('tickets.id','>',0)->where('tickets.seller_id',Auth::user()->id);
+                     ? $rg->where($criterion, 'like', '%'. $search . '%')
+                     : $rg->where('tickets.id','>',0);
                 
-                
-                   if($date){
-                    $rg->whereDate('day_tickets.game_date',$date);
-                   }
-                    
-            
-                    
-                if($status != 'all'){
+                     $rg->where('tickets.active',true)->where('ticket_details.active',true);
 
-                        switch ($status) {
-                            case 1:
-                                $rg->where('tickets.active',true);
-                            break;
-                            case 2:
-                                $rg->where('tickets.active',false);
-                            break;
-                            default:
-                                $rg->where('tickets.active',true);
-                        } 
-                }
+                   if($date){
+
+                    $rg->whereDate('day_tickets.game_date',$date);
+
+                   }
+                
                 
                 $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('tickets.id', 'desc')->paginate(10);
                
@@ -229,29 +218,21 @@ class RepositoryManagmentTickets
     public function updateStatus($Ticket_id): Ticket
     {
         $Ticket = $this->model->find($Ticket_id);
-        return DB::transaction(function () use ($Ticket) {
 
-            switch ($Ticket->active) {
-                case 0:
-                    $Ticket->active = 1;
-                break;
-                case 1:
-                    $Ticket->active = 0;  
-                break;
-            }
+        switch ($Ticket->active) {
+            case 0:
+                $Ticket->active = 1;
+            break;
+            case 1:
+                $Ticket->active = 0;  
+            break;
+        }
 
-            if ($Ticket->save()) {
+        if ($Ticket->save()) {
+            return $Ticket;
+        }
 
-                if($this->model_detail->where('ticket_id', $Ticket->id)
-                                        ->update(['active' => $Ticket->active]))
-                    {
-                        return $Ticket;
-                    } 
-                    throw new GeneralException(__('Error changing status of Ticket.'));
-                }
-
-                throw new GeneralException(__('Error changing status of Ticket.'));
-            });
+        throw new GeneralException(__('Error changing status of Ticket.'));
     }
 
     public function deleteOrResotore($Ticket_id)

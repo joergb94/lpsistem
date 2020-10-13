@@ -29,6 +29,8 @@ Vue.component('profile-component', require('./components/user/ProfileComponent.v
 Vue.component('home-component', require('./components/home/HomeComponent.vue').default);
 Vue.component('deposit-component', require('./components/deposits/DepositComponent.vue').default);
 Vue.component('schedule-component', require('./components/schedule/ScheduleComponent.vue').default);
+Vue.component('winner-component', require('./components/winners/WinnersComponent.vue').default);
+
 
 
 

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\Game_schedule\Game_scheduleRequest;
-use App\Http\Requests\Game_schedule\Game_scheduleIdRequest;
-use App\Http\Requests\Game_schedule\Game_schedulePassRequest;
-use App\Http\Requests\Game_schedule\Game_scheduleUpdateRequest;
-use App\Http\Requests\Game_schedule\Game_scheduleStoreRequest;
+use App\Http\Requests\GameSchedule\ScheduleRequest;
+use App\Http\Requests\GameSchedule\ScheduleUpdateRequest;
+use App\Http\Requests\GameSchedule\ScheduleStoreRequest;
 use App\Models\Game_schedule;
 use App\Repositories\RepositoryGameSchedule;
 use Carbon\Carbon; 
@@ -26,7 +24,7 @@ class GameScheduleController extends Controller
     }
 
 
-    public function index(Request $request){
+    public function index(ScheduleRequest $request){
 
         if (!$request->ajax()) return view('Schedules.index',['dm'=>accesUrl(Auth::user(),1)]);
         
@@ -36,28 +34,29 @@ class GameScheduleController extends Controller
   
         return $this->RepositoryGameSchedule->getSearchPaginated($criterion, $search, $status);
     }
-    public function store(Request $request){
+    public function store(ScheduleStoreRequest $request){
         $this->RepositoryGameSchedule->create($request->input());
         return response()->json('ready');
     }
 
-    public function update(Request $request){
+    public function update(ScheduleUpdateRequest $request){
 
         $this->RepositoryGameSchedule->update($request['id'], $request->only(
-            'name',
+            'number_win',
+            'number_win2',
             'game_id',
             'date'
         ));
         return response()->json('ready');
     }
 
-    public function change_status(Request $request)
+    public function change_status(ScheduleRequest $request)
     {
         $this->RepositoryGameSchedule->updateStatus($request->id);
         return response()->json('exito');
     } 
 
-    public function deleteOrResotore(Request $request)
+    public function deleteOrResotore(ScheduleRequest $request)
     {    
         $data = $this->RepositoryGameSchedule->deleteOrResotore($request['id']);
         

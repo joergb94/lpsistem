@@ -4,7 +4,8 @@ export default {
         dataUsers:[],
         dataGames:[],
         id:'',
-        name:'',
+        number_win:'',
+        number_win2:'',
         game_id:'',
         date:'',
         titleModal:'',
@@ -20,7 +21,7 @@ export default {
                 'to' : 0,
             },
         offset : 3,
-        criterion : 'name',
+        criterion : 'number_win',
         status : 1,
         search : '',
         dateS : '',
@@ -86,7 +87,8 @@ export default {
              var url = '/schedule/add'
              var data = {
                     'id': this.id,
-                    'name': this.name,
+                    'number_win': this.number_win,
+                    'number_win2': this.number_win2,
                     'game_id': this.game_id,
                     'date':this.date
             };
@@ -95,7 +97,8 @@ export default {
                 url = '/schedule/update'
                 var data = {
                     'id': this.id,
-                    'name': this.name,
+                    'number_win': this.number_win,
+                    'number_win2': this.number_win2,
                     'game_id': this.game_id,
                     'date':this.date
                 };
@@ -224,7 +227,8 @@ export default {
                         case 'add':
                         {
                             this.titleModal = 'Programar juego';
-                            this.name= '';
+                            this.number_win= '';
+                            this.number_win2= '';
                             this.game_id = '';
                             this.date = '';
                             this.action = 1;
@@ -234,7 +238,9 @@ export default {
                         {
                             
                             this.titleModal = 'Modificar Programacion del juego';
-                            this.name= data.name;
+                            this.id= data.id;
+                            this.number_win= data.number_win;
+                            this.number_win2= data.number_win2;
                             this.game_id =data.game_id;
                             this.date =data.date;
                             this.action = 2;
@@ -247,7 +253,8 @@ export default {
         },
         closeModal(){
                 this.titleModal = '';
-                this.name= '';
+                this.number_win= '';
+                this.number_win2= '';
                 this.game_id = '';
                 this.date = '';
                  $.notifyClose();

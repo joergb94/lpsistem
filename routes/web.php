@@ -63,6 +63,13 @@ Route::post('/schedule/update', 'GameScheduleController@update');
 Route::post('/schedule/deleteOrResotore','GameScheduleController@deleteOrResotore');
 Route::post('/schedule/change_status', 'GameScheduleController@change_status');
 
+//game schedule
+Route::get('/winners', 'GameWinnerController@index');
+Route::post('/winners/add', 'GameWinnerController@store');
+Route::post('/winners/update', 'GameWinnerController@update');
+Route::post('/winners/deleteOrResotore','GameWinnerController@deleteOrResotore');
+Route::post('/winners/change_status', 'GameWinnerController@change_status');
+
 //GeneralServies 
 Route::get('/get_data', 'GeneralServiceController@get_coins');
 

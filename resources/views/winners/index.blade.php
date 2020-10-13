@@ -1,0 +1,20 @@
+@extends('layouts.app')
+@section('content')
+    @switch($dm['type_user'])
+        @case(1)
+                <winner-component></winner-component>
+        @break
+        @case(2)
+                <winner-component></winner-component>
+        @break
+        @case(3)
+                <winner-component></winner-component>
+        @break
+        @case(4)
+                <winner-component></winner-component>
+        @break
+        @default
+                <winner-component></winner-component>
+    @endswitch
+        
+@endsection

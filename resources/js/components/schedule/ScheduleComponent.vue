@@ -9,11 +9,7 @@
                                  <h4 class="card-title mb-0">
                                      Calendario de Juegos
                                     <div class="btn-group">
-                                          <select class="form-control text-center" v-model="status">
-                                            <option value="all" >Todos</option>
-                                            <option value="1" >Activos</option>
-                                            <option value="2" >Inactivos</option>
-                                        </select>
+                                        
                                     </div> 
                                 </h4>
                             </div>
@@ -30,8 +26,8 @@
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <select class="form-control col-sm-2" v-model="criterion">
-                                        <option value="id">#</option>
-                                        <option value="name">Nombre</option>
+                                        <option value="number_win">1er Ganador</option>
+                                         <option value="number_win2">2do Ganador</option>
                                         <option value="date">Fecha</option>
                                     </select>
                                     
@@ -46,8 +42,8 @@
                             <table class="table table-bordered">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>#</th>
-                                    <th>Nombre</th>
+                                    <th>1er Ganador</th>
+                                    <th>2do Ganador</th>
                                     <th>Juego</th>
                                     <th>Fecha</th>
                                     <th>Opciones</th>
@@ -61,9 +57,9 @@
                                 </tr>
 
                                 <tr v-for="item in dataUsers" :key="item.id">
-                                    <td v-text="item.id"></td>
-                                    <td v-text="item.name"></td>
-                                    <td v-text="item.game_id"></td>
+                                    <td v-text="item.number_win"></td>
+                                    <td v-text="item.number_win2"></td>
+                                    <td v-text="item.games.name"></td>
                                     <td v-text="item.date"></td>
                                     <td>
                                         <button type="button" class="btn btn-warning btn-sm" v-if="item.deleted_at == null"  @click="openModal('modal', 'update', item)" >
@@ -119,8 +115,12 @@
                                     </select>
                             </div>
                              <div class="form-group">
-                                <label for="pwd">Nombre:</label>
-                                <input type="text"  v-model="name"  class="form-control" placeholder="Enter name" id="name">
+                                <label for="pwd">Numero ganador:</label>
+                                <input type="text"  v-model="number_win"  class="form-control" placeholder="Enter name" id="number_win">
+                            </div>
+                             <div class="form-group">
+                                <label for="pwd">2do Numero ganador:</label>
+                                <input type="text"  v-model="number_win2"  class="form-control" placeholder="Enter name" id="number_win2">
                             </div>
                             <div class="form-group">
                                 <label for="pwd">Fecha:</label>
