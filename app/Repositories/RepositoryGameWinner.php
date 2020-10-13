@@ -6,6 +6,7 @@ use App\Exceptions\GeneralException;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Game;
+use App\Models\Game_schedule;
 use App\Models\Day;
 use App\Models\Day_ticket;
 use App\Models\Coin_purse;
@@ -77,7 +78,7 @@ class RepositoryGameWinner
                     'to'           => $Tickets->lastItem(),
                 ],
                 'Tickets' => $Tickets,
-                'Games'=>Game::all(),
+                'Games'=>Game_schedule::with('games')->whereDate('date',$date)->get(),
                 'Days'=>Day::all(),
                 'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
             ];

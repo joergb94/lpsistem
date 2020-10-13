@@ -26,8 +26,6 @@
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <select class="form-control col-sm-2" v-model="criterion">
-                                        <option value="number_win">1er Ganador</option>
-                                         <option value="number_win2">2do Ganador</option>
                                         <option value="date">Fecha</option>
                                     </select>
                                     
@@ -57,8 +55,8 @@
                                 </tr>
 
                                 <tr v-for="item in dataUsers" :key="item.id">
-                                    <td v-text="item.number_win"></td>
-                                    <td v-text="item.number_win2"></td>
+                                    <td v-text="item.game_schedule_details[0].number_win"></td>
+                                    <td v-text="item.game_schedule_details[1].number_win"></td>
                                     <td v-text="item.games.name"></td>
                                     <td v-text="item.date"></td>
                                     <td>

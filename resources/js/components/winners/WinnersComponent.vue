@@ -25,13 +25,13 @@
                                     <input type="date" v-model="date" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
                                      <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game" id="game" name="game">
                                         <option value="" >Seleciona un Juego</option>
-                                        <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
-                                            {{ item.name }}
+                                        <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id}">
+                                            {{ item.games.name }} #{{item.id}}
                                         </option>
                                     </select>
 
                                     <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game" id="game" name="game">
-                                        <option value="" >Seleciona un Juego</option>
+                                        <option value="" >Selecione numero ganador</option>
                                         <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
                                             {{ item.name }}
                                         </option>

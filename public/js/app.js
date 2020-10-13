@@ -2143,10 +2143,14 @@ __webpack_require__.r(__webpack_exports__);
                 {
                   $('#imageDep').css('display', 'block');
                   $('#img-deposit').css('display', 'none');
+                  $('#bank').prop("disabled", false);
+                  $('#numDep').prop("disabled", false);
+                  $('#amount').prop("disabled", false);
+                  $('#description').prop("disabled", false);
                   this.titleModal = 'New Deposit';
                   this.bank = '';
                   this.numDep = '';
-                  this.imageDep = '';
+                  $('#imageDep').val('');
                   this.email = '';
                   this.amount = '';
                   this.description = '';
@@ -2158,8 +2162,12 @@ __webpack_require__.r(__webpack_exports__);
                 {
                   this.titleModal = 'View Deposit';
                   this.id = data.id;
-                  this.bank = data.bank;
+                  $('#bank').prop("disabled", true);
+                  $('#numDep').prop("disabled", true);
+                  $('#amount').prop("disabled", true);
+                  $('#description').prop("disabled", true);
                   this.numDep = data.numDep;
+                  $("#bank option[value='" + data.bank + "']").prop("selected", true);
                   $('#imageDep').css('display', 'none');
                   $('#img-deposit').css('display', 'block');
                   $('#img-deposit').html('<img src="images/deposits/' + data.imageDep + '" style="display: block; margin-left: auto; margin-right: auto;" alt="Img" width="200" height="250">');
@@ -39974,20 +39982,12 @@ var render = function() {
                         }
                       },
                       [
-                        _c("option", { attrs: { value: "all" } }, [
-                          _vm._v("Todos")
-                        ]),
-                        _vm._v(" "),
                         _c("option", { attrs: { value: "1" } }, [
-                          _vm._v("Confirmados")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "2" } }, [
-                          _vm._v("En Espera")
+                          _vm._v("Actived")
                         ]),
                         _vm._v(" "),
                         _c("option", { attrs: { value: "D" } }, [
-                          _vm._v("Rechazado")
+                          _vm._v("Delete")
                         ])
                       ]
                     )
@@ -40368,57 +40368,7 @@ var render = function() {
             { attrs: { action: "", enctype: "multipart/form-data" } },
             [
               _c("div", { staticClass: "modal-body" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "email" } }, [
-                    _vm._v("Tipo de Deposito:")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.bank,
-                          expression: "bank"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { name: "bank", id: "bank" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.bank = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "" } }, [
-                        _vm._v("Ingrese tipo de deposito")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "1" } }, [
-                        _vm._v("Banco")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "2" } }, [_vm._v("Oxxo")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "3" } }, [
-                        _vm._v("Banco Movil")
-                      ])
-                    ]
-                  )
-                ]),
+                _vm._m(2),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
                   _c("label", { attrs: { for: "pwd" } }, [
@@ -40569,22 +40519,6 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.action == 2
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.updateOrCreate(2)
-                          }
-                        }
-                      },
-                      [_vm._v("Update")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
                 _c(
                   "button",
                   {
@@ -40640,6 +40574,30 @@ var staticRenderFns = [
         ])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "email" } }, [_vm._v("Tipo de Deposito:")]),
+      _vm._v(" "),
+      _c(
+        "select",
+        { staticClass: "form-control", attrs: { name: "bank", id: "bank" } },
+        [
+          _c("option", { attrs: { value: "0" } }, [
+            _vm._v("Ingrese tipo de deposito")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "1" } }, [_vm._v("Banco")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "2" } }, [_vm._v("Oxxo")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "3" } }, [_vm._v("Banco Movil")])
+        ]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -40778,14 +40736,6 @@ var render = function() {
                       }
                     },
                     [
-                      _c("option", { attrs: { value: "number_win" } }, [
-                        _vm._v("1er Ganador")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "number_win2" } }, [
-                        _vm._v("2do Ganador")
-                      ]),
-                      _vm._v(" "),
                       _c("option", { attrs: { value: "date" } }, [
                         _vm._v("Fecha")
                       ])
@@ -40863,11 +40813,19 @@ var render = function() {
                     _vm._l(_vm.dataUsers, function(item) {
                       return _c("tr", { key: item.id }, [
                         _c("td", {
-                          domProps: { textContent: _vm._s(item.number_win) }
+                          domProps: {
+                            textContent: _vm._s(
+                              item.game_schedule_details[0].number_win
+                            )
+                          }
                         }),
                         _vm._v(" "),
                         _c("td", {
-                          domProps: { textContent: _vm._s(item.number_win2) }
+                          domProps: {
+                            textContent: _vm._s(
+                              item.game_schedule_details[1].number_win
+                            )
+                          }
                         }),
                         _vm._v(" "),
                         _c("td", {
@@ -45101,14 +45059,14 @@ var render = function() {
                           "option",
                           {
                             key: item.id,
-                            domProps: {
-                              value: { id: item.id, text: item.name }
-                            }
+                            domProps: { value: { id: item.id } }
                           },
                           [
                             _vm._v(
                               "\n                                        " +
-                                _vm._s(item.name) +
+                                _vm._s(item.games.name) +
+                                " #" +
+                                _vm._s(item.id) +
                                 "\n                                    "
                             )
                           ]
@@ -45149,7 +45107,7 @@ var render = function() {
                     },
                     [
                       _c("option", { attrs: { value: "" } }, [
-                        _vm._v("Seleciona un Juego")
+                        _vm._v("Selecione numero ganador")
                       ]),
                       _vm._v(" "),
                       _vm._l(_vm.dataGames, function(item) {

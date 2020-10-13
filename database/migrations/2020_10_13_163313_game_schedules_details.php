@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class GameSchedules extends Migration
+class GameSchedulesDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class GameSchedules extends Migration
      */
     public function up()
     {
-        Schema::create('game_schedules', function (Blueprint $table) {
+        Schema::create('game_schedules_details', function (Blueprint $table) {
             $table->id();
-            $table->string('mat', 3)->default('GS');
-            $table->unsignedBigInteger('game_id')->nullable();
-            $table->date('date')->nullable();
-            $table->boolean('active')->default(1);
+            $table->string('mat', 3)->default('GSD');
+            $table->unsignedBigInteger('game_schedule_id')->nullable();
+            $table->string('number_win',5)->nullable();
             $table->timestamps();
             $table->softDeletes();
             //foreing key 
-            $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
+            $table->foreign('game_schedule_id')->references('id')->on('game_schedules')->onDelete('cascade');
         });
     }
 
@@ -33,6 +32,6 @@ class GameSchedules extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('game_schedules');
+        Schema::dropIfExists('game_schedules_details');
     }
 }

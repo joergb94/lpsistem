@@ -14,6 +14,11 @@ class Game_schedule extends Model
     {
         return $this->belongsTo('App\Models\Game','game_id','id');
     }
+
+    public function game_schedule_details()
+    {
+        return $this->hasMany('App\Models\Game_schedules_detail', 'game_schedule_id');
+    }
     /**
      * @return bool
      */

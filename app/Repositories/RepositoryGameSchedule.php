@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralException;
 use App\Models\Game_schedule;
+use App\Models\Game_schedules_detail;
 use App\Models\Game;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,10 @@ class RepositoryGameSchedule
      *
      * @param  Game_schedule  $model
      */
-    public function __construct(Game_schedule $model)
+    public function __construct(Game_schedule $model, Game_schedules_detail $model_detail)
     {
         $this->model = $model;
+        $this->model_detail = $model_detail;
     }
 
 
@@ -36,8 +38,8 @@ class RepositoryGameSchedule
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->with('games')
-                     : $this->model->where('id','>',0)->with('games');
+                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->with('games')->with('game_schedule_details')
+                     : $this->model->where('id','>',0)->with('games')->with('game_schedule_details');
                 
                 if($status != 'all'){
 
@@ -85,14 +87,30 @@ class RepositoryGameSchedule
         return DB::transaction(function () use ($data) {
             $Game_schedule = $this->model::create([
                 'game_id' => $data['game_id'],
-                'number_win' => $data['number_win'],
-                'number_win2' => $data['number_win2'],
                 'date' => $data['date'],
             ]);
-
             if ($Game_schedule) {
-                
-                    return $Game_schedule;
+                    $details = [];
+                    array_push($details,['number_win'=>  $data['number_win']]);
+                   
+                    if($data['number_win2']){
+                        array_push($details,['number_win'=>  $data['number_win2']]);
+                    }
+
+                    foreach ($details as $detail) {
+                        $this->model_detail::create([
+                            'game_schedule_id'=>$Game_schedule['id'],
+                            'number_win' => $detail['number_win'],
+                        ]);
+                    }
+
+                    if($this->model_detail
+                            ->where('game_schedule_id',$Game_schedule['id'])
+                            ->exists())
+                    {
+                        return $Game_schedule;
+                    }
+                    throw new GeneralException(__('There was an error created the Game_schedule.'));
                 
             }
 
@@ -117,12 +135,38 @@ class RepositoryGameSchedule
         return DB::transaction(function () use ($Game_schedule, $data) {
             if ($Game_schedule->update([
                 'game_id' => $data['game_id'],
-                'number_win' => $data['number_win'],
-                'number_win2' => $data['number_win2'],
                 'date' => $data['date'],
             ])) {
 
-                return $Game_schedule;
+                if($this->model_detail
+                        ->where('game_schedule_id',$Game_schedule['id'])
+                        ->delete())
+                {
+                
+                    $details = [];
+                    array_push($details,['number_win'=>  $data['number_win']]);
+                
+                    if($data['number_win2']){
+                        array_push($details,['number_win'=>  $data['number_win2']]);
+                    }
+
+                    foreach ($details as $detail) {
+                        $this->model_detail::create([
+                            'game_schedule_id'=>$Game_schedule['id'],
+                            'number_win' => $detail['number_win'],
+                        ]);
+                    }
+
+                    if($this->model_detail
+                            ->where('game_schedule_id',$Game_schedule['id'])
+                            ->exists())
+                    {
+                        return $Game_schedule;
+                        
+                    }
+
+                    throw new GeneralException(__('There was an error updating the Game_schedule.'));
+                }
             }
 
             throw new GeneralException(__('There was an error updating the Game_schedule.'));
