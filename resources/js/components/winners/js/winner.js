@@ -4,14 +4,18 @@ export default {
         dataTicktes:[],
         dataNumbers:[],
         dataGames:[],
+        dataGamesDetail:[],
         dataDays:[],
         dataNewDays:[],
+        dataFigure:[1,2,3,4,5],
         id:'',
         phone:'',
         total: 0,
         subtotal:'',
         number:'',
         game:'',
+        game_detail:'',
+        figures:'5',
         day:'',
         multiplier:0,
         mTotal:0,
@@ -142,16 +146,17 @@ export default {
         ListTickets(page){
             let me = this;
             var url = '/winners?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status+'&date='+this.date;
+                url +='&game='+this.game.game_id+'&game_schedule='+this.game.id+'&game_detail='+this.game_detail.number+'&figure='+this.figures;
+    
              axios.get(url)
             .then(function (response) {
                 var answer= response.data;
-                console.log(answer.jas)
                 me.dataTicktes = answer.Tickets.data;
                 me.date = answer.Date;
-                me.dataGames = answer.Games;
+                me.dataGame ='';
                 me.dataDays = answer.Days;
                 me.pagination= answer.pagination;
-                dataC();
+            
             })
             .catch(function (error) {
                 console.log(error);
@@ -467,7 +472,27 @@ export default {
                 me.message({title:'Listo',text:'Se ELIMINO con exito el Dia',type:'success'});
              }
                
+        },
+        get_numbers(){
+            let me = this;
+            var id = this.game.id; 
+            axios.get('/gameSchD/detail?id='+id).then(function (response) {
+                var answer = response.data;
+                me.dataGamesDetail = answer;
+            }).catch(function (error) {});
+
+        }, 
+        get_games(){
+            let me = this;
+            var date = this.date; 
+            axios.get('/gameSch/detail?date='+date).then(function (response) {
+                var answer = response.data;
+                me.dataGames = answer;
+
+            }).catch(function (error) {});
+
         }
+
     },
     mounted () {
        this.ListTickets(1);

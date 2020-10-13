@@ -22,26 +22,25 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <input type="date" v-model="date" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
-                                     <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game" id="game" name="game">
+                                    <input type="date" v-model="date" v-on:change="get_games()" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
+                                     <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game" v-on:change="get_numbers()" id="game" name="game">
                                         <option value="" >Seleciona un Juego</option>
-                                        <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id}">
+                                        <option v-for="item in dataGames" :key="'a'+item.id" v-bind:value="{ id:item.id, game_id:item.game_id}">
                                             {{ item.games.name }} #{{item.id}}
                                         </option>
                                     </select>
 
-                                    <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game" id="game" name="game">
+                                    <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game_detail" id="game" name="game">
                                         <option value="" >Selecione numero ganador</option>
-                                        <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
-                                            {{ item.name }}
+                                        <option v-for="item in dataGamesDetail" :key="item.id" v-bind:value="{ id:item.id, number:item.number_win }">
+                                            {{ item.number_win }}
                                         </option>
                                     </select>
-                                    
-                                    <select class="form-control col-sm-12 col-md-6 col-lg-2" v-model="criterion">
-                                        <option value="tickets.phone">Telefono</option>
-                                        <option value="ticket_details.game_number">#</option>
+                                     <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="figures" id="figures" name="figures">
+                                        <option v-for="(item,i) in dataFigure" :key="'A'+ i" v-bind:value="item">
+                                            #Cifras {{ item }}
+                                        </option>
                                     </select>
-                                        
                                     <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-6 col-lg-8" placeholder="Texto a buscar">
                                 
                                     <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>

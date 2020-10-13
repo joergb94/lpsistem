@@ -9,6 +9,8 @@ use App\Http\Requests\Ticket\TicketPassRequest;
 use App\Http\Requests\Ticket\TicketUpdateRequest;
 use App\Http\Requests\Ticket\TicketStoreRequest;
 use App\Models\Ticket;
+use App\Models\Game_schedule;
+use App\Models\Game_schedules_detail;
 use App\Repositories\RepositoryGameWinner;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
@@ -29,13 +31,17 @@ class GameWinnerController extends Controller
     public function index(TicketRequest $request){
         
         if (!$request->ajax()) return view('winners.index',['dm'=>accesUrl(Auth::user(),3)]);
-       
+     
         $search = trim($request->search);
-        $criterion = 'ticket_details.game_number';
+        $criterion = 'tickets.phone';
         $status = ($request->status)? $request->status : 1;
         $date =($request->date)? Carbon::parse($request['date']): Carbon::now();
+        $game = ($request->game)?$request->game : 0;
+        $game_schedule = ($request->game_schedule)?$request->game_schedule : 0;
+        $game_detail = ($request->game_detail)?$request->game_detail : 0;
+        $figures =($request->figure)?$request->figure: 5;
         
-        return $this->RepositoryGameWinner->getSearchPaginated($criterion, $search, $status ,$date);
+        return $this->RepositoryGameWinner->getSearchPaginated($criterion, $search, $status , $date , $game , $game_schedule , $game_detail,$figures);
     }
     public function store(TicketStoreRequest $request){
         
@@ -59,4 +65,14 @@ class GameWinnerController extends Controller
         Ticket::find($request->id)->delete();
         return response()->json(Answer('success','Ticket'));
     }
+
+    public function detail_game(Request $request)
+    {
+        return response()->json(Game_schedules_detail::where('game_schedule_id',$request['id'])->get());
+    } 
+
+    public function game(Request $request)
+    {
+        return response()->json(Game_schedule::with('games')->where('date',$request['date'])->get());
+    } 
 }

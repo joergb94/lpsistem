@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Game;
 use App\Models\Game_schedule;
+use App\Models\Game_schedules_detail;
 use App\Models\Day;
 use App\Models\Day_ticket;
 use App\Models\Coin_purse;
@@ -42,9 +43,9 @@ class RepositoryGameWinner
      *
      * @return mixed
      */
-    public function getSearchPaginated($criterion, $search, $status, $date)
+    public function getSearchPaginated($criterion, $search, $status, $date, $game , $game_schedule , $game_detail,$figures)
     {      
-        $rg = $this->modelDAT->select( 'tickets.id as id',
+        $rg = $this->modelDAT->select( 'ticket_details.id as id',
                                         'tickets.phone as phone',
                                         'ticket_details.game_number as number',
                                         'ticket_details.bet as bet',
@@ -54,16 +55,38 @@ class RepositoryGameWinner
                             ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id');
 
             (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $rg->where($criterion, 'like', '%'. $search . '%')
-                     : $rg->where('tickets.id','>',0);
+                     ? $rg->where('tickets.phone', 'like', '%'. $search . '%')->whereDate('day_tickets.game_date',$date)
+                     : $rg->where('tickets.id','>',0)->whereDate('day_tickets.game_date',$date);
                 
                      $rg->where('tickets.active',true)->where('ticket_details.active',true);
 
-                   if($date){
-
-                    $rg->whereDate('day_tickets.game_date',$date);
-
+                   if($game > 0){
+                        $rg->where('ticket_details.game_id',$game);
                    }
+
+                   if($game > 0 && strlen($game_detail) > 0 && $figures > 0){
+                    $number = '';
+                    $number2 ='';
+                                    $numberArray =str_split($game_detail);
+                                    $prereverse =array_reverse($numberArray);
+                                   
+                                    $valNumber = ($figures <= count($numberArray))?$figures:count($numberArray);
+                                    
+                                        for ($i=0; $i < $valNumber; $i++) { 
+                                        
+                                            $number2 =$number2.''.$prereverse[$i];
+                                        }
+                                        
+                                        $numberArray2 =str_split($number2);
+                                        $reverse = array_reverse($numberArray2);
+            
+                                        for ($i=0; $i < $valNumber; $i++) { 
+                                        
+                                            $number =$number.''.$reverse[$i];
+                                        }
+                        $rg->where('ticket_details.game_number',$number);
+                    }
+               
                 
                 
                 $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('tickets.id', 'desc')->paginate(10);
@@ -78,7 +101,6 @@ class RepositoryGameWinner
                     'to'           => $Tickets->lastItem(),
                 ],
                 'Tickets' => $Tickets,
-                'Games'=>Game_schedule::with('games')->whereDate('date',$date)->get(),
                 'Days'=>Day::all(),
                 'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
             ];

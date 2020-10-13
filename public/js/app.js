@@ -3923,14 +3923,18 @@ __webpack_require__.r(__webpack_exports__);
       dataTicktes: [],
       dataNumbers: [],
       dataGames: [],
+      dataGamesDetail: [],
       dataDays: [],
       dataNewDays: [],
+      dataFigure: [1, 2, 3, 4, 5],
       id: '',
       phone: '',
       total: 0,
       subtotal: '',
       number: '',
       game: '',
+      game_detail: '',
+      figures: '5',
       day: '',
       multiplier: 0,
       mTotal: 0,
@@ -4046,15 +4050,14 @@ __webpack_require__.r(__webpack_exports__);
     ListTickets: function ListTickets(page) {
       var me = this;
       var url = '/winners?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status + '&date=' + this.date;
+      url += '&game=' + this.game.game_id + '&game_schedule=' + this.game.id + '&game_detail=' + this.game_detail.number + '&figure=' + this.figures;
       axios.get(url).then(function (response) {
         var answer = response.data;
-        console.log(answer.jas);
         me.dataTicktes = answer.Tickets.data;
         me.date = answer.Date;
-        me.dataGames = answer.Games;
+        me.dataGame = '';
         me.dataDays = answer.Days;
         me.pagination = answer.pagination;
-        dataC();
       })["catch"](function (error) {
         console.log(error);
       });
@@ -4350,6 +4353,22 @@ __webpack_require__.r(__webpack_exports__);
           type: 'success'
         });
       }
+    },
+    get_numbers: function get_numbers() {
+      var me = this;
+      var id = this.game.id;
+      axios.get('/gameSchD/detail?id=' + id).then(function (response) {
+        var answer = response.data;
+        me.dataGamesDetail = answer;
+      })["catch"](function (error) {});
+    },
+    get_games: function get_games() {
+      var me = this;
+      var date = this.date;
+      axios.get('/gameSch/detail?date=' + date).then(function (response) {
+        var answer = response.data;
+        me.dataGames = answer;
+      })["catch"](function (error) {});
     }
   },
   mounted: function mounted() {
@@ -44996,20 +45015,8 @@ var render = function() {
                     attrs: { type: "date", placeholder: "Texto a buscar" },
                     domProps: { value: _vm.date },
                     on: {
-                      keyup: function($event) {
-                        if (
-                          !$event.type.indexOf("key") &&
-                          _vm._k(
-                            $event.keyCode,
-                            "enter",
-                            13,
-                            $event.key,
-                            "Enter"
-                          )
-                        ) {
-                          return null
-                        }
-                        return _vm.ListTickets(1)
+                      change: function($event) {
+                        return _vm.get_games()
                       },
                       input: function($event) {
                         if ($event.target.composing) {
@@ -45034,19 +45041,24 @@ var render = function() {
                       staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
                       attrs: { id: "game", name: "game" },
                       on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.game = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.game = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          function($event) {
+                            return _vm.get_numbers()
+                          }
+                        ]
                       }
                     },
                     [
@@ -45058,8 +45070,10 @@ var render = function() {
                         return _c(
                           "option",
                           {
-                            key: item.id,
-                            domProps: { value: { id: item.id } }
+                            key: "a" + item.id,
+                            domProps: {
+                              value: { id: item.id, game_id: item.game_id }
+                            }
                           },
                           [
                             _vm._v(
@@ -45083,8 +45097,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.game,
-                          expression: "game"
+                          value: _vm.game_detail,
+                          expression: "game_detail"
                         }
                       ],
                       staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
@@ -45099,7 +45113,7 @@ var render = function() {
                               var val = "_value" in o ? o._value : o.value
                               return val
                             })
-                          _vm.game = $event.target.multiple
+                          _vm.game_detail = $event.target.multiple
                             ? $$selectedVal
                             : $$selectedVal[0]
                         }
@@ -45110,19 +45124,19 @@ var render = function() {
                         _vm._v("Selecione numero ganador")
                       ]),
                       _vm._v(" "),
-                      _vm._l(_vm.dataGames, function(item) {
+                      _vm._l(_vm.dataGamesDetail, function(item) {
                         return _c(
                           "option",
                           {
                             key: item.id,
                             domProps: {
-                              value: { id: item.id, text: item.name }
+                              value: { id: item.id, number: item.number_win }
                             }
                           },
                           [
                             _vm._v(
                               "\n                                        " +
-                                _vm._s(item.name) +
+                                _vm._s(item.number_win) +
                                 "\n                                    "
                             )
                           ]
@@ -45139,11 +45153,12 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.criterion,
-                          expression: "criterion"
+                          value: _vm.figures,
+                          expression: "figures"
                         }
                       ],
-                      staticClass: "form-control col-sm-12 col-md-6 col-lg-2",
+                      staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
+                      attrs: { id: "figures", name: "figures" },
                       on: {
                         change: function($event) {
                           var $$selectedVal = Array.prototype.filter
@@ -45154,23 +45169,26 @@ var render = function() {
                               var val = "_value" in o ? o._value : o.value
                               return val
                             })
-                          _vm.criterion = $event.target.multiple
+                          _vm.figures = $event.target.multiple
                             ? $$selectedVal
                             : $$selectedVal[0]
                         }
                       }
                     },
-                    [
-                      _c("option", { attrs: { value: "tickets.phone" } }, [
-                        _vm._v("Telefono")
-                      ]),
-                      _vm._v(" "),
-                      _c(
+                    _vm._l(_vm.dataFigure, function(item, i) {
+                      return _c(
                         "option",
-                        { attrs: { value: "ticket_details.game_number" } },
-                        [_vm._v("#")]
+                        { key: "A" + i, domProps: { value: item } },
+                        [
+                          _vm._v(
+                            "\n                                        #Cifras " +
+                              _vm._s(item) +
+                              "\n                                    "
+                          )
+                        ]
                       )
-                    ]
+                    }),
+                    0
                   ),
                   _vm._v(" "),
                   _c("input", {

@@ -69,6 +69,9 @@ Route::post('/winners/add', 'GameWinnerController@store');
 Route::post('/winners/update', 'GameWinnerController@update');
 Route::post('/winners/deleteOrResotore','GameWinnerController@deleteOrResotore');
 Route::post('/winners/change_status', 'GameWinnerController@change_status');
+Route::get('/gameSchD/detail','GameWinnerController@detail_game');
+Route::get('/gameSch/detail','GameWinnerController@game');
+
 
 //GeneralServies 
 Route::get('/get_data', 'GeneralServiceController@get_coins');
