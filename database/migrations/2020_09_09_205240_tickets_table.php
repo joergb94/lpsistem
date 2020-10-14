@@ -22,6 +22,7 @@ class TicketsTable extends Migration
             $table->string('phone')->nullable();
             $table->decimal('total')->nullable();
             $table->boolean('active')->default(1);
+            $table->boolean('winner')->default(1);
             $table->timestamps();
             $table->softDeletes();
 

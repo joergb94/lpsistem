@@ -275,18 +275,23 @@ export default {
                 {
                     switch(action){
                         case 'add':
-                        {
-                            this.titleModal = 'Nuevo Ticket';
-                            this.phone = '';
-                            this.total = '';
-                            this.number = '';
-                            this.subtotal = '';
-                            this.multiplier = 0;
-                            this.mTotal = 0;
-                            this.ticket_type = '1';
-                            this.dataNumbers =[];
-                            this.dataNewDays = [];
-                            this.action = 1;
+                        {   this.get_games();
+                            if(this.dataGames.length > 0){
+                                this.titleModal = 'Nuevo Ticket';
+                                this.phone = '';
+                                this.total = '';
+                                this.number = '';
+                                this.subtotal = '';
+                                this.multiplier = 0;
+                                this.mTotal = 0;
+                                this.ticket_type = '1';
+                                this.dataNumbers =[];
+                                this.dataNewDays = [];
+                                this.action = 1;
+                            } else {
+                                this.titleModal = 'El horario para crear tickets se ha terminado intentelo, mañana nuevamente.';
+                            }
+                            
 
                             $("#myModal").modal('show');
                             break;
@@ -467,6 +472,14 @@ export default {
                 me.message({title:'Listo',text:'Se ELIMINO con exito el Dia',type:'success'});
              }
                
+        },
+        get_games(){
+            let me = this;
+            axios.get('/games/data').then(function (response) {
+                var answer = response.data;
+                me.dataGames = answer;
+
+            }).catch(function (error) {});
         }
     },
     mounted () {

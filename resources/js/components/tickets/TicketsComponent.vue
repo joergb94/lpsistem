@@ -64,10 +64,11 @@
                                          <td v-text="item.phone"></td>
                                         <td v-text="item.total"></td>
                                         <td>
-                                            <div v-if="item.active == 1">
+                                            <div v-if="item.active == 1" class="text-center">
                                                 <span class="badge badge-success">Pagado</span>
+                                                <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6>
                                             </div>
-                                            <div v-else-if="item.active == 0">
+                                            <div v-else-if="item.active == 0" class="text-center">
                                                 <span class="badge badge-danger">Por Pagar</span>
                                             </div>
 
@@ -263,7 +264,10 @@
                                 </li>
                                 <li class="list-group-item"  v-for="item in dataNumbers" :key="item.id">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Numero:<strong v-text="item.game_number"></strong></div>
+                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
+                                            Numero:<strong v-text="item.game_number"></strong>
+                                            <h6 v-if="item.winner == 1" class="text-success"> Ganador</h6>
+                                        </div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos</div>                  
                                     </div>

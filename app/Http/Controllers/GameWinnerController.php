@@ -38,8 +38,9 @@ class GameWinnerController extends Controller
         $date =($request->date)? Carbon::parse($request['date']): Carbon::now();
         $game = ($request->game)?$request->game : 0;
         $game_schedule = ($request->game_schedule)?$request->game_schedule : 0;
-        $game_detail = ($request->game_detail)?$request->game_detail : 0;
-        $figures =($request->figure)?$request->figure: 5;
+        $game_detail = ($request->game_detail > 0)?$request->game_detail : '';
+        $figures =($request->figure > 0)?$request->figure: 0;
+       
         
         return $this->RepositoryGameWinner->getSearchPaginated($criterion, $search, $status , $date , $game , $game_schedule , $game_detail,$figures);
     }
@@ -54,7 +55,7 @@ class GameWinnerController extends Controller
         return response()->json($this->RepositoryGameWinner->detail($request['id']));
     } 
 
-    public function payment(Request $request)
+    public function win(Request $request)
     {
         $this->RepositoryGameWinner->updateStatus($request->id);
         return response()->json(Answer('success','Ticket'));

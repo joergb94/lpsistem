@@ -22,26 +22,27 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <input type="date" v-model="date" v-on:change="get_games()" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
-                                     <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game" v-on:change="get_numbers()" id="game" name="game">
+                                    <input type="date" v-model="date" v-on:change="get_games()" class="form-control col-sm-12 col-md-4 col-lg-2" placeholder="Texto a buscar">
+                                     <select class="form-control col-sm-12 col-md-4 col-lg-2" v-model="game" v-on:change="get_numbers()" id="game" name="game">
                                         <option value="" >Seleciona un Juego</option>
                                         <option v-for="item in dataGames" :key="'a'+item.id" v-bind:value="{ id:item.id, game_id:item.game_id}">
                                             {{ item.games.name }} #{{item.id}}
                                         </option>
                                     </select>
 
-                                    <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="game_detail" id="game" name="game">
-                                        <option value="" >Selecione numero ganador</option>
+                                    <select class="form-control col-sm-12 col-md-4 col-lg-2" v-model="game_detail" id="game" name="game">
+                                        <option value="0" >Selecione numero ganador</option>
                                         <option v-for="item in dataGamesDetail" :key="item.id" v-bind:value="{ id:item.id, number:item.number_win }">
                                             {{ item.number_win }}
                                         </option>
                                     </select>
-                                     <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="figures" id="figures" name="figures">
+                                     <select class="form-control col-sm-12 col-md-4 col-lg-2" v-model="figures" id="figures" name="figures">
+                                        <option value="0" >Todas las cifras</option>
                                         <option v-for="(item,i) in dataFigure" :key="'A'+ i" v-bind:value="item">
                                             #Cifras {{ item }}
                                         </option>
                                     </select>
-                                    <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-6 col-lg-8" placeholder="Texto a buscar">
+                                    <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-4 col-lg-2" placeholder="Texto a buscar">
                                 
                                     <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
@@ -67,7 +68,10 @@
                                     </tr>
 
                                     <tr v-for="item in dataTicktes" :key="item.id">
-                                        <td v-text="item.number"></td>
+                                        <td>
+                                            No.<strong v-text="item.number"></strong>
+                                            <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6>
+                                        </td>
                                          <td v-text="item.phone"></td>
                                         <td v-text="item.bet"></td>
                                         <td v-text="item.date"></td>
@@ -75,10 +79,10 @@
                                             <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                                 <i class="ti-eye"></i>
                                             </button>
-                                            <button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
+                                            <button v-if="item.winner == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
                                                 <i class="ti-money"></i>
                                             </button>
-                                            <button v-if="item.active == 1" type="button" class="btn btn-secondary btn-sm" @click="changeStatus(item)">
+                                            <button v-if="item.winner == 1" type="button" class="btn btn-secondary btn-sm" @click="changeStatus(item)">
                                                 <i class="ti-na"></i>
                                             </button>
                                             <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
@@ -198,12 +202,12 @@
                                                     </li>
                                                     <li class="list-group-item"  v-for="(item,index) in dataNumbers" :key="index">
                                                         <div class="row">
-                                                            <div class="col-sm-12 col-md-4 col-lg-4" v-text="item.number">
+                                                            <div class="col-sm-12 col-md-4 col-lg-2" v-text="item.number">
                                                             </div>
-                                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                            <div class="col-sm-12 col-md-4 col-lg-2">
                                                                 $<span v-text="item.subtotal"></span> pesos
                                                             </div>
-                                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                            <div class="col-sm-12 col-md-4 col-lg-2">
                                                                 <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" >-</button>
                                                             </div>
                                                         </div>
@@ -261,7 +265,8 @@
                                 </li>
                                 <li class="list-group-item"  v-for="item in dataNumbers" :key="item.id">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Numero:<strong v-text="item.game_number"></strong></div>
+                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Numero:<strong v-text="item.game_number"></strong>
+                                        <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6></div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos</div>                  
                                     </div>

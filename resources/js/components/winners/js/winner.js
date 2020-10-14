@@ -14,8 +14,8 @@ export default {
         subtotal:'',
         number:'',
         game:'',
-        game_detail:'',
-        figures:'5',
+        game_detail:'0',
+        figures:'0',
         day:'',
         multiplier:0,
         mTotal:0,
@@ -153,7 +153,7 @@ export default {
                 var answer= response.data;
                 me.dataTicktes = answer.Tickets.data;
                 me.date = answer.Date;
-                me.dataGame ='';
+                me.dataGame =me.get_games();
                 me.dataDays = answer.Days;
                 me.pagination= answer.pagination;
             
@@ -238,14 +238,14 @@ export default {
             var data = {
                 'id': item.id,
                 };
-             var m = "¿Deseas confirmar que el Ticket esta pagado?";
-             var mt = "El Ticket sera pagado";
+             var m = "¿Deseas confirmar que el Ticket Gano?";
+             var mt = "El Ticket se convertira en ganador";
              var btn = "pagalo";
 
 
             if(item.active == 1){
-                 m = "¿Deseas cancelar que el Ticket esta pagado?";
-                 mt = "El Ticket sera cancelado";
+                 m = "¿Deseas cancelar que el Gane del Ticket?";
+                 mt = "El Gane del ticket sera cancelado";
                  btn = "cancelalo";
             }
              Swal.fire({
@@ -258,7 +258,7 @@ export default {
                     confirmButtonText: 'Si, '+btn+'!'
                 }).then((result) => {
                     if (result.value) {
-                         axios.post('/winners/payment',data).then(function (response) {
+                         axios.post('/winners/win',data).then(function (response) {
                                 me.ListTickets();
                                 $.notify({
                                             // options
@@ -299,7 +299,7 @@ export default {
                         case 'detail':
                         {   let me = this;
                             me.action = 2;
-                            axios.get('/winners/detail?id='+data.id).then(function (response) {
+                            axios.get('/tickets/detail?id='+data.ticket_id).then(function (response) {
                                 var answer = response.data;
                                 console.log(answer)
                                 me.titleModal = 'Info Ticket Numero: '+answer.ticket.id;
@@ -307,23 +307,13 @@ export default {
                                 me.total = answer.ticket.total;
                                 me.phone =answer.client.phone;
                                 me.dataNewDays = answer.days;
-                                if(answer.client.created_at == answer.client.updated_at){
-                                     $('#send-text').html(`<a class="btn btn-block btn-primary text-white" href="https://wa.me/52${answer.client.phone}?text=USUARIO%20${answer.client.email}%20CONTRASEÑA:%20${answer.client.phone}%20" target="_blank" style="color:#000;">
-                                                        Enviar Usuario y Contraseña &nbsp; 
-                                                        <i style="font-size:18px;" class="fa fa-mobile-phone"></i>
-                                                    </a>
-                                                    <a class="btn btn-block btn-success text-white" href="https://wa.me/52${answer.client.phone}" target="_blank" style="color:#000;">
+                              
+                                $('#send-text').html(`<a class="btn btn-block btn-success text-white" href="https://wa.me/52${answer.client.phone}" target="_blank" style="color:#000;">
                                                         Enviar mensaje &nbsp; 
                                                         <i style="font-size:18px;" class="fa fa-mobile-phone"></i>
                                                     </a>`);
-                                }else{
-                                     $('#send-text').html(`<a class="btn btn-block btn-success text-white" href="https://wa.me/52${answer.client.phone}" target="_blank" style="color:#000;">
-                                                        Enviar mensaje &nbsp; 
-                                                        <i style="font-size:18px;" class="fa fa-mobile-phone"></i>
-                                                    </a>`);
-                                }
+                                
                                
-
                                 $("#myModal").modal('show');
                             }).catch(function (error) {}) 
                            
@@ -479,6 +469,7 @@ export default {
             axios.get('/gameSchD/detail?id='+id).then(function (response) {
                 var answer = response.data;
                 me.dataGamesDetail = answer;
+                me.game_detail ='0';
             }).catch(function (error) {});
 
         }, 

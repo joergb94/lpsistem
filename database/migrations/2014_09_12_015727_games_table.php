@@ -17,6 +17,7 @@ class GamesTable extends Migration
             $table->id();
             $table->string('mat', 3)->default('GAM');
             $table->string('name', 100);
+            $table->time('time_end',0)->nullable();
             $table->timestamps();
         });
     }

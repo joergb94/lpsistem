@@ -22,6 +22,7 @@ class TicketDetailsTable extends Migration
             $table->string('game_number',5)->nullable();
             $table->decimal('bet')->nullable();
             $table->boolean('active')->default(1);
+            $table->boolean('winner')->default(1);
             $table->timestamps();
             $table->softDeletes();
 

@@ -37,7 +37,10 @@
                                     </li>
                                     <li class="list-group-item"  v-for="item in dataTicktes" :key="item.id">
                                         <div class="row text-center">
-                                            <div class="col-sm-12 col-md-3 col-lg-3"><strong>No.ticket: <span v-text="item.id"></span></strong></div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3">
+                                                <strong>No.ticket: <span v-text="item.id"></span></strong>
+                                                <h6 v-if="item.winner == 1" class="text-success"> Ganador <i clsass="ti-star"></i></h6>
+                                            </div>
                                             <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.created_at"></div>
                                             <div class="col-sm-12 col-md-3 col-lg-3">$<span v-text="item.total"></span> pesos</div>
                                             <div class="col-sm-12 col-md-3 col-lg-3">
@@ -209,7 +212,10 @@
                                 </li>
                                 <li class="list-group-item"  v-for="item in dataNumbers" :key="item.id">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Numero:<strong v-text="item.game_number"></strong></div>
+                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
+                                            Numero:<strong v-text="item.game_number"></strong>
+                                            <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6>
+                                        </div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos</div>                  
                                     </div>

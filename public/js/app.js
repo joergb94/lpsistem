@@ -2731,17 +2731,24 @@ __webpack_require__.r(__webpack_exports__);
             switch (action) {
               case 'add':
                 {
-                  this.titleModal = 'Nuevo Ticket';
-                  this.phone = '';
-                  this.total = '';
-                  this.number = '';
-                  this.subtotal = '';
-                  this.multiplier = 0;
-                  this.mTotal = 0;
-                  this.ticket_type = '1';
-                  this.dataNumbers = [];
-                  this.dataNewDays = [];
-                  this.action = 1;
+                  this.get_games();
+
+                  if (this.dataGames.length > 0) {
+                    this.titleModal = 'Nuevo Ticket';
+                    this.phone = '';
+                    this.total = '';
+                    this.number = '';
+                    this.subtotal = '';
+                    this.multiplier = 0;
+                    this.mTotal = 0;
+                    this.ticket_type = '1';
+                    this.dataNumbers = [];
+                    this.dataNewDays = [];
+                    this.action = 1;
+                  } else {
+                    this.titleModal = 'El horario para crear tickets se ha terminado intentelo, mañana nuevamente.';
+                  }
+
                   $("#myModal").modal('show');
                   break;
                 }
@@ -2910,6 +2917,13 @@ __webpack_require__.r(__webpack_exports__);
           type: 'success'
         });
       }
+    },
+    get_games: function get_games() {
+      var me = this;
+      axios.get('/games/data').then(function (response) {
+        var answer = response.data;
+        me.dataGames = answer;
+      })["catch"](function (error) {});
     }
   },
   mounted: function mounted() {
@@ -3173,6 +3187,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     openModal: function openModal(model, action) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+      this.get_games();
 
       switch (model) {
         case 'modal':
@@ -3180,16 +3195,23 @@ __webpack_require__.r(__webpack_exports__);
             switch (action) {
               case 'add':
                 {
-                  this.titleModal = 'Nuevo Ticket';
-                  this.total = '';
-                  this.number = '';
-                  this.subtotal = '';
-                  this.multiplier = 0;
-                  this.mTotal = 0;
-                  this.ticket_type = '1';
-                  this.dataNumbers = [];
-                  this.dataNewDays = [];
-                  this.action = 1;
+                  this.get_games();
+
+                  if (this.dataGames.length > 0) {
+                    this.titleModal = 'Nuevo Ticket';
+                    this.total = '';
+                    this.number = '';
+                    this.subtotal = '';
+                    this.multiplier = 0;
+                    this.mTotal = 0;
+                    this.ticket_type = '1';
+                    this.dataNumbers = [];
+                    this.dataNewDays = [];
+                    this.action = 1;
+                  } else {
+                    this.titleModal = 'El horario para crear tickets se ha terminado intentelo, mañana nuevamente.';
+                  }
+
                   $("#myModal").modal('show');
                   break;
                 }
@@ -3349,6 +3371,13 @@ __webpack_require__.r(__webpack_exports__);
           type: 'success'
         });
       }
+    },
+    get_games: function get_games() {
+      var me = this;
+      axios.get('/games/data').then(function (response) {
+        var answer = response.data;
+        me.dataGames = answer;
+      })["catch"](function (error) {});
     }
   },
   mounted: function mounted() {
@@ -3933,8 +3962,8 @@ __webpack_require__.r(__webpack_exports__);
       subtotal: '',
       number: '',
       game: '',
-      game_detail: '',
-      figures: '5',
+      game_detail: '0',
+      figures: '0',
       day: '',
       multiplier: 0,
       mTotal: 0,
@@ -4055,7 +4084,7 @@ __webpack_require__.r(__webpack_exports__);
         var answer = response.data;
         me.dataTicktes = answer.Tickets.data;
         me.date = answer.Date;
-        me.dataGame = '';
+        me.dataGame = me.get_games();
         me.dataDays = answer.Days;
         me.pagination = answer.pagination;
       })["catch"](function (error) {
@@ -4131,13 +4160,13 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "¿Deseas confirmar que el Ticket esta pagado?";
-      var mt = "El Ticket sera pagado";
+      var m = "¿Deseas confirmar que el Ticket Gano?";
+      var mt = "El Ticket se convertira en ganador";
       var btn = "pagalo";
 
       if (item.active == 1) {
-        m = "¿Deseas cancelar que el Ticket esta pagado?";
-        mt = "El Ticket sera cancelado";
+        m = "¿Deseas cancelar que el Gane del Ticket?";
+        mt = "El Gane del ticket sera cancelado";
         btn = "cancelalo";
       }
 
@@ -4151,7 +4180,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Si, ' + btn + '!'
       }).then(function (result) {
         if (result.value) {
-          axios.post('/winners/payment', data).then(function (response) {
+          axios.post('/winners/win', data).then(function (response) {
             me.ListTickets();
             $.notify({
               // options
@@ -4193,7 +4222,7 @@ __webpack_require__.r(__webpack_exports__);
                 {
                   var me = this;
                   me.action = 2;
-                  axios.get('/winners/detail?id=' + data.id).then(function (response) {
+                  axios.get('/tickets/detail?id=' + data.ticket_id).then(function (response) {
                     var answer = response.data;
                     console.log(answer);
                     me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
@@ -4201,13 +4230,7 @@ __webpack_require__.r(__webpack_exports__);
                     me.total = answer.ticket.total;
                     me.phone = answer.client.phone;
                     me.dataNewDays = answer.days;
-
-                    if (answer.client.created_at == answer.client.updated_at) {
-                      $('#send-text').html("<a class=\"btn btn-block btn-primary text-white\" href=\"https://wa.me/52".concat(answer.client.phone, "?text=USUARIO%20").concat(answer.client.email, "%20CONTRASE\xD1A:%20").concat(answer.client.phone, "%20\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar Usuario y Contrase\xF1a &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>\n                                                    <a class=\"btn btn-block btn-success text-white\" href=\"https://wa.me/52").concat(answer.client.phone, "\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar mensaje &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>"));
-                    } else {
-                      $('#send-text').html("<a class=\"btn btn-block btn-success text-white\" href=\"https://wa.me/52".concat(answer.client.phone, "\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar mensaje &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>"));
-                    }
-
+                    $('#send-text').html("<a class=\"btn btn-block btn-success text-white\" href=\"https://wa.me/52".concat(answer.client.phone, "\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar mensaje &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>"));
                     $("#myModal").modal('show');
                   })["catch"](function (error) {});
                   break;
@@ -4360,6 +4383,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/gameSchD/detail?id=' + id).then(function (response) {
         var answer = response.data;
         me.dataGamesDetail = answer;
+        me.game_detail = '0';
       })["catch"](function (error) {});
     },
     get_games: function get_games() {
@@ -41520,15 +41544,22 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [
                           item.active == 1
-                            ? _c("div", [
+                            ? _c("div", { staticClass: "text-center" }, [
                                 _c(
                                   "span",
                                   { staticClass: "badge badge-success" },
                                   [_vm._v("Pagado")]
-                                )
+                                ),
+                                _vm._v(" "),
+                                item.winner == 1
+                                  ? _c("h6", { staticClass: "text-warning" }, [
+                                      _vm._v(" Ganador "),
+                                      _c("i", { staticClass: "ti-star" })
+                                    ])
+                                  : _vm._e()
                               ])
                             : item.active == 0
-                            ? _c("div", [
+                            ? _c("div", { staticClass: "text-center" }, [
                                 _c(
                                   "span",
                                   { staticClass: "badge badge-danger" },
@@ -42413,12 +42444,22 @@ var render = function() {
                                       "col-sm-12 col-md-4 col-lg-4 text-center"
                                   },
                                   [
-                                    _vm._v("Numero:"),
+                                    _vm._v(
+                                      "\n                                        Numero:"
+                                    ),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    item.winner == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [_vm._v(" Ganador")]
+                                        )
+                                      : _vm._e()
                                   ]
                                 ),
                                 _vm._v(" "),
@@ -42794,7 +42835,14 @@ var render = function() {
                                 _c("span", {
                                   domProps: { textContent: _vm._s(item.id) }
                                 })
-                              ])
+                              ]),
+                              _vm._v(" "),
+                              item.winner == 1
+                                ? _c("h6", { staticClass: "text-success" }, [
+                                    _vm._v(" Ganador "),
+                                    _c("i", { attrs: { clsass: "ti-star" } })
+                                  ])
+                                : _vm._e()
                             ]
                           ),
                           _vm._v(" "),
@@ -43578,12 +43626,25 @@ var render = function() {
                                       "col-sm-12 col-md-4 col-lg-4 text-center"
                                   },
                                   [
-                                    _vm._v("Numero:"),
+                                    _vm._v(
+                                      "\n                                        Numero:"
+                                    ),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    item.winner == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-warning" },
+                                          [
+                                            _vm._v(" Ganador "),
+                                            _c("i", { staticClass: "ti-star" })
+                                          ]
+                                        )
+                                      : _vm._e()
                                   ]
                                 ),
                                 _vm._v(" "),
@@ -45011,7 +45072,7 @@ var render = function() {
                         expression: "date"
                       }
                     ],
-                    staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
+                    staticClass: "form-control col-sm-12 col-md-4 col-lg-2",
                     attrs: { type: "date", placeholder: "Texto a buscar" },
                     domProps: { value: _vm.date },
                     on: {
@@ -45038,7 +45099,7 @@ var render = function() {
                           expression: "game"
                         }
                       ],
-                      staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
+                      staticClass: "form-control col-sm-12 col-md-4 col-lg-2",
                       attrs: { id: "game", name: "game" },
                       on: {
                         change: [
@@ -45101,7 +45162,7 @@ var render = function() {
                           expression: "game_detail"
                         }
                       ],
-                      staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
+                      staticClass: "form-control col-sm-12 col-md-4 col-lg-2",
                       attrs: { id: "game", name: "game" },
                       on: {
                         change: function($event) {
@@ -45120,7 +45181,7 @@ var render = function() {
                       }
                     },
                     [
-                      _c("option", { attrs: { value: "" } }, [
+                      _c("option", { attrs: { value: "0" } }, [
                         _vm._v("Selecione numero ganador")
                       ]),
                       _vm._v(" "),
@@ -45157,7 +45218,7 @@ var render = function() {
                           expression: "figures"
                         }
                       ],
-                      staticClass: "form-control col-sm-12 col-md-12 col-lg-12",
+                      staticClass: "form-control col-sm-12 col-md-4 col-lg-2",
                       attrs: { id: "figures", name: "figures" },
                       on: {
                         change: function($event) {
@@ -45175,20 +45236,26 @@ var render = function() {
                         }
                       }
                     },
-                    _vm._l(_vm.dataFigure, function(item, i) {
-                      return _c(
-                        "option",
-                        { key: "A" + i, domProps: { value: item } },
-                        [
-                          _vm._v(
-                            "\n                                        #Cifras " +
-                              _vm._s(item) +
-                              "\n                                    "
-                          )
-                        ]
-                      )
-                    }),
-                    0
+                    [
+                      _c("option", { attrs: { value: "0" } }, [
+                        _vm._v("Todas las cifras")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.dataFigure, function(item, i) {
+                        return _c(
+                          "option",
+                          { key: "A" + i, domProps: { value: item } },
+                          [
+                            _vm._v(
+                              "\n                                        #Cifras " +
+                                _vm._s(item) +
+                                "\n                                    "
+                            )
+                          ]
+                        )
+                      })
+                    ],
+                    2
                   ),
                   _vm._v(" "),
                   _c("input", {
@@ -45200,7 +45267,7 @@ var render = function() {
                         expression: "search"
                       }
                     ],
-                    staticClass: "form-control col-sm-12 col-md-6 col-lg-8",
+                    staticClass: "form-control col-sm-12 col-md-4 col-lg-2",
                     attrs: { type: "text", placeholder: "Texto a buscar" },
                     domProps: { value: _vm.search },
                     on: {
@@ -45262,9 +45329,21 @@ var render = function() {
                     _vm._v(" "),
                     _vm._l(_vm.dataTicktes, function(item) {
                       return _c("tr", { key: item.id }, [
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.number) }
-                        }),
+                        _c("td", [
+                          _vm._v(
+                            "\n                                        No."
+                          ),
+                          _c("strong", {
+                            domProps: { textContent: _vm._s(item.number) }
+                          }),
+                          _vm._v(" "),
+                          item.winner == 1
+                            ? _c("h6", { staticClass: "text-warning" }, [
+                                _vm._v(" Ganador "),
+                                _c("i", { staticClass: "ti-star" })
+                              ])
+                            : _vm._e()
+                        ]),
                         _vm._v(" "),
                         _c("td", {
                           domProps: { textContent: _vm._s(item.phone) }
@@ -45298,7 +45377,7 @@ var render = function() {
                                 [_c("i", { staticClass: "ti-eye" })]
                               ),
                               _vm._v(" "),
-                              item.active == 0
+                              item.winner == 0
                                 ? _c(
                                     "button",
                                     {
@@ -45314,7 +45393,7 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              item.active == 1
+                              item.winner == 1
                                 ? _c(
                                     "button",
                                     {
@@ -45920,7 +45999,7 @@ var render = function() {
                                     _c("div", { staticClass: "row" }, [
                                       _c("div", {
                                         staticClass:
-                                          "col-sm-12 col-md-4 col-lg-4",
+                                          "col-sm-12 col-md-4 col-lg-2",
                                         domProps: {
                                           textContent: _vm._s(item.number)
                                         }
@@ -45930,7 +46009,7 @@ var render = function() {
                                         "div",
                                         {
                                           staticClass:
-                                            "col-sm-12 col-md-4 col-lg-4"
+                                            "col-sm-12 col-md-4 col-lg-2"
                                         },
                                         [
                                           _vm._v(
@@ -45951,7 +46030,7 @@ var render = function() {
                                         "div",
                                         {
                                           staticClass:
-                                            "col-sm-12 col-md-4 col-lg-4"
+                                            "col-sm-12 col-md-4 col-lg-2"
                                         },
                                         [
                                           _c(
@@ -46154,7 +46233,18 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    item.winner == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-warning" },
+                                          [
+                                            _vm._v(" Ganador "),
+                                            _c("i", { staticClass: "ti-star" })
+                                          ]
+                                        )
+                                      : _vm._e()
                                   ]
                                 ),
                                 _vm._v(" "),

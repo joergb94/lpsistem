@@ -35,6 +35,33 @@ class RepositoryGameWinner
         $this->modelDAT = $modelDAT;
     }
 
+    public function figures($game_detail,$figures){
+
+                        $number = '';
+                        $number2 ='';
+                                        
+                        $numberArray =str_split($game_detail);
+                        $prereverse =array_reverse($numberArray);
+                                    
+                        $valNumber = ($figures <= count($numberArray))?$figures:count($numberArray);
+                                        
+                        for ($i=0; $i < $valNumber; $i++) { 
+                                            
+                                $number2 =$number2.''.$prereverse[$i];
+                            }
+                                            
+                        $numberArray2 =str_split($number2);
+                        $reverse = array_reverse($numberArray2);
+                
+                        for ($i=0; $i < $valNumber; $i++) { 
+                                            
+                                $number =$number.''.$reverse[$i];
+                            }
+
+            return $number;
+
+    }
+
 
           /**
      * @param int    $paged
@@ -46,6 +73,8 @@ class RepositoryGameWinner
     public function getSearchPaginated($criterion, $search, $status, $date, $game , $game_schedule , $game_detail,$figures)
     {      
         $rg = $this->modelDAT->select( 'ticket_details.id as id',
+                                        'tickets.id as ticket_id',
+                                        'ticket_details.winner as winner',
                                         'tickets.phone as phone',
                                         'ticket_details.game_number as number',
                                         'ticket_details.bet as bet',
@@ -60,31 +89,30 @@ class RepositoryGameWinner
                 
                      $rg->where('tickets.active',true)->where('ticket_details.active',true);
 
-                   if($game > 0){
-                        $rg->where('ticket_details.game_id',$game);
-                   }
+                  
 
-                   if($game > 0 && strlen($game_detail) > 0 && $figures > 0){
-                    $number = '';
-                    $number2 ='';
-                                    $numberArray =str_split($game_detail);
-                                    $prereverse =array_reverse($numberArray);
-                                   
-                                    $valNumber = ($figures <= count($numberArray))?$figures:count($numberArray);
-                                    
-                                        for ($i=0; $i < $valNumber; $i++) { 
-                                        
-                                            $number2 =$number2.''.$prereverse[$i];
-                                        }
-                                        
-                                        $numberArray2 =str_split($number2);
-                                        $reverse = array_reverse($numberArray2);
-            
-                                        for ($i=0; $i < $valNumber; $i++) { 
-                                        
-                                            $number =$number.''.$reverse[$i];
-                                        }
-                        $rg->where('ticket_details.game_number',$number);
+
+                    if($game > 0  && strlen($game_detail) > 0 && $figures > 0){   
+                        
+                            $rg->where('ticket_details.game_id',$game)
+                                ->where('ticket_details.game_number',RepositoryGameWinner::figures($game_detail,$figures));
+                           
+                    }else if(strlen($game_detail) > 0){
+
+                        $figuresArray = [];
+                        $cycles =strlen($game_detail);
+                        
+                        for ($i=0; $i <= $cycles ; $i++) { 
+                            array_push($figuresArray,RepositoryGameWinner::figures($game_detail,$i));
+                        }
+                        
+                        $rg->where('ticket_details.game_id',$game)
+                            ->whereIn('ticket_details.game_number',$figuresArray);
+                            
+                    }
+                    
+                    if($game > 0){
+                        $rg->where('ticket_details.game_id',$game);
                     }
                
                 
@@ -238,24 +266,41 @@ class RepositoryGameWinner
      * @return Ticket
      */
      
-    public function updateStatus($Ticket_id): Ticket
+    public function updateStatus($TicketD_id)
     {
-        $Ticket = $this->model->find($Ticket_id);
+    
+        return DB::transaction(function () use ($TicketD_id) {
+            $TicketD = $this->model_detail->find($TicketD_id);
 
-        switch ($Ticket->active) {
-            case 0:
-                $Ticket->active = 1;
-            break;
-            case 1:
-                $Ticket->active = 0;  
-            break;
-        }
+            switch ($TicketD->winner) {
+                case 0:
+                    $TicketD->winner = true;
+                break;
+                case 1:
+                    $TicketD->winner = false;  
+                break;
+            }
 
-        if ($Ticket->save()) {
-            return $Ticket;
-        }
+            if ($TicketD->save()) {
 
-        throw new GeneralException(__('Error changing status of Ticket.'));
+                $Ticket = $this->model->find($TicketD->ticket_id);
+
+                $win =  $this->model_detail
+                        ->where('ticket_id',$Ticket->id)
+                        ->where('winner',true)
+                        ->exists();
+
+                if ($Ticket->update([
+                        'winner' => $win,
+                        
+                    ])) {
+                        return $TicketD;
+                    }
+                    throw new GeneralException(__('Error changing status of Ticket.'));
+            }
+
+            throw new GeneralException(__('Error changing status of Ticket.'));
+        });
     }
 
     public function deleteOrResotore($Ticket_id)
