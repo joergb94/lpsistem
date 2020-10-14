@@ -19,9 +19,23 @@ class GameSeeder extends Seeder
             ['name'=> 'Lotería Nacional Gallo','time_end'=>'19:30:00'],
       ];
 
+      $gamesD = [
+                    ['game_id'=> 1,'figures'=>3,'prize'=>'500'],
+                    ['game_id'=> 1,'figures'=>2,'prize'=>'50'],
+                    ['game_id'=> 1,'figures'=>2,'prize'=>'5'],
+                    ['game_id'=> 2,'figures'=>3,'prize'=>'500'],
+                    ['game_id'=> 2,'figures'=>2,'prize'=>'50'],
+                    ['game_id'=> 2,'figures'=>2,'prize'=>'5'],
       
-      foreach($games as $game){
+                ];
+
+      
+        foreach($games as $game){
             DB::table('games')->insert($game);
+                        }
+
+        foreach($gamesD as $gameD){
+            DB::table('game_details')->insert($gameD);
                         }
     }
     

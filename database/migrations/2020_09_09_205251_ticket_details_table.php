@@ -19,10 +19,12 @@ class TicketDetailsTable extends Migration
             $table->unsignedBigInteger('ticket_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('game_id')->nullable();
+            $table->integer('figures')->nullable();
             $table->string('game_number',5)->nullable();
             $table->decimal('bet')->nullable();
+            $table->decimal('prize')->nullable();
             $table->boolean('active')->default(1);
-            $table->boolean('winner')->default(1);
+            $table->boolean('winner')->default(0);
             $table->timestamps();
             $table->softDeletes();
 

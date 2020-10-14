@@ -137,7 +137,17 @@
                                         </div>
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                                        <div class="row">
+                                     <h3><span class="badge badge-warning">Jugada</span></h3>
+                                    <br>
+                                    <div class="col-sm-12">
+                                             <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="figures" id="figures" name="figures">
+                                                <option value="0" >Selecione el numero de cifras</option>
+                                                <option v-for="(item,i) in dataFigure" :key="'A'+ i" v-bind:value="item">
+                                                    {{ item }} Cifras 
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div  v-if="figures > 0" class="row">
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label for="pwd">Numero:</label>
                                                 <input type="number" maxlength="5" v-model="number"  class="form-control" placeholder="Enter total" id="number">
@@ -217,7 +227,10 @@
                                             <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6>
                                         </div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos</div>                  
+                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
+                                            Inversion:$<strong v-text="item.bet"></strong> pesos
+                                            <h6 v-if="item.winner == 1" class="text-success">Premio: <p v-text="item.prize"></p></h6>
+                                        </div>                  
                                     </div>
                                 </li>
                             </ul>

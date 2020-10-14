@@ -134,6 +134,7 @@ class RepositoryUserTickets
                                         'game_id'=>$data['game']['id'],
                                         'game_number' => $detail['number'],
                                         'bet' => $detail['subtotal'],
+                                        'figures'=>$detail['figures'],
                                         'active'=>true,
                                     ]);
                                 }

@@ -149,6 +149,7 @@ class RepositoryManagmentTickets
                                 'ticket_id'=>$Ticket['id'],
                                 'user_id' => $Client['id'],
                                 'game_id'=>$data['game']['id'],
+                                'figures'=>$detail['figures'],
                                 'game_number' => $detail['number'],
                                 'bet' => $detail['subtotal'],
                                 'active'=>false,

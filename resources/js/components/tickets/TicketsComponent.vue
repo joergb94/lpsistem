@@ -62,7 +62,9 @@
                                     <tr v-for="item in dataTicktes" :key="item.id">
                                         <td v-text="item.id"></td>
                                          <td v-text="item.phone"></td>
-                                        <td v-text="item.total"></td>
+                                        <td v-text="item.total">
+                                            <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6>
+                                        </td>
                                         <td>
                                             <div v-if="item.active == 1" class="text-center">
                                                 <span class="badge badge-success">Pagado</span>
@@ -182,7 +184,16 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                                     <h3><span class="badge badge-warning">Jugada</span></h3>
-                                        <div class="row">
+                                    <br>
+                                        <div class="col-sm-12">
+                                             <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="figures" id="figures" name="figures">
+                                                <option value="0" >Selecione el numero de cifras</option>
+                                                <option v-for="(item,i) in dataFigure" :key="'A'+ i" v-bind:value="item">
+                                                    #Cifras {{ item }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div v-if="figures > 0" class="row">
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label for="pwd">Numero:</label>
                                                 <input type="number" maxlength="5" v-model="number"  class="form-control" placeholder="Enter total" id="number">
@@ -269,7 +280,10 @@
                                             <h6 v-if="item.winner == 1" class="text-success"> Ganador</h6>
                                         </div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos</div>                  
+                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
+                                            Inversion:$<strong v-text="item.bet"></strong> pesos
+                                            <h6 v-if="item.winner == 1" class="text-success">Premio: <p v-text="item.prize"></p></h6>
+                                        </div>                  
                                     </div>
                                 </li>
                             </ul>

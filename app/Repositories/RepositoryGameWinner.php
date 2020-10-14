@@ -6,6 +6,7 @@ use App\Exceptions\GeneralException;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Game;
+use App\Models\Game_detail;
 use App\Models\Game_schedule;
 use App\Models\Game_schedules_detail;
 use App\Models\Day;
@@ -78,6 +79,7 @@ class RepositoryGameWinner
                                         'tickets.phone as phone',
                                         'ticket_details.game_number as number',
                                         'ticket_details.bet as bet',
+                                        'ticket_details.prize as prize',
                                         'tickets.deleted_at as deleted_at',
                                         'day_tickets.game_date as date')
                             ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
@@ -266,24 +268,32 @@ class RepositoryGameWinner
      * @return Ticket
      */
      
-    public function updateStatus($TicketD_id)
+    public function updateStatus($TicketDetail_id)
     {
     
-        return DB::transaction(function () use ($TicketD_id) {
-            $TicketD = $this->model_detail->find($TicketD_id);
-
-            switch ($TicketD->winner) {
+        return DB::transaction(function () use ($TicketDetail_id) {
+            $TicketDetail = $this->model_detail->find($TicketDetail_id);
+            $prize = 0;
+            switch ($TicketDetail->winner) {
                 case 0:
-                    $TicketD->winner = true;
+                    $TicketDetail->winner = true;
+
+                    $win = Game_detail::where('game_id',$TicketDetail['game_id'])
+                                        ->where('figures',$TicketDetail['figures'])
+                                        ->first();
+                    $prize =$TicketDetail['bet']*$win['prize'];
+
+                    $TicketDetail->prize = $prize;
                 break;
                 case 1:
-                    $TicketD->winner = false;  
+                    $TicketDetail->winner = false;
+                    $TicketDetail->prize = $prize; 
                 break;
             }
 
-            if ($TicketD->save()) {
+            if ($TicketDetail->save()) {
 
-                $Ticket = $this->model->find($TicketD->ticket_id);
+                $Ticket = $this->model->find($TicketDetail->ticket_id);
 
                 $win =  $this->model_detail
                         ->where('ticket_id',$Ticket->id)
@@ -294,7 +304,7 @@ class RepositoryGameWinner
                         'winner' => $win,
                         
                     ])) {
-                        return $TicketD;
+                        return $TicketDetail;
                     }
                     throw new GeneralException(__('Error changing status of Ticket.'));
             }

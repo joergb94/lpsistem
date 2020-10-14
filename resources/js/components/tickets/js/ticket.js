@@ -6,12 +6,14 @@ export default {
         dataGames:[],
         dataDays:[],
         dataNewDays:[],
+        dataFigure:[1,2,3,4,5],
         id:'',
         phone:'',
         total: 0,
-        subtotal:'',
+        subtotal:'', 
         number:'',
         game:'',
+        figures:0,
         day:'',
         multiplier:0,
         mTotal:0,
@@ -352,8 +354,8 @@ export default {
         },
         addNumber() {
             let me = this;
-                if(this.number.length == 0 || this.number.length > 5){
-                    me.message({title:'Error',text:'El campo Numero es incorrecto',type:'danger'});
+                if(this.number.length !== me.figures){
+                    me.message({title:'Error',text:'El campo Numero debe ser almenos de '+me.figures+' cifra(s).',type:'danger'});
                     return false;
                 }
 
@@ -372,6 +374,7 @@ export default {
                 if(this.dataNumbers.push({
                     number: this.number,
                     subtotal: Number.parseFloat(this.subtotal),
+                    figures: me.figures,
                 }))
                 {   
                     let sumtotal = me.total > 0 

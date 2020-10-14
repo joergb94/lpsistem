@@ -2485,12 +2485,14 @@ __webpack_require__.r(__webpack_exports__);
       dataGames: [],
       dataDays: [],
       dataNewDays: [],
+      dataFigure: [1, 2, 3, 4, 5],
       id: '',
       phone: '',
       total: 0,
       subtotal: '',
       number: '',
       game: '',
+      figures: 0,
       day: '',
       multiplier: 0,
       mTotal: 0,
@@ -2799,10 +2801,10 @@ __webpack_require__.r(__webpack_exports__);
     addNumber: function addNumber() {
       var me = this;
 
-      if (this.number.length == 0 || this.number.length > 5) {
+      if (this.number.length !== me.figures) {
         me.message({
           title: 'Error',
-          text: 'El campo Numero es incorrecto',
+          text: 'El campo Numero debe ser almenos de ' + me.figures + ' cifra(s).',
           type: 'danger'
         });
         return false;
@@ -2833,7 +2835,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.dataNumbers.push({
         number: this.number,
-        subtotal: Number.parseFloat(this.subtotal)
+        subtotal: Number.parseFloat(this.subtotal),
+        figures: me.figures
       })) {
         var sumtotal = me.total > 0 ? parseFloat(me.mTotal) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
         this.mTotal = sumtotal;
@@ -2950,6 +2953,7 @@ __webpack_require__.r(__webpack_exports__);
       dataGames: [],
       dataDays: [],
       dataNewDays: [],
+      dataFigure: [1, 2, 3, 4, 5],
       id: '',
       total: 0,
       multiplier: 0,
@@ -2957,6 +2961,7 @@ __webpack_require__.r(__webpack_exports__);
       subtotal: '',
       number: '',
       game: '',
+      figures: 0,
       day: '',
       ticket_type: '1',
       titleModal: '',
@@ -3253,10 +3258,10 @@ __webpack_require__.r(__webpack_exports__);
     addNumber: function addNumber() {
       var me = this;
 
-      if (this.number.length == 0 || this.number.length > 5) {
+      if (this.number.length !== me.figures) {
         me.message({
           title: 'Error',
-          text: 'El campo Numero es incorrecto',
+          text: 'El campo Numero debe ser almenos de ' + me.figures + ' cifra(s).',
           type: 'danger'
         });
         return false;
@@ -3287,7 +3292,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.dataNumbers.push({
         number: this.number,
-        subtotal: Number.parseFloat(this.subtotal)
+        subtotal: Number.parseFloat(this.subtotal),
+        figures: me.figures
       })) {
         var sumtotal = me.total > 0 ? parseFloat(me.mTotal) + parseFloat(this.subtotal) : parseFloat(this.subtotal);
         this.mTotal = sumtotal;
@@ -41538,9 +41544,18 @@ var render = function() {
                           domProps: { textContent: _vm._s(item.phone) }
                         }),
                         _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.total) }
-                        }),
+                        _c(
+                          "td",
+                          { domProps: { textContent: _vm._s(item.total) } },
+                          [
+                            item.winner == 1
+                              ? _c("h6", { staticClass: "text-warning" }, [
+                                  _vm._v(" Ganador "),
+                                  _c("i", { staticClass: "ti-star" })
+                                ])
+                              : _vm._e()
+                          ]
+                        ),
                         _vm._v(" "),
                         _c("td", [
                           item.active == 1
@@ -42085,195 +42100,264 @@ var render = function() {
                   [
                     _vm._m(3),
                     _vm._v(" "),
-                    _c("div", { staticClass: "row" }, [
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm-12" }, [
                       _c(
-                        "div",
+                        "select",
                         {
-                          staticClass: "form-group col-sm-12 col-md-6 col-lg-6"
-                        },
-                        [
-                          _c("label", { attrs: { for: "pwd" } }, [
-                            _vm._v("Numero:")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.number,
-                                expression: "number"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "number",
-                              maxlength: "5",
-                              placeholder: "Enter total",
-                              id: "number"
-                            },
-                            domProps: { value: _vm.number },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.number = $event.target.value
-                              }
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "form-group col-sm-12 col-md-6 col-lg-6"
-                        },
-                        [
-                          _c("label", { attrs: { for: "pwd" } }, [
-                            _vm._v("Inversion:")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.subtotal,
-                                expression: "subtotal"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "number",
-                              step: "0.01",
-                              placeholder: "Enter total",
-                              id: "subtotal"
-                            },
-                            domProps: { value: _vm.subtotal },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.subtotal = $event.target.value
-                              }
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "form-group col-sm-12 col-md-12 col-lg-12"
-                        },
-                        [
-                          _c(
-                            "button",
+                          directives: [
                             {
-                              staticClass: "btn btn-primary btn-block",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.addNumber()
-                                }
-                              }
-                            },
-                            [_vm._v("Agregar al tickte")]
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.figures,
+                              expression: "figures"
+                            }
+                          ],
                           staticClass:
-                            "form-group col-sm-12 col-md-12 col-lg-12"
+                            "form-control col-sm-12 col-md-12 col-lg-12",
+                          attrs: { id: "figures", name: "figures" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.figures = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
                         },
                         [
+                          _c("option", { attrs: { value: "0" } }, [
+                            _vm._v("Selecione el numero de cifras")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.dataFigure, function(item, i) {
+                            return _c(
+                              "option",
+                              { key: "A" + i, domProps: { value: item } },
+                              [
+                                _vm._v(
+                                  "\n                                                #Cifras " +
+                                    _vm._s(item) +
+                                    "\n                                            "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm.figures > 0
+                      ? _c("div", { staticClass: "row" }, [
                           _c(
-                            "ul",
-                            { staticClass: "list-group" },
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-6 col-lg-6"
+                            },
                             [
-                              _vm.dataNumbers.length == 0
-                                ? _c("li", { staticClass: "list-group-item" }, [
-                                    _c("h6", [_vm._v("Jugada vacía")])
-                                  ])
-                                : _vm._e(),
+                              _c("label", { attrs: { for: "pwd" } }, [
+                                _vm._v("Numero:")
+                              ]),
                               _vm._v(" "),
-                              _vm._l(_vm.dataNumbers, function(item, index) {
-                                return _c(
-                                  "li",
+                              _c("input", {
+                                directives: [
                                   {
-                                    key: index,
-                                    staticClass: "list-group-item"
-                                  },
-                                  [
-                                    _c("div", { staticClass: "row" }, [
-                                      _c("div", {
-                                        staticClass:
-                                          "col-sm-12 col-md-4 col-lg-4",
-                                        domProps: {
-                                          textContent: _vm._s(item.number)
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "col-sm-12 col-md-4 col-lg-4"
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                                            $"
-                                          ),
-                                          _c("span", {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.number,
+                                    expression: "number"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "number",
+                                  maxlength: "5",
+                                  placeholder: "Enter total",
+                                  id: "number"
+                                },
+                                domProps: { value: _vm.number },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.number = $event.target.value
+                                  }
+                                }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-6 col-lg-6"
+                            },
+                            [
+                              _c("label", { attrs: { for: "pwd" } }, [
+                                _vm._v("Inversion:")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.subtotal,
+                                    expression: "subtotal"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "number",
+                                  step: "0.01",
+                                  placeholder: "Enter total",
+                                  id: "subtotal"
+                                },
+                                domProps: { value: _vm.subtotal },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.subtotal = $event.target.value
+                                  }
+                                }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-12 col-lg-12"
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary btn-block",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.addNumber()
+                                    }
+                                  }
+                                },
+                                [_vm._v("Agregar al tickte")]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-12 col-lg-12"
+                            },
+                            [
+                              _c(
+                                "ul",
+                                { staticClass: "list-group" },
+                                [
+                                  _vm.dataNumbers.length == 0
+                                    ? _c(
+                                        "li",
+                                        { staticClass: "list-group-item" },
+                                        [_c("h6", [_vm._v("Jugada vacía")])]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm._l(_vm.dataNumbers, function(
+                                    item,
+                                    index
+                                  ) {
+                                    return _c(
+                                      "li",
+                                      {
+                                        key: index,
+                                        staticClass: "list-group-item"
+                                      },
+                                      [
+                                        _c("div", { staticClass: "row" }, [
+                                          _c("div", {
+                                            staticClass:
+                                              "col-sm-12 col-md-4 col-lg-4",
                                             domProps: {
-                                              textContent: _vm._s(item.subtotal)
+                                              textContent: _vm._s(item.number)
                                             }
                                           }),
-                                          _vm._v(
-                                            " pesos\n                                                        "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "col-sm-12 col-md-4 col-lg-4"
-                                        },
-                                        [
+                                          _vm._v(" "),
                                           _c(
-                                            "button",
+                                            "div",
                                             {
-                                              staticClass: "btn btn-danger",
-                                              attrs: { type: "button" },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.removeNumber(index)
-                                                }
-                                              }
+                                              staticClass:
+                                                "col-sm-12 col-md-4 col-lg-4"
                                             },
-                                            [_vm._v("-")]
+                                            [
+                                              _vm._v(
+                                                "\n                                                            $"
+                                              ),
+                                              _c("span", {
+                                                domProps: {
+                                                  textContent: _vm._s(
+                                                    item.subtotal
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(
+                                                " pesos\n                                                        "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "col-sm-12 col-md-4 col-lg-4"
+                                            },
+                                            [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass: "btn btn-danger",
+                                                  attrs: { type: "button" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.removeNumber(
+                                                        index
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("-")]
+                                              )
+                                            ]
                                           )
-                                        ]
-                                      )
-                                    ])
-                                  ]
-                                )
-                              })
-                            ],
-                            2
+                                        ])
+                                      ]
+                                    )
+                                  })
+                                ],
+                                2
+                              )
+                            ]
                           )
-                        ]
-                      )
-                    ])
+                        ])
+                      : _vm._e()
                   ]
                 ),
                 _vm._v(" "),
@@ -42486,13 +42570,31 @@ var render = function() {
                                       "col-sm-12 col-md-4 col-lg-4 text-center"
                                   },
                                   [
-                                    _vm._v("Inversion:$"),
+                                    _vm._v(
+                                      "\n                                        Inversion:$"
+                                    ),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(" pesos")
+                                    _vm._v(
+                                      " pesos\n                                        "
+                                    ),
+                                    item.winner == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [
+                                            _vm._v("Premio: "),
+                                            _c("p", {
+                                              domProps: {
+                                                textContent: _vm._s(item.prize)
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      : _vm._e()
                                   ]
                                 )
                               ])
@@ -43286,199 +43388,270 @@ var render = function() {
                       "form-group col-sm-12 col-md-12 col-lg-12 text-center"
                   },
                   [
-                    _c("div", { staticClass: "row" }, [
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm-12" }, [
                       _c(
-                        "div",
+                        "select",
                         {
-                          staticClass: "form-group col-sm-12 col-md-6 col-lg-6"
-                        },
-                        [
-                          _c("label", { attrs: { for: "pwd" } }, [
-                            _vm._v("Numero:")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.number,
-                                expression: "number"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "number",
-                              maxlength: "5",
-                              placeholder: "Enter total",
-                              id: "number"
-                            },
-                            domProps: { value: _vm.number },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.number = $event.target.value
-                              }
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "form-group col-sm-12 col-md-6 col-lg-6"
-                        },
-                        [
-                          _c("label", { attrs: { for: "pwd" } }, [
-                            _vm._v("Inversion:")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.subtotal,
-                                expression: "subtotal"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "number",
-                              step: "0.01",
-                              placeholder: "Enter total",
-                              id: "subtotal"
-                            },
-                            domProps: { value: _vm.subtotal },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.subtotal = $event.target.value
-                              }
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "form-group col-sm-12 col-md-12 col-lg-12"
-                        },
-                        [
-                          _c(
-                            "button",
+                          directives: [
                             {
-                              staticClass: "btn btn-primary btn-block",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.addNumber()
-                                }
-                              }
-                            },
-                            [_vm._v("Agregar al tickte")]
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.figures,
+                              expression: "figures"
+                            }
+                          ],
                           staticClass:
-                            "form-group col-sm-12 col-md-12 col-lg-12"
+                            "form-control col-sm-12 col-md-12 col-lg-12",
+                          attrs: { id: "figures", name: "figures" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.figures = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
                         },
                         [
+                          _c("option", { attrs: { value: "0" } }, [
+                            _vm._v("Selecione el numero de cifras")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.dataFigure, function(item, i) {
+                            return _c(
+                              "option",
+                              { key: "A" + i, domProps: { value: item } },
+                              [
+                                _vm._v(
+                                  "\n                                                " +
+                                    _vm._s(item) +
+                                    " Cifras \n                                            "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm.figures > 0
+                      ? _c("div", { staticClass: "row" }, [
                           _c(
-                            "ul",
-                            { staticClass: "list-group" },
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-6 col-lg-6"
+                            },
                             [
-                              _vm.dataNumbers.length == 0
-                                ? _c("li", { staticClass: "list-group-item" }, [
-                                    _c("h6", [_vm._v("Jugada vacía")])
-                                  ])
-                                : _vm._e(),
+                              _c("label", { attrs: { for: "pwd" } }, [
+                                _vm._v("Numero:")
+                              ]),
                               _vm._v(" "),
-                              _vm._l(_vm.dataNumbers, function(item, index) {
-                                return _c(
-                                  "li",
+                              _c("input", {
+                                directives: [
                                   {
-                                    key: index,
-                                    staticClass: "list-group-item"
-                                  },
-                                  [
-                                    _c("div", { staticClass: "row" }, [
-                                      _c("div", {
-                                        staticClass:
-                                          "col-sm-12 col-md-3 col-lg-4",
-                                        domProps: {
-                                          textContent: _vm._s(item.number)
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "col-sm-12 col-md-3 col-lg-4"
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                                            $"
-                                          ),
-                                          _c("span", {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.number,
+                                    expression: "number"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "number",
+                                  maxlength: "5",
+                                  placeholder: "Enter total",
+                                  id: "number"
+                                },
+                                domProps: { value: _vm.number },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.number = $event.target.value
+                                  }
+                                }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-6 col-lg-6"
+                            },
+                            [
+                              _c("label", { attrs: { for: "pwd" } }, [
+                                _vm._v("Inversion:")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.subtotal,
+                                    expression: "subtotal"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "number",
+                                  step: "0.01",
+                                  placeholder: "Enter total",
+                                  id: "subtotal"
+                                },
+                                domProps: { value: _vm.subtotal },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.subtotal = $event.target.value
+                                  }
+                                }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-12 col-lg-12"
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary btn-block",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.addNumber()
+                                    }
+                                  }
+                                },
+                                [_vm._v("Agregar al tickte")]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "form-group col-sm-12 col-md-12 col-lg-12"
+                            },
+                            [
+                              _c(
+                                "ul",
+                                { staticClass: "list-group" },
+                                [
+                                  _vm.dataNumbers.length == 0
+                                    ? _c(
+                                        "li",
+                                        { staticClass: "list-group-item" },
+                                        [_c("h6", [_vm._v("Jugada vacía")])]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm._l(_vm.dataNumbers, function(
+                                    item,
+                                    index
+                                  ) {
+                                    return _c(
+                                      "li",
+                                      {
+                                        key: index,
+                                        staticClass: "list-group-item"
+                                      },
+                                      [
+                                        _c("div", { staticClass: "row" }, [
+                                          _c("div", {
+                                            staticClass:
+                                              "col-sm-12 col-md-3 col-lg-4",
                                             domProps: {
-                                              textContent: _vm._s(item.subtotal)
+                                              textContent: _vm._s(item.number)
                                             }
                                           }),
-                                          _vm._v(
-                                            " pesos\n                                                        "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "col-sm-12 col-md-3 col-lg-4"
-                                        },
-                                        [
+                                          _vm._v(" "),
                                           _c(
-                                            "button",
+                                            "div",
                                             {
-                                              staticClass: "btn btn-danger",
-                                              attrs: { type: "button" },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.removeNumber(index)
-                                                }
-                                              }
+                                              staticClass:
+                                                "col-sm-12 col-md-3 col-lg-4"
                                             },
                                             [
-                                              _c("i", {
-                                                staticClass: "ti-trash"
-                                              })
+                                              _vm._v(
+                                                "\n                                                            $"
+                                              ),
+                                              _c("span", {
+                                                domProps: {
+                                                  textContent: _vm._s(
+                                                    item.subtotal
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(
+                                                " pesos\n                                                        "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "col-sm-12 col-md-3 col-lg-4"
+                                            },
+                                            [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass: "btn btn-danger",
+                                                  attrs: { type: "button" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.removeNumber(
+                                                        index
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass: "ti-trash"
+                                                  })
+                                                ]
+                                              )
                                             ]
                                           )
-                                        ]
-                                      )
-                                    ])
-                                  ]
-                                )
-                              })
-                            ],
-                            2
+                                        ])
+                                      ]
+                                    )
+                                  })
+                                ],
+                                2
+                              )
+                            ]
                           )
-                        ]
-                      )
-                    ])
+                        ])
+                      : _vm._e()
                   ]
                 ),
                 _vm._v(" "),
@@ -43534,7 +43707,7 @@ var render = function() {
           _vm._v(" "),
           _vm.action == 2
             ? _c("div", { staticClass: "modal-body" }, [
-                _vm._m(3),
+                _vm._m(4),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -43597,7 +43770,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(4),
+                _vm._m(5),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -43671,13 +43844,31 @@ var render = function() {
                                       "col-sm-12 col-md-4 col-lg-4 text-center"
                                   },
                                   [
-                                    _vm._v("Inversion:$"),
+                                    _vm._v(
+                                      "\n                                        Inversion:$"
+                                    ),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(" pesos")
+                                    _vm._v(
+                                      " pesos\n                                        "
+                                    ),
+                                    item.winner == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [
+                                            _vm._v("Premio: "),
+                                            _c("p", {
+                                              domProps: {
+                                                textContent: _vm._s(item.prize)
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      : _vm._e()
                                   ]
                                 )
                               ])
@@ -43774,6 +43965,14 @@ var staticRenderFns = [
       _c("span", { staticClass: "badge badge-warning" }, [
         _vm._v("Dias de juego")
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", [
+      _c("span", { staticClass: "badge badge-warning" }, [_vm._v("Jugada")])
     ])
   },
   function() {
