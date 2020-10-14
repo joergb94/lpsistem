@@ -240,10 +240,10 @@ export default {
                 };
              var m = "¿Deseas confirmar que el Ticket Gano?";
              var mt = "El Ticket se convertira en ganador";
-             var btn = "pagalo";
+             var btn = "conviertelo";
 
 
-            if(item.active == 1){
+            if(item.winner == 1){
                  m = "¿Deseas cancelar que el Gane del Ticket?";
                  mt = "El Gane del ticket sera cancelado";
                  btn = "cancelalo";

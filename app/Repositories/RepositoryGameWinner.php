@@ -281,7 +281,28 @@ class RepositoryGameWinner
                     $win = Game_detail::where('game_id',$TicketDetail['game_id'])
                                         ->where('figures',$TicketDetail['figures'])
                                         ->first();
-                    $prize =$TicketDetail['bet']*$win['prize'];
+
+                    switch ($win['game_id']) {
+                            case 1:
+                                $prize =$TicketDetail['bet']*$win['prize'];
+                            break;
+                            case 2:
+                                $prize =$TicketDetail['bet']*$win['prize'];
+                            break;
+                            case 3:
+                                $prize = $TicketDetail['bet']*$win['prize'];
+                            break;
+                            case 3:
+                                $prize = $TicketDetail['bet']*$win['prize'];
+                            break;
+                            case 4:
+                                $prize = $TicketDetail['bet']*$win['prize'];
+                            break;
+                            case 5:
+                                $prize = $TicketDetail['bet']*$win['prize'];
+                            break;
+                    }
+                   
 
                     $TicketDetail->prize = $prize;
                 break;

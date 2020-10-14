@@ -4168,9 +4168,9 @@ __webpack_require__.r(__webpack_exports__);
       };
       var m = "¿Deseas confirmar que el Ticket Gano?";
       var mt = "El Ticket se convertira en ganador";
-      var btn = "pagalo";
+      var btn = "conviertelo";
 
-      if (item.active == 1) {
+      if (item.winner == 1) {
         m = "¿Deseas cancelar que el Gane del Ticket?";
         mt = "El Gane del ticket sera cancelado";
         btn = "cancelalo";
@@ -45538,8 +45538,7 @@ var render = function() {
                           _vm._v(" "),
                           item.winner == 1
                             ? _c("h6", { staticClass: "text-warning" }, [
-                                _vm._v(" Ganador "),
-                                _c("i", { staticClass: "ti-star" })
+                                _vm._v(" Ganador ")
                               ])
                             : _vm._e()
                         ]),
@@ -45548,9 +45547,18 @@ var render = function() {
                           domProps: { textContent: _vm._s(item.phone) }
                         }),
                         _vm._v(" "),
-                        _c("td", {
-                          domProps: { textContent: _vm._s(item.bet) }
-                        }),
+                        _c("td", [
+                          _c("h6", {
+                            domProps: { textContent: _vm._s(item.bet) }
+                          }),
+                          _vm._v(" "),
+                          item.winner == 1
+                            ? _c("h6", {
+                                staticClass: "text-warning",
+                                domProps: { textContent: _vm._s(item.prize) }
+                              })
+                            : _vm._e()
+                        ]),
                         _vm._v(" "),
                         _c("td", {
                           domProps: { textContent: _vm._s(item.date) }

@@ -18,6 +18,7 @@ class GameSchedulesDetails extends Migration
             $table->string('mat', 3)->default('GSD');
             $table->unsignedBigInteger('game_schedule_id')->nullable();
             $table->string('number_win',5)->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
             $table->softDeletes();
             //foreing key 

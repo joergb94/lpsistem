@@ -70,10 +70,13 @@
                                     <tr v-for="item in dataTicktes" :key="item.id">
                                         <td>
                                             No.<strong v-text="item.number"></strong>
-                                            <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6>
+                                            <h6 v-if="item.winner == 1" class="text-warning"> Ganador </h6>
                                         </td>
                                          <td v-text="item.phone"></td>
-                                        <td v-text="item.bet"></td>
+                                        <td>
+                                            <h6 v-text="item.bet"></h6>
+                                            <h6 v-if="item.winner == 1" class="text-warning" v-text="item.prize"></h6>
+                                        </td>
                                         <td v-text="item.date"></td>
                                         <td v-if="item.deleted_at == null" >
                                             <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
