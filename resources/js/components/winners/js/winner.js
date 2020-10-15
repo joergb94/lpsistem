@@ -235,20 +235,35 @@ export default {
         },
         changeStatus(item){
             let me = this;
-            var data = {
-                'id': item.id,
-                };
+            var id = item.id;
+            var type = item.type?item.type:1;
+            
              var m = "¿Deseas confirmar que el Ticket Gano?";
-             var mt = "El Ticket se convertira en ganador";
+             var mt = "Selecione la posicion del numero ganador";
              var btn = "conviertelo";
+             var dataSW={ 
+                title: m,
+                text:  mt,
+                icon: 'warning',
+                input: 'select',
+                inputOptions: {
+                  '1': '1er',
+                  '2': '2do',
+                },
+                inputValue:type,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, '+btn+'!'
+            }
 
 
             if(item.winner == 1){
                  m = "¿Deseas cancelar que el Gane del Ticket?";
                  mt = "El Gane del ticket sera cancelado";
                  btn = "cancelalo";
-            }
-             Swal.fire({
+
+                 dataSW={ 
                     title: m,
                     text:  mt,
                     icon: 'warning',
@@ -256,7 +271,12 @@ export default {
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Si, '+btn+'!'
-                }).then((result) => {
+                }
+
+                 
+            }
+             Swal.fire(dataSW).then((result) => {
+                    var data ={'id':id, 'type_game':result.value?result.value:0}
                     if (result.value) {
                          axios.post('/winners/win',data).then(function (response) {
                                 me.ListTickets();
@@ -269,9 +289,10 @@ export default {
                                             type: 'success'
                                         });
 
-                            }).catch(function (error) {}) 
-                    }
+                            }).catch(function (error) {})
+                        }
                 }) 
+           
                
         },
         openModal(model,action, data = ''){

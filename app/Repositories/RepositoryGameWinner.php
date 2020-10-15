@@ -268,18 +268,22 @@ class RepositoryGameWinner
      * @return Ticket
      */
      
-    public function updateStatus($TicketDetail_id)
+    public function updateStatus($TicketDetailData)
     {
     
-        return DB::transaction(function () use ($TicketDetail_id) {
-            $TicketDetail = $this->model_detail->find($TicketDetail_id);
+        return DB::transaction(function () use ($TicketDetailData) {
+            $TicketDetail = $this->model_detail->find($TicketDetailData['id']);
             $prize = 0;
             switch ($TicketDetail->winner) {
                 case 0:
                     $TicketDetail->winner = true;
-
-                    $win = Game_detail::where('game_id',$TicketDetail['game_id'])
+                        
+                    $win =$TicketDetail['game_id'] < 5
+                                    ? Game_detail::where('game_id',$TicketDetail['game_id'])
                                         ->where('figures',$TicketDetail['figures'])
+                                        ->first()
+                                    : Game_detail::where('game_id',$TicketDetail['game_id'])
+                                        ->where('figures',$TicketDetailData['type_game'])
                                         ->first();
 
                     switch ($win['game_id']) {

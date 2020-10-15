@@ -57,7 +57,7 @@ class GameWinnerController extends Controller
 
     public function win(Request $request)
     {
-        $this->RepositoryGameWinner->updateStatus($request->id);
+        $this->RepositoryGameWinner->updateStatus($request->input());
         return response()->json(Answer('success','Ticket'));
     } 
 

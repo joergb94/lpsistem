@@ -32,8 +32,8 @@
 
                                     <select class="form-control col-sm-12 col-md-4 col-lg-2" v-model="game_detail" id="game" name="game">
                                         <option value="0" >Selecione numero ganador</option>
-                                        <option v-for="item in dataGamesDetail" :key="item.id" v-bind:value="{ id:item.id, number:item.number_win }">
-                                            {{ item.number_win }}
+                                        <option v-for="item in dataGamesDetail" :key="item.id" v-bind:value="{ type:item.type, number:item.number_win }">
+                                            {{ item.number_win }} <h6 class="text-success" v-text="item.type == 1?'1er':'2do'"></h6>
                                         </option>
                                     </select>
                                      <select class="form-control col-sm-12 col-md-4 col-lg-2" v-model="figures" id="figures" name="figures">

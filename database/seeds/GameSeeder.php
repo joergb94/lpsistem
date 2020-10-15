@@ -26,6 +26,14 @@ class GameSeeder extends Seeder
                     ['game_id'=> 2,'figures'=>3,'prize'=>'500'],
                     ['game_id'=> 2,'figures'=>2,'prize'=>'50'],
                     ['game_id'=> 2,'figures'=>1,'prize'=>'5'],
+                    ['game_id'=> 3,'figures'=>3,'prize'=>'500'],
+                    ['game_id'=> 3,'figures'=>2,'prize'=>'50'],
+                    ['game_id'=> 3,'figures'=>1,'prize'=>'5'],
+                    ['game_id'=> 4,'figures'=>3,'prize'=>'500'],
+                    ['game_id'=> 4,'figures'=>2,'prize'=>'50'],
+                    ['game_id'=> 4,'figures'=>1,'prize'=>'5'],
+                    ['game_id'=> 5,'figures'=>1,'prize'=>'400'],
+                    ['game_id'=> 5,'figures'=>2,'prize'=>'100'],
       
                 ];
 

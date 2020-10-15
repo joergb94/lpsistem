@@ -4163,28 +4163,48 @@ __webpack_require__.r(__webpack_exports__);
     },
     changeStatus: function changeStatus(item) {
       var me = this;
-      var data = {
-        'id': item.id
-      };
+      var id = item.id;
+      var type = item.type ? item.type : 1;
       var m = "¿Deseas confirmar que el Ticket Gano?";
-      var mt = "El Ticket se convertira en ganador";
+      var mt = "Selecione la posicion del numero ganador";
       var btn = "conviertelo";
+      var dataSW = {
+        title: m,
+        text: mt,
+        icon: 'warning',
+        input: 'select',
+        inputOptions: {
+          '1': '1er',
+          '2': '2do'
+        },
+        inputValue: type,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, ' + btn + '!'
+      };
 
       if (item.winner == 1) {
         m = "¿Deseas cancelar que el Gane del Ticket?";
         mt = "El Gane del ticket sera cancelado";
         btn = "cancelalo";
+        dataSW = {
+          title: m,
+          text: mt,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, ' + btn + '!'
+        };
       }
 
-      Swal.fire({
-        title: m,
-        text: mt,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, ' + btn + '!'
-      }).then(function (result) {
+      Swal.fire(dataSW).then(function (result) {
+        var data = {
+          'id': id,
+          'type_game': result.value ? result.value : 0
+        };
+
         if (result.value) {
           axios.post('/winners/win', data).then(function (response) {
             me.ListTickets();
@@ -45390,15 +45410,26 @@ var render = function() {
                           {
                             key: item.id,
                             domProps: {
-                              value: { id: item.id, number: item.number_win }
+                              value: {
+                                type: item.type,
+                                number: item.number_win
+                              }
                             }
                           },
                           [
                             _vm._v(
                               "\n                                        " +
                                 _vm._s(item.number_win) +
-                                "\n                                    "
-                            )
+                                " "
+                            ),
+                            _c("h6", {
+                              staticClass: "text-success",
+                              domProps: {
+                                textContent: _vm._s(
+                                  item.type == 1 ? "1er" : "2do"
+                                )
+                              }
+                            })
                           ]
                         )
                       })
