@@ -41,9 +41,9 @@
                                                 <strong>No.ticket: <span v-text="item.id"></span></strong>
                                                 <h6 v-if="item.winner == 1" class="text-success"> Ganador <i clsass="ti-star"></i></h6>
                                             </div>
-                                            <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.created_at"></div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.date"></div>
                                             <div class="col-sm-12 col-md-3 col-lg-3">$<span v-text="item.total"></span> pesos</div>
-                                            <div class="col-sm-12 col-md-3 col-lg-3">
+                                            <div v-if="item.winner == 0" class="col-sm-12 col-md-3 col-lg-3">
                                                 <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                                     <i class="ti-eye"></i>
                                                 </button>
@@ -55,6 +55,11 @@
                                                 </button>
                                                 <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                                     <i class="ti-trash"></i>
+                                                </button>
+                                            </div>
+                                             <div v-if="item.winner == 1" class="col-sm-12 col-md-3 col-lg-3">
+                                                <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
+                                                    <i class="ti-eye"></i>
                                                 </button>
                                             </div>
                                         </div>

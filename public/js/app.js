@@ -2350,6 +2350,149 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/home/js/homeC.js?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./resources/js/components/home/js/homeC.js?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      dataGames: [],
+      dataTicktes: [],
+      date: '',
+      tickets_pay_off: 0,
+      tickets_not_pay_off: 0,
+      incomes: 0,
+      titleModal: '',
+      action: 0,
+      page: 1,
+      users: 1,
+      pagination: {
+        'total': 0,
+        'current_page': 0,
+        'per_page': 0,
+        'last_page': 0,
+        'from': 0,
+        'to': 0
+      },
+      offset: 3,
+      criterion: 'day',
+      prize: 0,
+      search: ''
+    };
+  },
+  computed: {
+    isActived: function isActived() {
+      return this.pagination.current_page;
+    },
+    pagesNumber: function pagesNumber() {
+      if (!this.pagination.to) {
+        return [];
+      }
+
+      var from = this.pagination.current_page - this.offset;
+
+      if (from < 1) {
+        from = 1;
+      }
+
+      var to = from + this.offset * 2;
+
+      if (to >= this.pagination.last_page) {
+        to = this.pagination.last_page;
+      }
+
+      var pagesArray = [];
+
+      while (from <= to) {
+        pagesArray.push(from);
+        from++;
+      }
+
+      return pagesArray;
+    }
+  },
+  methods: {
+    ListHome: function ListHome(page) {
+      var me = this;
+      var url = '/home?page=' + page + '&date=' + this.date;
+      axios.get(url).then(function (response) {
+        var respuesta = response.data;
+        console.log(respuesta); //me.dataUsers = respuesta.TableTickets.Tikets.data;
+
+        me.dataGames = respuesta.games;
+        me.dataTicktes = respuesta.TableTickets.Tickets.data;
+        me.date = respuesta.date;
+        me.pagination = respuesta.TableTickets.pagination;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    pageChange: function pageChange(page) {
+      var me = this;
+      console.log(me.pagination.current_page);
+      console.log(page); //Actualiza la página actual
+
+      me.pagination.current_page = page; //Envia la petición para visualizar la data de esa página
+
+      me.ListHome(page);
+    },
+    openModal: function openModal(model, action) {
+      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+      switch (model) {
+        case 'modal':
+          {
+            switch (action) {
+              case 'detail':
+                {
+                  var me = this;
+                  me.action = 2;
+                  axios.get('/tickets/detail?id=' + data.id).then(function (response) {
+                    var answer = response.data;
+                    console.log(answer);
+                    me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
+                    me.dataNumbers = answer.ticketDetail;
+                    me.total = answer.ticket.total;
+                    me.phone = answer.client.phone;
+                    me.dataNewDays = answer.days;
+                    $("#myModal").modal('show');
+                  })["catch"](function (error) {});
+                  break;
+                }
+            }
+          }
+      }
+    },
+    closeModal: function closeModal() {
+      this.titleModal = '';
+      this.phone = '';
+      this.total = '';
+      this.number = '';
+      this.multiplier = 0;
+      this.mTotal = 0;
+      this.ticket_type = '1';
+      this.subtotal = '';
+      this.dataNumbers = [];
+      this.dataNewDays = [];
+      this.client = '';
+      $('#send-text').html('');
+      $.notifyClose();
+      $("#myModal").modal('hide');
+    }
+  },
+  mounted: function mounted() {
+    this.ListHome(1);
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/schedule/js/schedule.js?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./resources/js/components/schedule/js/schedule.js?vue&type=script&lang=js& ***!
@@ -2446,8 +2589,8 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/schedule/add';
       var data = {
         'id': this.id,
-        'number_win': this.number_win,
-        'number_win2': this.number_win2,
+        'number_win': this.number_win ? this.number_win : '',
+        'number_win2': this.number_win2 ? this.number_win : '',
         'game_id': this.game_id,
         'date': this.date
       };
@@ -2456,8 +2599,8 @@ __webpack_require__.r(__webpack_exports__);
         url = '/schedule/update';
         var data = {
           'id': this.id,
-          'number_win': this.number_win,
-          'number_win2': this.number_win2,
+          'number_win': this.number_win ? this.number_win : '',
+          'number_win2': this.number_win2 ? this.number_win : '',
           'game_id': this.game_id,
           'date': this.date
         };
@@ -40828,6 +40971,678 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/home/HomeClientComponent.vue?vue&type=template&id=6ca07b0e&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/home/HomeClientComponent.vue?vue&type=template&id=6ca07b0e& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-sm-12" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-7 text-right" }, [
+                _c("h4", {
+                  staticClass: "text-primary",
+                  domProps: { textContent: _vm._s(this.date) }
+                })
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "col-sm-12 text-center" }, [
+              _c("h1", [_vm._v("Bienvenido ")]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "carousel slide",
+                  attrs: { id: "demo", "data-ride": "carousel" }
+                },
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "carousel-inner" },
+                    _vm._l(_vm.dataGames, function(item, index) {
+                      return _c(
+                        "div",
+                        {
+                          key: index,
+                          class: ["carousel-item", index === 0 ? "active" : ""]
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "jumbotron bg-warning" },
+                            [
+                              _c("h1", {
+                                domProps: {
+                                  textContent: _vm._s(item.games.name)
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("p", {
+                                staticClass: "text-primary",
+                                domProps: { textContent: _vm._s(item.date) }
+                              }),
+                              _vm._v(" "),
+                              item.game_schedule_details.length == 0
+                                ? _c("p", [
+                                    _vm._v(
+                                      " A un no hay numero ganadores, tu puedes ser un ganador."
+                                    )
+                                  ])
+                                : _vm._l(item.game_schedule_details, function(
+                                    detail,
+                                    index
+                                  ) {
+                                    return _c(
+                                      "h4",
+                                      {
+                                        key: index,
+                                        staticClass: "text-center text-success"
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            index + 1 == 1 ? "1er" : "2do"
+                                          ) + " Numero "
+                                        ),
+                                        _c("strong", {
+                                          domProps: {
+                                            textContent: _vm._s(
+                                              detail.number_win
+                                            )
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  })
+                            ],
+                            2
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _vm._m(3)
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "table-responsive" }, [
+                _c(
+                  "ul",
+                  { staticClass: "list-group" },
+                  [
+                    _vm.dataTicktes.length == 0
+                      ? _c(
+                          "li",
+                          { staticClass: "list-group-item text-center" },
+                          [_vm._m(4)]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm._l(_vm.dataTicktes, function(item) {
+                      return _c(
+                        "li",
+                        { key: item.id, staticClass: "list-group-item" },
+                        [
+                          _c("div", { staticClass: "row text-center" }, [
+                            _c(
+                              "div",
+                              { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                              [
+                                _c("strong", [
+                                  _vm._v("No.ticket: "),
+                                  _c("span", {
+                                    domProps: { textContent: _vm._s(item.id) }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                item.winner == 1
+                                  ? _c("h6", { staticClass: "text-success" }, [
+                                      _vm._v(" Ganador "),
+                                      _c("i", { attrs: { clsass: "ti-star" } })
+                                    ])
+                                  : _vm._e()
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", {
+                              staticClass:
+                                "col-sm-12 col-md-3 col-lg-3 text-primary",
+                              domProps: { textContent: _vm._s(item.date) }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                              [
+                                _vm._v("$"),
+                                _c("span", {
+                                  domProps: { textContent: _vm._s(item.total) }
+                                }),
+                                _vm._v(" pesos")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                              [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-danger btn-sm",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.openModal(
+                                          "modal",
+                                          "detail",
+                                          item
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "ti-eye" })]
+                                )
+                              ]
+                            )
+                          ])
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                ),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("nav", [
+                  _c(
+                    "ul",
+                    { staticClass: "pagination" },
+                    [
+                      _vm.pagination.current_page > 1
+                        ? _c("li", { staticClass: "page-item" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "page-link",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.pageChange(
+                                      _vm.pagination.current_page - 1
+                                    )
+                                  }
+                                }
+                              },
+                              [_vm._v("Ant")]
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm._l(_vm.pagesNumber, function(page) {
+                        return _c(
+                          "li",
+                          {
+                            key: page,
+                            staticClass: "page-item",
+                            class: [page == _vm.isActived ? "active" : ""]
+                          },
+                          [
+                            _c("a", {
+                              staticClass: "page-link",
+                              attrs: { href: "#" },
+                              domProps: { textContent: _vm._s(page) },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.pageChange(page)
+                                }
+                              }
+                            })
+                          ]
+                        )
+                      }),
+                      _vm._v(" "),
+                      _vm.pagination.current_page < _vm.pagination.last_page
+                        ? _c("li", { staticClass: "page-item" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "page-link",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.pageChange(
+                                      _vm.pagination.current_page + 1
+                                    )
+                                  }
+                                }
+                              },
+                              [_vm._v("Sig")]
+                            )
+                          ])
+                        : _vm._e()
+                    ],
+                    2
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal", attrs: { id: "myModal" } }, [
+      _c("div", { staticClass: "modal-dialog modal-sm modal-lg" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c("h4", {
+              staticClass: "modal-title",
+              domProps: { textContent: _vm._s(_vm.titleModal) }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.closeModal()
+                  }
+                }
+              },
+              [_vm._v("×")]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.action == 2
+            ? _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Telefono del cliente:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [
+                      _c("strong", {
+                        domProps: { textContent: _vm._s(_vm.phone) }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", {
+                      staticClass: "col-sm-12",
+                      attrs: { id: "send-text" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(5),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
+                  [
+                    _c(
+                      "ul",
+                      { staticClass: "list-group" },
+                      [
+                        _vm.dataNewDays.length == 0
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _c("h6", [_vm._v("Sin dias")])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._l(_vm.dataNewDays, function(item) {
+                          return _c(
+                            "li",
+                            { key: item.id, staticClass: "list-group-item" },
+                            [
+                              _c("div", { staticClass: "row" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-6 col-lg-6 text-center"
+                                  },
+                                  [
+                                    _vm._v("Dia:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.name)
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-6 col-lg-6 text-center"
+                                  },
+                                  [
+                                    _vm._v("Fecha:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.date)
+                                      }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(6),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
+                  [
+                    _c(
+                      "ul",
+                      { staticClass: "list-group" },
+                      [
+                        _vm.dataNumbers.length == 0
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _c("h6", [_vm._v("Jugada vacía")])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._l(_vm.dataNumbers, function(item) {
+                          return _c(
+                            "li",
+                            { key: item.id, staticClass: "list-group-item" },
+                            [
+                              _c("div", { staticClass: "row" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                                Numero:"
+                                    ),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.game_number)
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    item.winner == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [_vm._v(" Ganador")]
+                                        )
+                                      : _vm._e()
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                  },
+                                  [
+                                    _vm._v("Juego:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.game_number)
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                                Inversion:$"
+                                    ),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.bet)
+                                      }
+                                    }),
+                                    _vm._v(
+                                      " pesos\n                                                "
+                                    ),
+                                    item.winner == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [
+                                            _vm._v("Premio: "),
+                                            _c("p", {
+                                              domProps: {
+                                                textContent: _vm._s(item.prize)
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      : _vm._e()
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Total Jugadas:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [_vm._v("$ " + _vm._s(_vm.mTotal) + " Pesos")])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Numero de dias:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", {
+                      domProps: { textContent: _vm._s(_vm.dataNewDays.length) }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Total por dias:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [_vm._v("$ " + _vm._s(_vm.total) + " Pesos")])
+                  ]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-footer" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.closeModal()
+                  }
+                }
+              },
+              [_vm._v("Close")]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-5" }, [
+      _c("h4", { staticClass: "card-title mb-0" }, [
+        _vm._v(
+          "\n                                     Inicio \n                                "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "carousel-indicators" }, [
+      _c("li", {
+        staticClass: "active",
+        attrs: { "data-target": "#demo", "data-slide-to": "0" }
+      }),
+      _vm._v(" "),
+      _c("li", { attrs: { "data-target": "#demo", "data-slide-to": "1" } }),
+      _vm._v(" "),
+      _c("li", { attrs: { "data-target": "#demo", "data-slide-to": "2" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-prev",
+        attrs: { href: "#demo", "data-slide": "prev" }
+      },
+      [_c("span", { staticClass: "carousel-control-prev-icon" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-next",
+        attrs: { href: "#demo", "data-slide": "next" }
+      },
+      [_c("span", { staticClass: "carousel-control-next-icon" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h2", [
+      _c("span", { staticClass: "badge  badge-pill badge-info" }, [
+        _vm._v("Data Not Found")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
+      [_c("h3", [_vm._v("Dias de juego")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
+      [_c("h3", [_vm._v("Jugadas")])]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/home/HomeComponent.vue?vue&type=template&id=6caa5fce&":
 /*!*********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/home/HomeComponent.vue?vue&type=template&id=6caa5fce& ***!
@@ -41713,7 +42528,9 @@ var render = function() {
                         _c("td", {
                           domProps: {
                             textContent: _vm._s(
-                              item.game_schedule_details[0].number_win
+                              item.game_schedule_details.length > 0
+                                ? item.game_schedule_details[0].number_win
+                                : "Sin Numero"
                             )
                           }
                         }),
@@ -41721,7 +42538,9 @@ var render = function() {
                         _c("td", {
                           domProps: {
                             textContent: _vm._s(
-                              item.game_schedule_details[1].number_win
+                              item.game_schedule_details.length > 1
+                                ? item.game_schedule_details[1].number_win
+                                : "Sin Numero"
                             )
                           }
                         }),
@@ -45246,7 +46065,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("div", {
                             staticClass: "col-sm-12 col-md-3 col-lg-3",
-                            domProps: { textContent: _vm._s(item.created_at) }
+                            domProps: { textContent: _vm._s(item.date) }
                           }),
                           _vm._v(" "),
                           _c(
@@ -45261,75 +46080,104 @@ var render = function() {
                             ]
                           ),
                           _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "col-sm-12 col-md-3 col-lg-3" },
-                            [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-danger btn-sm",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.openModal(
-                                        "modal",
-                                        "detail",
-                                        item
+                          item.winner == 0
+                            ? _c(
+                                "div",
+                                { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-danger btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.openModal(
+                                            "modal",
+                                            "detail",
+                                            item
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "ti-eye" })]
+                                  ),
+                                  _vm._v(" "),
+                                  item.active == 0
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-success btn-sm",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.changeStatus(item)
+                                            }
+                                          }
+                                        },
+                                        [_c("i", { staticClass: "ti-money" })]
                                       )
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "ti-eye" })]
-                              ),
-                              _vm._v(" "),
-                              item.active == 0
-                                ? _c(
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  item.active == 1
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-secondary btn-sm",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.changeStatus(item)
+                                            }
+                                          }
+                                        },
+                                        [_c("i", { staticClass: "ti-na" })]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c(
                                     "button",
                                     {
-                                      staticClass: "btn btn-success btn-sm",
+                                      staticClass: "btn btn-primary btn-sm",
                                       attrs: { type: "button" },
                                       on: {
                                         click: function($event) {
-                                          return _vm.changeStatus(item)
+                                          return _vm.DeleteOrRestore(item)
                                         }
                                       }
                                     },
-                                    [_c("i", { staticClass: "ti-money" })]
+                                    [_c("i", { staticClass: "ti-trash" })]
                                   )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              item.active == 1
-                                ? _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-secondary btn-sm",
-                                      attrs: { type: "button" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.changeStatus(item)
-                                        }
-                                      }
-                                    },
-                                    [_c("i", { staticClass: "ti-na" })]
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-primary btn-sm",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.DeleteOrRestore(item)
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "ti-trash" })]
+                                ]
                               )
-                            ]
-                          )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          item.winner == 1
+                            ? _c(
+                                "div",
+                                { staticClass: "col-sm-12 col-md-3 col-lg-3" },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-danger btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.openModal(
+                                            "modal",
+                                            "detail",
+                                            item
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "ti-eye" })]
+                                  )
+                                ]
+                              )
+                            : _vm._e()
                         ])
                       ]
                     )
@@ -61177,6 +62025,7 @@ Vue.component('user-tickets-component', __webpack_require__(/*! ./components/tic
 Vue.component('user-component', __webpack_require__(/*! ./components/user/UsersComponent.vue */ "./resources/js/components/user/UsersComponent.vue")["default"]);
 Vue.component('profile-component', __webpack_require__(/*! ./components/user/ProfileComponent.vue */ "./resources/js/components/user/ProfileComponent.vue")["default"]);
 Vue.component('home-component', __webpack_require__(/*! ./components/home/HomeComponent.vue */ "./resources/js/components/home/HomeComponent.vue")["default"]);
+Vue.component('home-component-client', __webpack_require__(/*! ./components/home/HomeClientComponent.vue */ "./resources/js/components/home/HomeClientComponent.vue")["default"]);
 Vue.component('deposit-component', __webpack_require__(/*! ./components/deposits/DepositComponent.vue */ "./resources/js/components/deposits/DepositComponent.vue")["default"]);
 Vue.component('schedule-component', __webpack_require__(/*! ./components/schedule/ScheduleComponent.vue */ "./resources/js/components/schedule/ScheduleComponent.vue")["default"]);
 Vue.component('winner-component', __webpack_require__(/*! ./components/winners/WinnersComponent.vue */ "./resources/js/components/winners/WinnersComponent.vue")["default"]);
@@ -61788,6 +62637,62 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/home/HomeClientComponent.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/home/HomeClientComponent.vue ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _HomeClientComponent_vue_vue_type_template_id_6ca07b0e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HomeClientComponent.vue?vue&type=template&id=6ca07b0e& */ "./resources/js/components/home/HomeClientComponent.vue?vue&type=template&id=6ca07b0e&");
+/* harmony import */ var _js_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/homeC.js?vue&type=script&lang=js& */ "./resources/js/components/home/js/homeC.js?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _js_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _js_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _js_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _HomeClientComponent_vue_vue_type_template_id_6ca07b0e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _HomeClientComponent_vue_vue_type_template_id_6ca07b0e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/home/HomeClientComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/home/HomeClientComponent.vue?vue&type=template&id=6ca07b0e&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/home/HomeClientComponent.vue?vue&type=template&id=6ca07b0e& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HomeClientComponent_vue_vue_type_template_id_6ca07b0e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./HomeClientComponent.vue?vue&type=template&id=6ca07b0e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/home/HomeClientComponent.vue?vue&type=template&id=6ca07b0e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HomeClientComponent_vue_vue_type_template_id_6ca07b0e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HomeClientComponent_vue_vue_type_template_id_6ca07b0e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/home/HomeComponent.vue":
 /*!********************************************************!*\
   !*** ./resources/js/components/home/HomeComponent.vue ***!
@@ -61854,6 +62759,20 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_home_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!./home.js?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/home/js/home.js?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_home_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/home/js/homeC.js?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/home/js/homeC.js?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!./homeC.js?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./resources/js/components/home/js/homeC.js?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 

@@ -47,6 +47,7 @@ class RepositoryUserTickets
         $rg = $this->modelDAT->select( 'tickets.id as id',
                                         'tickets.phone as phone',
                                         'tickets.active as active',
+                                        'tickets.winner as winner',
                                         'tickets.total as total',
                                         'tickets.deleted_at as deleted_at',
                                         'day_tickets.game_date as date')

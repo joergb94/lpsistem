@@ -25,7 +25,7 @@ class ScheduleUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'number_win' => 'required|max:5',
+            'number_win' => 'max:5',
             'number_win2' => 'max:5',
             'date' => 'required|after:yesterday',
             'game_id' => 'required',

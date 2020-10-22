@@ -22,6 +22,7 @@ Route::group(['middleware'=>['auth']], function(){
     
 Route::get('logout', 'Auth\LoginController@redirectUrlLogout');
 Route::get('/home', 'HomeController@index')->name('home');
+
 //user
 Route::get('/users', 'UserController@index');
 Route::post('/users/add', 'UserController@store');

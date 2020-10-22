@@ -87,18 +87,18 @@ export default {
              var url = '/schedule/add'
              var data = {
                     'id': this.id,
-                    'number_win': this.number_win,
-                    'number_win2': this.number_win2,
+                    'number_win': this.number_win?this.number_win:'',
+                    'number_win2': this.number_win2?this.number_win:'',
                     'game_id': this.game_id,
                     'date':this.date
             };
 
             if (action == 2){
-                url = '/schedule/update'
+                url = '/schedule/update'    
                 var data = {
                     'id': this.id,
-                    'number_win': this.number_win,
-                    'number_win2': this.number_win2,
+                    'number_win': this.number_win?this.number_win:'',
+                    'number_win2': this.number_win2?this.number_win:'',
                     'game_id': this.game_id,
                     'date':this.date
                 };

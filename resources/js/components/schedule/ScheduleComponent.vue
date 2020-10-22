@@ -55,8 +55,8 @@
                                 </tr>
 
                                 <tr v-for="item in dataUsers" :key="item.id">
-                                    <td v-text="item.game_schedule_details[0].number_win"></td>
-                                    <td v-text="item.game_schedule_details[1].number_win"></td>
+                                    <td v-text="item.game_schedule_details.length > 0?item.game_schedule_details[0].number_win:'Sin Numero'"></td>
+                                    <td v-text="item.game_schedule_details.length > 1?item.game_schedule_details[1].number_win:'Sin Numero'"></td>
                                     <td v-text="item.games.name"></td>
                                     <td v-text="item.date"></td>
                                     <td>

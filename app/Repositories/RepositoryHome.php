@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Exceptions\GeneralException;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Game_schedule;
+use App\Models\Game_schedules_detail;
 use App\Models\Game;
 use App\Models\Day;
 use App\Models\Day_ticket;
@@ -170,23 +172,31 @@ class RepositoryHome
         }else{
                 $Ticket->where('tickets.user_id',Auth::user()->id);
         }
-        switch ($type) {
-            case 'day':
-                $Ticket->whereDate('day_tickets.game_date', $date);
-                break;
-            case 'week':
-                $Ticket->whereDate('day_tickets.game_date','>=',$date->startOfWeek())->whereDate('day_tickets.game_date','<=',$date->endOfWeek());
-                break;
-                
-            case 'month':
-                $Ticket->whereMonth('day_tickets.game_date', $date->month)->whereYear('day_tickets.game_date', $date->year);
-                break;
-            default:
-                $Ticket->whereDate('day_tickets.game_date', $date);
-                break;
+
+        if(Auth::user()->type_user_id < 3 || Auth::user()->type_user_id > 4){
+            switch ($type) {
+                case 'day':
+                    $Ticket->whereDate('day_tickets.game_date', $date);
+                    break;
+                case 'week':
+                    $Ticket->whereDate('day_tickets.game_date','>=',$date->startOfWeek())->whereDate('day_tickets.game_date','<=',$date->endOfWeek());
+                    break;
+                    
+                case 'month':
+                    $Ticket->whereMonth('day_tickets.game_date', $date->month)->whereYear('day_tickets.game_date', $date->year);
+                    break;
+                default:
+                    $Ticket->whereDate('day_tickets.game_date', $date);
+                    break;
+            }
         }
-        
-        $data = $Ticket->whereNull('tickets.deleted_at')->paginate(10);
+        if(Auth::user()->type_user_id < 4 || Auth::user()->type_user_id > 4){
+            $data = $Ticket->whereNull('tickets.deleted_at')->paginate(10);
+
+          }else{
+            $data = $Ticket->whereNull('tickets.deleted_at')->where('winner',true)->paginate(10);
+            }
+       
 
         return [
             'pagination' => [
@@ -223,7 +233,29 @@ class RepositoryHome
             return $home;
     }
 
+    /**
+     * section for client dashboard 
+     */
+
+    public function data_games($date){
+
+                return Game_schedule::where('id','>',0)->with('games')->with('game_schedule_details')
+                ->whereDate('date','>=',$date->startOfWeek())->whereDate('date','<=',$date->endOfWeek())->get();
+     }
+
+
   
+   public function data_indexC($date_filter,$type_filter)
+   {
+       $date = ($date_filter)?  Carbon::parse($date_filter) : Carbon::now();
+       $type = ($type_filter)?  $type_filter : 'day';
+       $home = [
+                   "games"=>RepositoryHome::data_games($date),
+                   "TableTickets"=>RepositoryHome::table_byTicket($date,$type),
+                   "date"=>$date->format('Y-m-d')
+               ];
+           return $home;
+   }
 
    
 
