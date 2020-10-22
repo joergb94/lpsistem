@@ -71,6 +71,7 @@
     <script src="{{ asset('js/sweetalert2.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/template.js') }}"></script>
     @guest
     @else
         @if($dm['type_user']==4)

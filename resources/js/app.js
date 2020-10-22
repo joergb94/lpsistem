@@ -22,6 +22,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('admin-tickets-component', require('./components/tickets/TicketsRunnerComponent.vue').default);
 Vue.component('management-tickets-component', require('./components/tickets/TicketsComponent.vue').default);
 Vue.component('user-tickets-component', require('./components/tickets/UserTicketsComponent.vue').default);
 Vue.component('user-component', require('./components/user/UsersComponent.vue').default);
@@ -75,4 +76,6 @@ const app = new Vue({
         
      }
 });
+
+
  

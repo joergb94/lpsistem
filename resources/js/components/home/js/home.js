@@ -2,13 +2,11 @@ export default {
         data () {
             return {
             dataUsers:[],
-            id:'',
-            name:'',
-            last_name:'',
-            phone:'',
-            email:'',
-            password:'',
-            type_user:'',
+            dataTicktes:[],
+            date:'',
+            tickets_pay_off:0,
+            tickets_not_pay_off:0,
+            incomes:0,
             titleModal:'',
             action:0,
             page:1,
@@ -22,8 +20,8 @@ export default {
                     'to' : 0,
                 },
             offset : 3,
-            criterion : 'name',
-            status : 1,
+            criterion : 'day',
+            prize : 0,
             search : ''
 
             }
@@ -57,14 +55,21 @@ export default {
             }
         },
         methods : {
-            ListUsers(page){
+            ListHome(page){
                 let me = this;
-                var url = '/users?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status;
+                var url = '/home?page='+page+'&criterion='+this.criterion+'&date='+this.date;
                  axios.get(url)
                 .then(function (response) {
                     var respuesta= response.data;
-                    me.dataUsers = respuesta.Users.data;
-                    me.pagination= respuesta.pagination;
+                    console.log(respuesta)
+                    //me.dataUsers = respuesta.TableTickets.Tikets.data;
+                    me.tickets_pay_off = respuesta.tickets_pay_off;
+                    me.tickets_not_pay_off = respuesta.tickets_not_pay_off;
+                    me.incomes = respuesta.incomes.total_bet;
+                    me.prize = respuesta.prizes.total_prize;
+                    me.dataTicktes = respuesta.TableTickets.Tickets.data;
+                    me.date = respuesta.date;
+                    me.pagination = respuesta.TableTickets.pagination;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -78,186 +83,70 @@ export default {
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.ListUsers(page)
+                me.ListHome(page)
             },
-            updateOrCreate(action){
-                 let me = this;
-                 var url = '/users/add'
-                 var data = {
-                    'name': this.name,
-                    'last_name': this.last_name,
-                    'phone': this.phone,
-                    'email':this.email,
-                    'password':this.password,
-                    'type':this.type_user
-                };
-
-                if (action == 2){
-                    url = '/users/update'
-                    var data = {
-                        'id': this.id,
-                        'name': this.name,
-                        'description': this.description
-                    };
-                }
-               
-                axios.post(url,data).then(function (response) {
-
-                    me.closeModal();
-                    me.ListUsers('');
-
-                     $.notify({
-                                // options
-                                title: "Success!",
-                                message:"Exito",
-                            },{
-                                // settings
-                                type: 'success'
-                            });
-
-                }).catch(function (error) {
-                    console.log(error.response.data.errors);
-                    var e = error.response.data.errors;
-                      $.notifyClose();
-                    
-                     $.each(e,function (k,message) {
-                            $.notify({
-                                // options
-                                title: "Error!",
-                                message:message,
-                            },{
-                                // settings
-                                type: 'danger'
-                            });
-                        });
-                })              
-            },
-            DeleteOrRestore(item){
-                let me = this;
-                var data = {
-                    'id': item.id,
-                    };
-                 var m = "Do you want to deleted User?";
-                 var mt = "The User will be delete";
-                 var btn = "Delete";
-
-
-                if(item.deleted_at != null){
-                     m = "Do you want to restored User?";
-                     mt = "The User will be restore";
-                     btn = "Restore";
-                }
-
-                    Swal.fire({
-                        title: m,
-                        text:  mt,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Si, eliminalo!'
-                    }).then((result) => {
-                        if (result.value) {
-                             axios.post('/users/deleteOrResotore',data).then(function (response) {
-                                    me.ListUsers();
-                                    $.notify({
-                                                // options
-                                                title: "Success!",
-                                                message:"Exito",
-                                            },{
-                                                // settings
-                                                type: 'success'
-                                            });
-
-                                }).catch(function (error) {}) 
-                        }
-                    }) 
-            },
-            changeStatus(item){
-                let me = this;
-                var data = {
-                    'id': item.id,
-                    };
-                 var m = "Do you want to deactived User?";
-                 var mt = "The User will be deactived";
-                 var btn = "Deactived";
-
-
-                if(item.active == 0){
-                     m = "Do you want to actived User?";
-                     mt = "The User will be actived";
-                     btn = "Actived";
-                }
-                 Swal.fire({
-                        title: m,
-                        text:  mt,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Si, eliminalo!'
-                    }).then((result) => {
-                        if (result.value) {
-                             axios.post('/users/change_status',data).then(function (response) {
-                                    me.ListUsers();
-                                    $.notify({
-                                                // options
-                                                title: "Success!",
-                                                message:"Exito",
-                                            },{
-                                                // settings
-                                                type: 'success'
-                                            });
-
-                                }).catch(function (error) {}) 
-                        }
-                    }) 
-                   
-            },
-            openModal(model, action, data = []){
-               
-                switch(model){
-                    case 'modal':
-                    {
-                        switch(action){
-                            case 'add':
-                            {
-                                this.titleModal = 'New User';
-                                this.name= '';
-                                 this.name = '';
-                                this.phone = '';
-                                this.email = '';
-                                this.password = '';
-                                this.action = 1;
-                                break;
-                            }
-                            case 'update':
-                            {
-                                
-                                this.titleModal = 'Update User';
-                                this.id = data.id;
-                                this.name = data.name;
-                                this.phone = data.phone;
-                                this.email = data.email;
-                                this.password = data.password;
-                                this.action = 2;
-                                break;
-                            }
-                        }
-                        $("#myModal").modal('show');
-                    }
-                }
-            },
-            closeModal(){
-                    this.titleModal = '';
-                    this.name= '';
-                    this.description = '';
-                     $.notifyClose();
-                    $("#myModal").modal('hide');
-            },
+           openModal(model,action, data = ''){
+               switch(model){
+                   case 'modal':
+                   {
+                       switch(action){
+                           case 'detail':
+                           {   let me = this;
+                               me.action = 2;
+                               axios.get('/tickets/detail?id='+data.id).then(function (response) {
+                                   var answer = response.data;
+                                   console.log(answer)
+                                   me.titleModal = 'Info Ticket Numero: '+answer.ticket.id;
+                                   me.dataNumbers = answer.ticketDetail;
+                                   me.total = answer.ticket.total;
+                                   me.phone =answer.client.phone;
+                                   me.dataNewDays = answer.days;
+                                   if(answer.client.created_at == answer.client.updated_at){
+                                        $('#send-text').html(`<a class="btn btn-block btn-primary text-white" href="https://wa.me/52${answer.client.phone}?text=USUARIO%20${answer.client.email}%20CONTRASEÑA:%20${answer.client.phone}%20" target="_blank" style="color:#000;">
+                                                           Enviar Usuario y Contraseña &nbsp; 
+                                                           <i style="font-size:18px;" class="fa fa-mobile-phone"></i>
+                                                       </a>
+                                                       <a class="btn btn-block btn-success text-white" href="https://wa.me/52${answer.client.phone}" target="_blank" style="color:#000;">
+                                                           Enviar mensaje &nbsp; 
+                                                           <i style="font-size:18px;" class="fa fa-mobile-phone"></i>
+                                                       </a>`);
+                                   }else{
+                                        $('#send-text').html(`<a class="btn btn-block btn-success text-white" href="https://wa.me/52${answer.client.phone}" target="_blank" style="color:#000;">
+                                                           Enviar mensaje &nbsp; 
+                                                           <i style="font-size:18px;" class="fa fa-mobile-phone"></i>
+                                                       </a>`);
+                                   }
+                                  
+   
+                                   $("#myModal").modal('show');
+                               }).catch(function (error) {}) 
+                              
+                               break;
+                           }
+                       }
+                       
+                   }
+               }
+           },
+           closeModal(){
+                   this.titleModal = '';
+                   this.phone = '';
+                   this.total = '';
+                   this.number = '';
+                   this.multiplier = 0;
+                   this.mTotal = 0;
+                   this.ticket_type = '1';
+                   this.subtotal = '';
+                   this.dataNumbers =[];
+                   this.dataNewDays = [];
+                   this.client ='';
+                   $('#send-text').html('');
+                    $.notifyClose();
+                   $("#myModal").modal('hide');
+           },
         },
         mounted () {
-           this.ListUsers(1);
+           this.ListHome(1);
         }
     }
 

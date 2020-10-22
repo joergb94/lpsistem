@@ -80,6 +80,12 @@
                                             <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                                 <i class="ti-eye"></i>
                                             </button>
+                                            <button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
+                                                <i class="ti-money"></i>
+                                            </button>
+                                            <button v-if="item.active == 1" type="button" class="btn btn-secondary btn-sm" @click="changeStatus(item)">
+                                                <i class="ti-na"></i>
+                                            </button>
                                             <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                                 <i class="ti-trash"></i>
                                             </button>

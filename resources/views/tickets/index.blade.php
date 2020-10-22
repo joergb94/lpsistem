@@ -2,10 +2,10 @@
 @section('content')
     @switch($dm['type_user'])
         @case(1)
-                <management-tickets-component></management-tickets-component>
+                <admin-tickets-component></admin-tickets-component>
         @break
         @case(2)
-                <management-tickets-component></management-tickets-component>
+                <admin-tickets-component></admin-tickets-component>
         @break
         @case(3)
                 <management-tickets-component></management-tickets-component>
