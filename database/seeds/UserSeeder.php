@@ -35,6 +35,12 @@ class UserSeeder extends Seeder
             'last_name'=>'usuario',
             'email'=>'usuario@LP.com',
             'password'=> bcrypt('example'),],
+
+            ['type_user_id' => 5,
+            'name'=> 'LP',
+            'last_name'=>'usuario',
+            'email'=>'Corredor@LP.com',
+            'password'=> bcrypt('example'),],
         ];
       
       foreach($adminUser as $admin)

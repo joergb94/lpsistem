@@ -24,8 +24,8 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="btn-group col-sm-12">
-                                    <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-10" placeholder="buscar No.ticket">
-                                    <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-10 col-lg-10" placeholder="buscar No.ticket">
+                                    <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-2 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>

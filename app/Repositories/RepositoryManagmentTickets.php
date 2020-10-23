@@ -41,7 +41,7 @@ class RepositoryManagmentTickets
      *
      * @return mixed
      */
-    public function getSearchPaginated($criterion, $search, $status, $date)
+    public function getSearchPaginated($criterion, $search, $status, $date, $seller)
     {
         $rg = $this->modelDAT->select( 'tickets.id as id',
                                         'tickets.phone as phone',
@@ -52,10 +52,24 @@ class RepositoryManagmentTickets
                                         'day_tickets.game_date as date')
                             ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
 
-            (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $rg->where($criterion, 'like', '%'. $search . '%')->where('tickets.seller_id',Auth::user()->id)
-                     : $rg->where('tickets.id','>',0)->where('tickets.seller_id',Auth::user()->id);
+            if(Auth::user()->type_user_id == 3)
+            {
+                (strlen($criterion) > 0 &&  strlen($search) > 0) 
+                ? $rg->where($criterion, 'like', '%'. $search . '%')->where('tickets.seller_id',Auth::user()->id)
+                : $rg->where('tickets.id','>',0)->where('tickets.seller_id',Auth::user()->id); 
+           
+            }
+            else{
+                (strlen($criterion) > 0 &&  strlen($search) > 0) 
+                ? $rg->where($criterion, 'like', '%'. $search . '%')
+                : $rg->where('tickets.id','>',0); 
+
+                if($seller != 'all'){
+                    $rg->where('tickets.seller_id',$seller);
+                }
+            }
                 
+            
                 
                    if($date){
                     $rg->whereDate('day_tickets.game_date',$date);
@@ -92,6 +106,8 @@ class RepositoryManagmentTickets
                 'Games'=>Game::whereTime('time_end', '>=',Carbon::now())->get(),
                 'Days'=>Day::all(),
                 'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
+                'Sellers' =>User::where('type_user_id',3)->get(),
+                'type'=>Auth::user()->type_user_id,
             ];
     }
 

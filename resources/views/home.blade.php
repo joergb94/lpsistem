@@ -14,7 +14,7 @@
                 <home-component-client></home-component-client>
         @break
         @default
-        <home-component></home-component>
+                <home-component-client></home-component-client>
     @endswitch
  
 @endsection

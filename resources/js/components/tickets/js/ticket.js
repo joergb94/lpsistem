@@ -6,13 +6,16 @@ export default {
         dataGames:[],
         dataDays:[],
         dataNewDays:[],
+        dataSeller:[],
         dataFigure:[1,2,3,4,5],
         id:'',
+        type:'',
         phone:'',
         total: 0,
         subtotal:'', 
         number:'',
         game:'',
+        seller:0,
         figures:0,
         day:'',
         multiplier:0,
@@ -143,17 +146,17 @@ export default {
         },
         ListTickets(page){
             let me = this;
-            var url = '/tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status+'&date='+this.date;
+            var url = '/tickets?page='+page+'&search='+this.search+'&criterion='+this.criterion+'&status='+this.status+'&date='+this.date+'&seller='+this.seller.id;
              axios.get(url)
             .then(function (response) {
                 var answer= response.data;
-                console.log(answer.jas)
                 me.dataTicktes = answer.Tickets.data;
                 me.date = answer.Date;
                 me.dataGames = answer.Games;
                 me.dataDays = answer.Days;
+                me.dataSeller = answer.Sellers;
                 me.pagination= answer.pagination;
-                dataC();
+                me.type =answer.type;
             })
             .catch(function (error) {
                 console.log(error);
@@ -292,6 +295,7 @@ export default {
                                 this.action = 1;
                             } else {
                                 this.titleModal = 'El horario para crear tickets se ha terminado intentelo, mañana nuevamente.';
+                                this.action = '';
                             }
                             
 

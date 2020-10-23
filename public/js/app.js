@@ -2781,13 +2781,16 @@ __webpack_require__.r(__webpack_exports__);
       dataGames: [],
       dataDays: [],
       dataNewDays: [],
+      dataSeller: [],
       dataFigure: [1, 2, 3, 4, 5],
       id: '',
+      type: '',
       phone: '',
       total: 0,
       subtotal: '',
       number: '',
       game: '',
+      seller: 0,
       figures: 0,
       day: '',
       multiplier: 0,
@@ -2903,16 +2906,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     ListTickets: function ListTickets(page) {
       var me = this;
-      var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status + '&date=' + this.date;
+      var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status + '&date=' + this.date + '&seller=' + this.seller.id;
       axios.get(url).then(function (response) {
         var answer = response.data;
-        console.log(answer.jas);
         me.dataTicktes = answer.Tickets.data;
         me.date = answer.Date;
         me.dataGames = answer.Games;
         me.dataDays = answer.Days;
+        me.dataSeller = answer.Sellers;
         me.pagination = answer.pagination;
-        dataC();
+        me.type = answer.type;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3045,6 +3048,7 @@ __webpack_require__.r(__webpack_exports__);
                     this.action = 1;
                   } else {
                     this.titleModal = 'El horario para crear tickets se ha terminado intentelo, mañana nuevamente.';
+                    this.action = '';
                   }
 
                   $("#myModal").modal('show');
@@ -3373,7 +3377,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(url).then(function (response) {
         var answer = response.data;
         me.dataTicktes = answer.Tickets.data;
-        me.date = this.date == answer.Date ? answer.Date : this.date;
+        me.date = answer.Date;
         me.dataGames = answer.Games;
         me.dataDays = answer.Days;
         me.pagination = answer.pagination;
@@ -44541,6 +44545,66 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
+                  this.type !== 3
+                    ? _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.seller,
+                              expression: "seller"
+                            }
+                          ],
+                          staticClass:
+                            "form-control col-sm-12 col-md-12 col-lg-12",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.seller = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "0" } }, [
+                            _vm._v("Selecione un vendedor")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.dataSeller, function(item) {
+                            return _c(
+                              "option",
+                              {
+                                key: item.id,
+                                domProps: {
+                                  value: { id: item.id, text: item.name }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                        " +
+                                    _vm._s(item.name) +
+                                    " " +
+                                    _vm._s(item.last_name) +
+                                    "\n                                    "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c(
                     "select",
                     {
@@ -44980,7 +45044,7 @@ var render = function() {
                               _vm._v(
                                 "\n                                        " +
                                   _vm._s(item.name) +
-                                  "\n                                    "
+                                  " \n                                    "
                               )
                             ]
                           )
@@ -45977,7 +46041,7 @@ var render = function() {
                         expression: "search"
                       }
                     ],
-                    staticClass: "form-control col-sm-12 col-md-12 col-lg-10",
+                    staticClass: "form-control col-sm-12 col-md-10 col-lg-10",
                     attrs: { type: "text", placeholder: "buscar No.ticket" },
                     domProps: { value: _vm.search },
                     on: {
@@ -46009,7 +46073,7 @@ var render = function() {
                     "button",
                     {
                       staticClass:
-                        "btn btn-primary col-sm-12 col-md-12 col-lg-2",
+                        "btn btn-primary col-sm-12 col-md-2 col-lg-2",
                       attrs: { type: "button" },
                       on: {
                         click: function($event) {
@@ -62641,15 +62705,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************************!*\
   !*** ./resources/js/components/home/HomeClientComponent.vue ***!
   \**************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _HomeClientComponent_vue_vue_type_template_id_6ca07b0e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HomeClientComponent.vue?vue&type=template&id=6ca07b0e& */ "./resources/js/components/home/HomeClientComponent.vue?vue&type=template&id=6ca07b0e&");
 /* harmony import */ var _js_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/homeC.js?vue&type=script&lang=js& */ "./resources/js/components/home/js/homeC.js?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _js_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _js_homeC_js_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -62766,7 +62829,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!***************************************************************************!*\
   !*** ./resources/js/components/home/js/homeC.js?vue&type=script&lang=js& ***!
   \***************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

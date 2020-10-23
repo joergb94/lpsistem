@@ -14,7 +14,7 @@
                 <user-tickets-component></management-tickets-component>
         @break
         @default
-                <user-tickets-component></management-tickets-component>
+                <admin-tickets-component></admin-tickets-component>
     @endswitch
         
 @endsection

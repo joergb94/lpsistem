@@ -28,11 +28,17 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <input type="date" v-model="date" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
+                                    <select v-if="this.type !== 3" class="form-control col-sm-12 col-md-12 col-lg-12" v-model="seller">
+                                        <option value="0">Selecione un vendedor</option>
+                                        <option v-for="item in dataSeller" :key="item.id" v-bind:value="{ id:item.id,text:item.name}">
+                                            {{ item.name }} {{item.last_name}}
+                                        </option>   
+                                    </select>
                                     <select class="form-control col-sm-12 col-md-6 col-lg-2" v-model="criterion">
                                         <option value="tickets.phone">Telefono</option>
                                         <option value="tickets.id">#</option>
                                     </select>
-                                        
+                                    
                                     <input type="text" v-model="search" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-6 col-lg-8" placeholder="Texto a buscar">
                                 
                                     <button type="button" @click="ListTickets(1)" class="btn btn-primary col-sm-12 col-md-12 col-lg-2"><i class="fa fa-search"></i> Buscar</button>
@@ -138,7 +144,7 @@
                                     <select class="form-control" v-model="game" id="game" name="game">
                                         <option value="" >Seleciona un Juego</option>
                                         <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
-                                            {{ item.name }}
+                                            {{ item.name }} 
                                         </option>
                                     </select>
                                 </div>
@@ -316,5 +322,4 @@
              
     </div>
 </template>
-<script src="main.js"></script>
 <script src="./js/ticket.js"></script>

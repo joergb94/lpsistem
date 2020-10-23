@@ -145,7 +145,7 @@ export default {
             .then(function (response) {
                 var answer= response.data;
                 me.dataTicktes = answer.Tickets.data;  
-                me.date =(this.date == answer.Date)?answer.Date:this.date;
+                me.date = answer.Date;
                 me.dataGames = answer.Games;
                 me.dataDays = answer.Days;
                 me.pagination= answer.pagination;
