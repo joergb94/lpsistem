@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="{{ asset('vendors/selectFX/css/cs-skin-elastic.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/jqvmap/dist/jqvmap.min.css') }}">
 
-
+    
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
@@ -32,12 +32,11 @@
 </head>
 
 <body>
-<div >
-
+<div id="appwraper" style="display:none">
     <!-- Left Panel -->
     @guest
         <!-- Right Panel -->
-        <div  id="app"  class="right-panel-login">
+        <div  id="app"  class="right-panel-login" >
     @else
         @include('layouts.items.leftPanel')
 
@@ -60,7 +59,12 @@
                 </div>
                 <!--/.col-->
             </div> 
+        </div> 
         <!-- .content -->
+    </div>
+        <div id="loading-wrapper" style=" padding-top: 200px;" class="col-sm-12 text-center">
+        <img src="{{asset('images/load.svg')}}">
+            <h1>Cargando ...</h1>
         </div>
 
     <!-- /#right-panel -->

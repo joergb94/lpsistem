@@ -5,10 +5,10 @@
                 <user-component></user-component>
         @break
         @case(2)
-                <user-component></user-component>
+                <profile-component></profile-component>
         @break
         @case(3)
-                <user-component></user-component>
+                <profile-component></profile-component>
         @break
         @case(4)
                 <profile-component></profile-component>

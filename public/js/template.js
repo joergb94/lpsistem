@@ -6,4 +6,11 @@ function menuMove(){
     x.style.display = "none";
     }
 }
+
+setTimeout(function(){  
+    if($('#loading-wrapper').hide()){
+        $('#appwraper').show(); 
+    }
+    
+  }, 1000);
  
