@@ -41381,7 +41381,24 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(6),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                  },
+                  [
+                    _c("h3", [
+                      _vm._v("Jugadas para "),
+                      _c("strong", {
+                        staticClass: "text-primary",
+                        domProps: {
+                          textContent: _vm._s(_vm.dataNumbers[0].games.name)
+                        }
+                      })
+                    ])
+                  ]
+                ),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -41407,7 +41424,7 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-6 col-lg-6 text-center"
                                   },
                                   [
                                     _vm._v(
@@ -41433,23 +41450,7 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
-                                  },
-                                  [
-                                    _vm._v("Juego:"),
-                                    _c("strong", {
-                                      domProps: {
-                                        textContent: _vm._s(item.game_number)
-                                      }
-                                    })
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-6 col-lg-6 text-center"
                                   },
                                   [
                                     _vm._v(
@@ -41630,16 +41631,6 @@ var staticRenderFns = [
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
       [_c("h3", [_vm._v("Dias de juego")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
-      [_c("h3", [_vm._v("Jugadas")])]
     )
   }
 ]
@@ -42165,7 +42156,26 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(4),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                  },
+                  [
+                    _c("h3", [
+                      _c("h3", [
+                        _vm._v("Jugadas para "),
+                        _c("strong", {
+                          staticClass: "text-primary",
+                          domProps: {
+                            textContent: _vm._s(_vm.dataNumbers[0].games.name)
+                          }
+                        })
+                      ])
+                    ])
+                  ]
+                ),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -42210,22 +42220,6 @@ var render = function() {
                                           [_vm._v(" Ganador")]
                                         )
                                       : _vm._e()
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
-                                  },
-                                  [
-                                    _vm._v("Juego:"),
-                                    _c("strong", {
-                                      domProps: {
-                                        textContent: _vm._s(item.game_number)
-                                      }
-                                    })
                                   ]
                                 ),
                                 _vm._v(" "),
@@ -42399,16 +42393,6 @@ var staticRenderFns = [
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
       [_c("h3", [_vm._v("Dias de juego")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
-      [_c("h3", [_vm._v("Jugadas")])]
     )
   }
 ]

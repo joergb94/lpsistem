@@ -138,7 +138,7 @@
                                 </ul>
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                                <h3>Jugadas</h3>
+                                <h3>Jugadas para <strong class="text-primary" v-text="dataNumbers[0].games.name"></strong></h3>
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <ul class="list-group">
@@ -147,12 +147,11 @@
                                     </li>
                                     <li class="list-group-item"  v-for="item in dataNumbers" :key="item.id">
                                         <div class="row">
-                                            <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
+                                            <div class="col-sm-12 col-md-6 col-lg-6 text-center" >
                                                 Numero:<strong v-text="item.game_number"></strong>
                                                 <h6 v-if="item.winner == 1" class="text-success"> Ganador</h6>
                                             </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
+                                            <div class="col-sm-12 col-md-6 col-lg-6 text-center" >
                                                 Inversion:$<strong v-text="item.bet"></strong> pesos
                                                 <h6 v-if="item.winner == 1" class="text-success">Premio: <p v-text="item.prize"></p></h6>
                                             </div>                  
