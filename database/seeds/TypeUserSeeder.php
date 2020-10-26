@@ -27,7 +27,6 @@ class TypeUserSeeder extends Seeder
                   ['type_user_id'=> 1,'data_menu_id'=> 2,'active'=> 1,],
                   ['type_user_id'=> 1,'data_menu_id'=> 3,'active'=> 1,],
                   ['type_user_id'=> 1,'data_menu_id'=> 4,'active'=> 1,],
-                  ['type_user_id'=> 1,'data_menu_id'=> 5,'active'=> 1,],
                   ['type_user_id'=> 1,'data_menu_id'=> 6,'active'=> 1,],
                 
 
@@ -36,7 +35,7 @@ class TypeUserSeeder extends Seeder
                   ['type_user_id'=> 2,'data_menu_id'=> 2,'active'=> 1,],
                   ['type_user_id'=> 2,'data_menu_id'=> 3,'active'=> 1,],
                   ['type_user_id'=> 2,'data_menu_id'=> 4,'active'=> 1,],
-                  ['type_user_id'=> 2,'data_menu_id'=> 5,'active'=> 1,],
+
       
               
                 //Vendedor
