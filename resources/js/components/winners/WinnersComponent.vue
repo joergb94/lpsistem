@@ -13,7 +13,7 @@
                                 </h4>
                             </div>
                             <div class="col-sm-7 text-right">
-                                 <button class="btn btn-success" @click="openModal('modal', 'add')">New</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -129,110 +129,6 @@
                         <button type="button"  class="close" @click="closeModal()" >&times;</button>
                     </div>
 
-                    <!-- Modal body Create/Edit -->
-                    <div class="modal-body" v-if="action==1"> 
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <label for="email">Telefono del cliente:</label>
-                                    <input type="number"  v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label for="pwd">Juego:</label>
-                                    <select class="form-control" v-model="game" id="game" name="game">
-                                        <option value="" >Seleciona un Juego</option>
-                                        <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
-                                            {{ item.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label for="pwd">Tipo:</label>
-                                    <select class="form-control" v-model="ticket_type" id="ticket_type" name="ticket_type">
-                                        <option value="1">No recurrente</option>
-                                        <option value="2">Recurrente</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                                    <h3><span class="badge badge-warning">Dias de juego</span></h3>
-                                    <br>
-                                        <div class="row">
-                                            <div class="form-group col-sm-10 col-md-10 col-lg-10">
-                                                <select class="form-control" v-model="day" id="day" name="day">
-                                                        <option value="" >Seleciona un dia</option>
-                                                        <option v-for="item in dataDays" :key="item.id" v-bind:value="{ id:item.id,text:item.name ,value:item.value}">
-                                                            {{ item.name }}
-                                                        </option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-sm-2 col-md-2 col-lg-2">
-                                                <button type="button" class="btn btn-primary btn-block" @click="addDay()">Agregar </button>
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                               <div class="row">
-                                                   <div class="col-sm-12 text-center" v-if="dataNewDays.length == 0">
-                                                       <h6> Sin dias</h6>
-                                                   </div>
-                                                   <div class="col-sm-4 text-center" v-for="(item,index) in dataNewDays" :key="index">
-                                                       <div class="row">
-                                                           <div class="col-sm-8" v-text="item.day.text">
-                                                           </div>
-                                                           <div class="col-sm-4">
-                                                               <button type="button" class="btn btn-danger" v-on:click="removeDay(index)" >X</button>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                            </div>
-                                        </div>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                                    <h3><span class="badge badge-warning">Jugada</span></h3>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                <label for="pwd">Numero:</label>
-                                                <input type="number" maxlength="5" v-model="number"  class="form-control" placeholder="Enter total" id="number">
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                <label for="pwd">Inversion:</label>
-                                                <input type="number" step="0.01" v-model="subtotal"  class="form-control" placeholder="Enter total" id="subtotal">
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                <button type="button" class="btn btn-primary btn-block" @click="addNumber()">Agregar al tickte</button>
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                <ul class="list-group">
-                                                    <li class="list-group-item"  v-if="dataNumbers.length == 0">
-                                                    <h6>Jugada vacía</h6>
-                                                    </li>
-                                                    <li class="list-group-item"  v-for="(item,index) in dataNumbers" :key="index">
-                                                        <div class="row">
-                                                            <div class="col-sm-12 col-md-4 col-lg-2" v-text="item.number">
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-4 col-lg-2">
-                                                                $<span v-text="item.subtotal"></span> pesos
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-4 col-lg-2">
-                                                                <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" >-</button>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
-                                    <label for="email">Total Jugadas:</label>
-                                    <label >$ {{mTotal}} Pesos</label>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
-                                    <label for="email">Numero de dias:</label>
-                                    <label v-text="dataNewDays.length" ></label>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
-                                    <label for="email">Total por dias:</label>
-                                    <label >$ {{total}} Pesos</label>
-                                </div> 
-                    </div>
-                    <!-- End Modal body  Create/Edit-->
                     <!-- Modal body Detail-->
                     <div class="modal-body" v-if="action==2">
                          <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
@@ -259,7 +155,7 @@
                             </ul>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                             <h3>Jugadas</h3>
+                             <h3>Jugadas para <strong class="text-primary" v-text="dataNumbers[0].games.name"></strong></h3>
                          </div>
                          <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <ul class="list-group">

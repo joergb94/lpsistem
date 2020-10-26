@@ -42,7 +42,7 @@ class RepositoryManagmentTickets
      * @return mixed
      */
     public function getSearchPaginated($criterion, $search, $status, $date, $seller)
-    {
+    {   
         $rg = $this->modelDAT->select( 'tickets.id as id',
                                         'tickets.phone as phone',
                                         'tickets.active as active',
@@ -92,6 +92,7 @@ class RepositoryManagmentTickets
                 }
                 
                 $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('tickets.id', 'desc')->paginate(10);
+               
                
         return [
                 'pagination' => [
@@ -155,6 +156,8 @@ class RepositoryManagmentTickets
                     
             
                     if ($Ticket) {
+                        $gameT = Game::where('id',$data['game']['id'])->first();
+                        $time_end = Carbon::parse($gameT['time_end']);
                         $now = Carbon::now();
                         $totalDetail = 0;
                        
@@ -177,7 +180,7 @@ class RepositoryManagmentTickets
                             $date = ($item['day']['value'] > 0)
                                     ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks($i)
                                     : Carbon::now()->startOfWeek()->addWeeks($i);
-                            if($date >= $now){
+                            if($now <= $time_end){
 
                                 Day_ticket::create([
                                     'ticket_id'=>$Ticket['id'],
@@ -220,7 +223,7 @@ class RepositoryManagmentTickets
         return DB::transaction(function () use ($Ticket_id) {
             if ($Ticket = $this->model->find($Ticket_id)) {
                 
-                $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->get();
+                $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->with('games')->get();
                 $client = User::find($Ticket['user_id']);
                 $days = Day_ticket::select('day.name as name', 'day_tickets.game_date as date')
                                     ->join('days as day','day.id', "=", 'day_tickets.day_id')

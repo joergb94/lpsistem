@@ -33,27 +33,31 @@
                                 <h1>Bienvenido </h1>
                                 <br>
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm">
                                         <div class="card bg-primary text-white">
-                                            <div class="card-body  text-center"><h1 v-text="this.tickets_pay_off">0</h1>Tickets Pagados</div>
+                                            <div class="card-body  text-center"><h1 v-text="this.tickets_pay_off">0</h1><p class="text-white">Tickets</p>Pagados</div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm">
+                                        <div class="card bg-secondary text-white">
+                                            <div class="card-body text-center"><h1 v-text="this.tickets_not_pay_off">0</h1><p class="text-white">Tickets</p> No Pagados</div>
+                                        </div>
+                                    </div>
+                                     <div class="col-sm">
                                         <div class="card bg-danger text-white">
-                                            <div class="card-body text-center"><h1 v-text="this.tickets_not_pay_off">0</h1>Tickets No Pagados</div>
+                                            <div class="card-body text-center"><h1 v-text="this.not_pay > 0?'$'+this.not_pay:'$'+0">0</h1><p class="text-white">pesos.</p> No Pagados</div>
                                         </div>
                                     </div>
-                                     <div class="col-sm-3">
+                                     <div class="col-sm">
                                         <div class="card bg-warning text-white">
-                                            <div class="card-body text-center"><h1 v-text="this.prize > 0?this.prize:0">0</h1>Premios</div>
+                                            <div class="card-body text-center"><h1 v-text="this.prize > 0?'$'+this.prize:'$'+0">0</h1><p class="text-white">pesos.</p>Premios</div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm">
                                         <div class="card bg-success text-white">
-                                            <div class="card-body text-center"><h1 v-text="this.incomes > 0?this.incomes:0">0</h1>Ingresos</div>
+                                            <div class="card-body text-center"><h1 v-text="this.incomes > 0?'$'+this.incomes:'$'+0">0</h1><p class="text-white">pesos.</p> Pagados</div>
                                         </div>
                                     </div>
-                                   
                                 </div>
                             </div>
                              <!-- The table-->

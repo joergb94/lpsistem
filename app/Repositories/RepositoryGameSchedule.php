@@ -92,11 +92,11 @@ class RepositoryGameSchedule
             if ($Game_schedule) {
                     $details = [];
                     if($data['number_win']){
-                          array_push($details,['number_win'=>  $data['number_win']]);
+                          array_push($details,['number_win'=>  $data['number_win'],'type'=> 1]);
                     }
                    
                     if($data['number_win2']){
-                        array_push($details,['number_win'=>  $data['number_win2']]);
+                        array_push($details,['number_win'=>  $data['number_win2'], 'type'=> 2]);
                     }
 
                     if(count($details) > 0){
@@ -104,6 +104,7 @@ class RepositoryGameSchedule
                             $this->model_detail::create([
                                 'game_schedule_id'=>$Game_schedule['id'],
                                 'number_win' => $detail['number_win'],
+                                'type'=>$detail['type'],
                             ]);
                         }
                     }
@@ -149,18 +150,19 @@ class RepositoryGameSchedule
                     $details = [];
 
                     if($data['number_win']){
-                        array_push($details,['number_win'=>  $data['number_win']]);
+                        array_push($details,['number_win'=>  $data['number_win'],'type'=> 1]);
                   }
                  
                   if($data['number_win2']){
-                      array_push($details,['number_win'=>  $data['number_win2']]);
+                    array_push($details,['number_win'=>  $data['number_win2'],'type'=> 2]);
                   }
 
                   if(count($details) > 0){
                       foreach ($details as $detail) {
                           $this->model_detail::create([
-                              'game_schedule_id'=>$Game_schedule['id'],
-                              'number_win' => $detail['number_win'],
+                            'game_schedule_id'=>$Game_schedule['id'],
+                            'number_win' => $detail['number_win'],
+                            'type'=>$detail['type'],
                           ]);
                       }
                   }

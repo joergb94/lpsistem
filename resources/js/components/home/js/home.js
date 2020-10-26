@@ -7,6 +7,7 @@ export default {
             tickets_pay_off:0,
             tickets_not_pay_off:0,
             incomes:0,
+            not_pay:0,
             titleModal:'',
             action:0,
             page:1,
@@ -66,6 +67,7 @@ export default {
                     me.tickets_pay_off = respuesta.tickets_pay_off;
                     me.tickets_not_pay_off = respuesta.tickets_not_pay_off;
                     me.incomes = respuesta.incomes.total_bet;
+                    me.not_pay = respuesta.not_pay.total_bet;
                     me.prize = respuesta.prizes.total_prize;
                     me.dataTicktes = respuesta.TableTickets.Tickets.data;
                     me.date = respuesta.date;

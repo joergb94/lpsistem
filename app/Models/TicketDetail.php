@@ -10,6 +10,11 @@ class TicketDetail extends Model
     protected $guarded=[];
     use SoftDeletes;
 
+    public function games()
+    {
+        return $this->belongsTo('App\Models\Game','game_id','id');
+    }
+    
       /**
      * @return bool
      */

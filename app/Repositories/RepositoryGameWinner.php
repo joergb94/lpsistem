@@ -244,7 +244,7 @@ class RepositoryGameWinner
         return DB::transaction(function () use ($Ticket_id) {
             if ($Ticket = $this->model->find($Ticket_id)) {
                 
-                $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->get();
+                $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->with('games')->get();
                 $client = User::find($Ticket['user_id']);
                 $days = Day_ticket::select('day.name as name', 'day_tickets.game_date as date')
                                     ->join('days as day','day.id', "=", 'day_tickets.day_id')

@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralException;
 use App\Models\User;
-use App\Models\Tickets;
+use App\Models\Ticket;
 use App\Models\Coin_purse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;

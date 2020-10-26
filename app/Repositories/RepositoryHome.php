@@ -33,7 +33,7 @@ class RepositoryHome
         $this->model = $model;
     }
 
-    public function data_tickets($date,$type)
+    public function data_tickets($date,$type,$pay)
     {
 
           $Ticket = Day_ticket::select(DB::raw('SUM(ticket_details.bet) as total_bet'))
@@ -68,7 +68,7 @@ class RepositoryHome
                             }
                             
                             
-                         $data=$Ticket->where('ticket_details.active',1)->first();
+                         $data=$Ticket->where('ticket_details.active',$pay)->first();
         return $data;
     }
     public function data_winners($date,$type)
@@ -191,7 +191,7 @@ class RepositoryHome
             }
         }
         if(Auth::user()->type_user_id < 4 || Auth::user()->type_user_id > 4){
-            $data = $Ticket->whereNull('tickets.deleted_at')->paginate(10);
+            $data = $Ticket->whereNull('tickets.deleted_at')->where('active',true)->paginate(10);
 
           }else{
             $data = $Ticket->whereNull('tickets.deleted_at')->where('winner',true)->paginate(10);
@@ -226,7 +226,8 @@ class RepositoryHome
                     "tickets_pay_off"=>RepositoryHome::byTicketsPayOff($date,$type,true),
                     "tickets_not_pay_off"=>RepositoryHome::byTicketsPayOff($date,$type,false),
                     "prizes"=>RepositoryHome::data_winners($date,$type),
-                    "incomes"=>RepositoryHome::data_tickets($date,$type),
+                    "not_pay"=>RepositoryHome::data_tickets($date,$type,false),
+                    "incomes"=>RepositoryHome::data_tickets($date,$type,true),
                     "TableTickets"=>RepositoryHome::table_byTicket($date,$type),
                     "date"=>$date->format('Y-m-d')
                 ];

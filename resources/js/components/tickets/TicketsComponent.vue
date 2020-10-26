@@ -260,7 +260,7 @@
                             </ul>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                             <h3>Jugadas</h3>
+                             <h3>Jugadas para <strong class="text-primary" v-text="dataNumbers[0].games.name"></strong></h3>
                          </div>
                          <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <ul class="list-group">

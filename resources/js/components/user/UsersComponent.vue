@@ -10,9 +10,7 @@
                                      User
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
-                                            <option value="all" >All</option>
                                             <option value="1" >Actived</option>
-                                            <option value="2">Deactived</option>
                                             <option value="D">Delete</option>
                                         </select>
                                     </div> 
@@ -89,8 +87,12 @@
                                         <button type="button" v-if="item.deleted_at == null" class="btn btn-danger btn-sm" @click="openModal('modal', 'password', item)">
                                           <i class="ti-key"></i>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
+                                        <button type="button" v-if="item.deleted_at == null" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                           <i class="ti-trash"></i>
+                                        </button>
+
+                                         <button type="button" v-if="item.deleted_at !== null" class="btn btn-secondary btn-sm" @click="DeleteOrRestore(item)">
+                                          <i class="fa fa-refresh"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -133,6 +135,10 @@
                                 <label for="email">Nombre:</label>
                                 <input type="text"  v-model="name"  class="form-control" placeholder="Enter Name" id="name">
                             </div>
+                             <div class="form-group" v-if="action==1||action==2">
+                                <label for="pwd">Apellido:</label>
+                                <input type="text" v-model="last_name"  class="form-control" placeholder="Enter last_name" id="last_name">
+                            </div>
                             <div class="form-group" v-if="action==1||action==2">
                                 <label for="pwd">Tipo de Usuario:</label>
                                 <select class="form-control text-center" v-model="type">
@@ -140,10 +146,6 @@
                                             <option value="2" >Adminitrativo</option>
                                             <option value="3">Vendedor</option>
                                 </select>
-                            </div>
-                             <div class="form-group" v-if="action==1||action==2">
-                                <label for="pwd">Apellido:</label>
-                                <input type="text" v-model="last_name"  class="form-control" placeholder="Enter last_name" id="last_name">
                             </div>
                             <div class="form-group" v-if="action==1||action==2">
                                 <label for="pwd">Telefono:</label>
