@@ -2527,7 +2527,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      criterion: 'number_win',
+      criterion: 'date',
       status: 1,
       search: '',
       dateS: ''
@@ -42462,41 +42462,6 @@ var render = function() {
             _c("div", { staticClass: "form-group row" }, [
               _c("div", { staticClass: "col-md-12" }, [
                 _c("div", { staticClass: "input-group" }, [
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.criterion,
-                          expression: "criterion"
-                        }
-                      ],
-                      staticClass: "form-control col-sm-2",
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.criterion = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "date" } }, [
-                        _vm._v("Fecha")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
                   _c("input", {
                     directives: [
                       {
@@ -42507,7 +42472,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { type: "text", placeholder: "Texto a buscar" },
+                    attrs: { type: "date" },
                     domProps: { value: _vm.search },
                     on: {
                       keyup: function($event) {

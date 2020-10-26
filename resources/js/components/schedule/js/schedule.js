@@ -21,7 +21,7 @@ export default {
                 'to' : 0,
             },
         offset : 3,
-        criterion : 'number_win',
+        criterion : 'date',
         status : 1,
         search : '',
         dateS : '',

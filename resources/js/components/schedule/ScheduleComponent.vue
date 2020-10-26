@@ -25,12 +25,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <div class="input-group">
-                                    <select class="form-control col-sm-2" v-model="criterion">
-                                        <option value="date">Fecha</option>
-                                    </select>
-                                    
-                                    <input type="text" v-model="search" @keyup.enter="ListUsers(1)" class="form-control" placeholder="Texto a buscar">
-                                 
+                                    <input type="date" v-model="search" @keyup.enter="ListUsers(1)" class="form-control">
                                     <button type="submit" @click="ListUsers(1)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
