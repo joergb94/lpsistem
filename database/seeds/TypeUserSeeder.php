@@ -15,8 +15,8 @@ class TypeUserSeeder extends Seeder
                       ['mat'=> 'TYU','name'=> 'Administrador Dueño','active'=> 1,],
                       ['mat'=> 'TYU','name'=> 'Administrador','active'=> 1,],
                       ['mat'=> 'TYU','name'=> 'Vendedor','active'=> 1,],
-                      ['mat'=> 'TYU','name'=> 'Usuario','active'=> 1,],
-                      ['mat'=> 'TYU','name'=> 'Corredor','active'=> 1,],             ];
+                      ['mat'=> 'TYU','name'=> 'Corredor','active'=> 1,],
+                      ['mat'=> 'TYU','name'=> 'Usuario','active'=> 1,],             ];
 
         foreach($types as $type){
                 DB::table('type_users')->insert($type);

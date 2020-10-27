@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralException;
 use App\Models\User;
+use App\Models\Type_user;
 use App\Models\Ticket;
 use App\Models\Coin_purse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -37,8 +38,8 @@ class RepositoryUser
     {
             
         $rg = (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->whereIn('type_user_id',[2,3,4])
-                     : $this->model->where('id','>',0)->whereIn('type_user_id',[2,3,4]);
+                     ? $this->model->where($criterion, 'like', '%'. $search . '%')->whereNotIn('type_user_id',[1])
+                     : $this->model->where('id','>',0)->whereNotIn('type_user_id',[1]);
                 
                 if($status != 'all'){
 
@@ -68,7 +69,8 @@ class RepositoryUser
                     'from'         => $Users->firstItem(),
                     'to'           => $Users->lastItem(),
                 ],
-                'Users' => $Users
+                'Users' => $Users,
+                'TypeUser'=>Type_user::whereNotIn('id',[1])->get(),
             ];
     }
 

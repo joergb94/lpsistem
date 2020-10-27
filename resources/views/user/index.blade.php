@@ -4,15 +4,6 @@
         @case(1)
                 <user-component></user-component>
         @break
-        @case(2)
-                <profile-component></profile-component>
-        @break
-        @case(3)
-                <profile-component></profile-component>
-        @break
-        @case(4)
-                <profile-component></profile-component>
-        @break
         @default
                 <profile-component></profile-component>
     @endswitch

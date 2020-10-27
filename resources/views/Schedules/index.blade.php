@@ -7,14 +7,10 @@
         @case(2)
                 <schedule-component></schedule-component>
         @break
-        @case(3)
-                <schedule-component></schedule-component>
-        @break
-        @case(4)
-                <schedule-component></schedule-component>
-        @break
         @default
-                <schedule-component></schedule-component>
+               <div class="col-sm-12">
+                 <h1>Error 404</h1>
+               </div>
     @endswitch
         
 @endsection

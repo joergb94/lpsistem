@@ -40,16 +40,20 @@ class RepositoryHome
                                 ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
                                 ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id');
 
-                        if(Auth::user()->type_user_id < 3 || Auth::user()->type_user_id > 4){
-                                $Ticket->where('tickets.id','>=',0);
-
-                        }else if(Auth::user()->type_user_id == 3){
-
-                                $Ticket->where('tickets.seller_id',Auth::user()->id); 
-                                
-                        }else{
-                                $Ticket->where('tickets.user_id',Auth::user()->id);
-                        }
+                            if(Auth::user()->type_user_id < 3 ){
+                                    $Ticket->where('tickets.id','>=',0);
+                    
+                            }else if(Auth::user()->type_user_id == 3){
+                    
+                                    $Ticket->where('tickets.seller_id',Auth::user()->id); 
+                                    
+                            }else if(Auth::user()->type_user_id == 4){
+                    
+                                    $Ticket->where('tickets.charged_id',Auth::user()->id);
+                            }else{
+                                    
+                                    $Ticket->where('tickets.id','>=',0);
+                            }
 
                         switch ($type) {
                                 case 'day':
@@ -121,16 +125,21 @@ class RepositoryHome
                                         'day_tickets.game_date as date')
                                 ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
 
-        if(Auth::user()->type_user_id < 3 || Auth::user()->type_user_id > 4){
+        if(Auth::user()->type_user_id < 3 ){
                 $Ticket->where('tickets.id','>=',0);
 
         }else if(Auth::user()->type_user_id == 3){
 
                 $Ticket->where('tickets.seller_id',Auth::user()->id); 
                 
+        }else if(Auth::user()->type_user_id == 4){
+
+                $Ticket->where('tickets.charged_id',Auth::user()->id);
         }else{
-                $Ticket->where('tickets.user_id',Auth::user()->id);
+                
+                $Ticket->where('tickets.id','>=',0);
         }
+
         switch ($type) {
             case 'day':
                 $Ticket->whereDate('day_tickets.game_date', $date);
@@ -229,7 +238,8 @@ class RepositoryHome
                     "not_pay"=>RepositoryHome::data_tickets($date,$type,false),
                     "incomes"=>RepositoryHome::data_tickets($date,$type,true),
                     "TableTickets"=>RepositoryHome::table_byTicket($date,$type),
-                    "date"=>$date->format('Y-m-d')
+                    "date"=>$date->format('Y-m-d'),
+                    "type"=>Auth::user()->type_user_id
                 ];
             return $home;
     }

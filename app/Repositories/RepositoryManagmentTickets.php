@@ -266,7 +266,13 @@ class RepositoryManagmentTickets
                 if($this->model_detail->where('ticket_id', $Ticket->id)
                                         ->update(['active' => $Ticket->active]))
                     {
-                        return $Ticket;
+                        if($this->model->find($Ticket->id)
+                                       ->update(['charged_id'=>Auth::user()->id])){
+                            
+                                        return $Ticket;
+
+                        }
+                        
                     } 
                     throw new GeneralException(__('Error changing status of Ticket.'));
                 }

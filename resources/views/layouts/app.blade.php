@@ -78,7 +78,7 @@
     <script src="{{ asset('js/template.js') }}"></script>
     @guest
     @else
-        @if($dm['type_user']==4)
+        @if($dm['type_user']==5)
             <script src="{{ asset('js/complement.js') }}"></script>
         @endif
     @endguest

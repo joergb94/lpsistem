@@ -2211,6 +2211,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       dataUsers: [],
       dataTicktes: [],
+      typeU: 0,
       date: '',
       tickets_pay_off: 0,
       tickets_not_pay_off: 0,
@@ -2280,6 +2281,7 @@ __webpack_require__.r(__webpack_exports__);
         me.prize = respuesta.prizes.total_prize;
         me.dataTicktes = respuesta.TableTickets.Tickets.data;
         me.date = respuesta.date;
+        me.typeU = respuesta.type;
         me.pagination = respuesta.TableTickets.pagination;
       })["catch"](function (error) {
         console.log(error);
@@ -3934,6 +3936,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       dataUsers: [],
+      dataType: [],
       id: '',
       name: '',
       last_name: '',
@@ -3998,6 +4001,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         me.dataUsers = respuesta.Users.data;
+        me.dataType = respuesta.TypeUser;
         me.pagination = respuesta.pagination;
       })["catch"](function (error) {
         console.log(error);
@@ -41769,7 +41773,16 @@ var render = function() {
                       _c("p", { staticClass: "text-white" }, [
                         _vm._v("Tickets")
                       ]),
-                      _vm._v("Pagados")
+                      _vm._v(" "),
+                      _c("h6", {
+                        domProps: {
+                          textContent: _vm._s(
+                            this.typeU > 0 && this.typeU < 4
+                              ? "Pagados"
+                              : "Cobrados"
+                          )
+                        }
+                      })
                     ])
                   ])
                 ]),
@@ -41789,7 +41802,16 @@ var render = function() {
                       _c("p", { staticClass: "text-white" }, [
                         _vm._v("Tickets")
                       ]),
-                      _vm._v(" No Pagados")
+                      _vm._v(" "),
+                      _c("h6", {
+                        domProps: {
+                          textContent: _vm._s(
+                            this.typeU > 0 && this.typeU < 4
+                              ? "No Pagados"
+                              : "No Cobrados"
+                          )
+                        }
+                      })
                     ])
                   ])
                 ]),
@@ -41808,35 +41830,59 @@ var render = function() {
                         },
                         [_vm._v("0")]
                       ),
+                      _vm._v(" "),
                       _c("p", { staticClass: "text-white" }, [
                         _vm._v("pesos.")
                       ]),
-                      _vm._v(" No Pagados")
+                      _vm._v(" "),
+                      _c("h6", {
+                        domProps: {
+                          textContent: _vm._s(
+                            this.typeU > 0 && this.typeU < 4
+                              ? "No Pagados"
+                              : "No Cobrados"
+                          )
+                        }
+                      })
                     ])
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-sm" }, [
-                  _c("div", { staticClass: "card bg-warning text-white" }, [
-                    _c("div", { staticClass: "card-body text-center" }, [
-                      _c(
-                        "h1",
-                        {
-                          domProps: {
-                            textContent: _vm._s(
-                              this.prize > 0 ? "$" + this.prize : "$" + 0
-                            )
-                          }
-                        },
-                        [_vm._v("0")]
-                      ),
-                      _c("p", { staticClass: "text-white" }, [
-                        _vm._v("pesos.")
-                      ]),
-                      _vm._v("Premios")
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: this.typeU > 0 && this.typeU < 4,
+                        expression: "this.typeU > 0 && this.typeU < 4"
+                      }
+                    ],
+                    staticClass: "col-sm"
+                  },
+                  [
+                    _c("div", { staticClass: "card bg-warning text-white" }, [
+                      _c("div", { staticClass: "card-body text-center" }, [
+                        _c(
+                          "h1",
+                          {
+                            domProps: {
+                              textContent: _vm._s(
+                                this.prize > 0 ? "$" + this.prize : "$" + 0
+                              )
+                            }
+                          },
+                          [_vm._v("0")]
+                        ),
+                        _c("p", { staticClass: "text-white" }, [
+                          _vm._v("pesos.")
+                        ]),
+                        _vm._v("Premios")
+                      ])
                     ])
-                  ])
-                ]),
+                  ]
+                ),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-sm" }, [
                   _c("div", { staticClass: "card bg-success text-white" }, [
@@ -41852,10 +41898,20 @@ var render = function() {
                         },
                         [_vm._v("0")]
                       ),
+                      _vm._v(" "),
                       _c("p", { staticClass: "text-white" }, [
                         _vm._v("pesos.")
                       ]),
-                      _vm._v(" Pagados")
+                      _vm._v(" "),
+                      _c("h6", {
+                        domProps: {
+                          textContent: _vm._s(
+                            this.typeU > 0 && this.typeU < 4
+                              ? "Pagados"
+                              : "Cobrados"
+                          )
+                        }
+                      })
                     ])
                   ])
                 ])
@@ -48149,7 +48205,8 @@ var render = function() {
                             expression: "type"
                           }
                         ],
-                        staticClass: "form-control text-center",
+                        staticClass: "form-control",
+                        attrs: { id: "day", name: "day" },
                         on: {
                           change: function($event) {
                             var $$selectedVal = Array.prototype.filter
@@ -48168,17 +48225,24 @@ var render = function() {
                       },
                       [
                         _c("option", { attrs: { value: "" } }, [
-                          _vm._v("Selecione Tipo")
+                          _vm._v("Seleciona un dia")
                         ]),
                         _vm._v(" "),
-                        _c("option", { attrs: { value: "2" } }, [
-                          _vm._v("Adminitrativo")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "3" } }, [
-                          _vm._v("Vendedor")
-                        ])
-                      ]
+                        _vm._l(_vm.dataType, function(item) {
+                          return _c(
+                            "option",
+                            { key: item.id, domProps: { value: item.id } },
+                            [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(item.name) +
+                                  "\n                                    "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
                     )
                   ])
                 : _vm._e(),

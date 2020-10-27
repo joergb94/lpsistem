@@ -141,11 +141,12 @@
                             </div>
                             <div class="form-group" v-if="action==1||action==2">
                                 <label for="pwd">Tipo de Usuario:</label>
-                                <select class="form-control text-center" v-model="type">
-                                            <option value="">Selecione Tipo</option>
-                                            <option value="2" >Adminitrativo</option>
-                                            <option value="3">Vendedor</option>
-                                </select>
+                                 <select class="form-control" v-model="type" id="day" name="day">
+                                        <option value="" >Seleciona un dia</option>
+                                        <option v-for="item in dataType" :key="item.id" v-bind:value="item.id">
+                                                {{ item.name }}
+                                        </option>
+                                    </select>
                             </div>
                             <div class="form-group" v-if="action==1||action==2">
                                 <label for="pwd">Telefono:</label>

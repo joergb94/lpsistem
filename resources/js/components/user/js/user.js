@@ -2,6 +2,7 @@
         data () {
             return {
             dataUsers:[],
+            dataType:[],
             id:'',
             name:'',
             last_name:'',
@@ -65,6 +66,7 @@
                 .then(function (response) {
                     var respuesta= response.data;
                     me.dataUsers = respuesta.Users.data;
+                    me.dataType = respuesta.TypeUser;
                     me.pagination= respuesta.pagination;
                 })
                 .catch(function (error) {

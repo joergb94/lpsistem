@@ -3,6 +3,7 @@ export default {
             return {
             dataUsers:[],
             dataTicktes:[],
+            typeU:0,
             date:'',
             tickets_pay_off:0,
             tickets_not_pay_off:0,
@@ -71,6 +72,7 @@ export default {
                     me.prize = respuesta.prizes.total_prize;
                     me.dataTicktes = respuesta.TableTickets.Tickets.data;
                     me.date = respuesta.date;
+                    me.typeU = respuesta.type;
                     me.pagination = respuesta.TableTickets.pagination;
                 })
                 .catch(function (error) {

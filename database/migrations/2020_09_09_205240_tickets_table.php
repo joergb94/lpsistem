@@ -16,6 +16,7 @@ class TicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('mat', 3)->default('TIC');
+            $table->unsignedBigInteger('charged_id')->nullable();
             $table->unsignedBigInteger('seller_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->integer('ticket_type')->nullable();
@@ -28,7 +29,8 @@ class TicketsTable extends Migration
 
             //foreing key 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('seller_id')->references('id')->on('users')->onDelete('cascade');  
+            $table->foreign('seller_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('charged_id')->references('id')->on('users')->onDelete('cascade');    
         });
     }
 

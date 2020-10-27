@@ -7,14 +7,10 @@
         @case(2)
                 <winner-component></winner-component>
         @break
-        @case(3)
-                <winner-component></winner-component>
-        @break
-        @case(4)
-                <winner-component></winner-component>
-        @break
         @default
-                <winner-component></winner-component>
+               <div class="col-sm-12">
+                        <h1>Error 404</h1>
+               </div>
     @endswitch
         
 @endsection
