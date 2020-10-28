@@ -14,7 +14,7 @@
                                 </h4>
                             </div>
                             <div class="col-sm-7 text-right">
-                                 <button class="btn btn-success" @click="openModal('modal', 'add')">New</button>
+                                 <button class="btn btn-success" @click="openModal('modal', 'add')">Progranar Nuevo Juego +</button>
                             </div>
                                    
          
@@ -45,7 +45,7 @@
                             <tbody>
                                 <tr v-if="pagination.total == 0" class="text-center">
                                     <th colspan="5" class="text-center no-data">
-                                        <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                        <h2><span class="badge  badge-pill badge-info">NO hay Juegos Porgamados</span></h2>
                                     </th>
                                 </tr>
 

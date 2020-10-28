@@ -140,15 +140,15 @@ export default {
             var data = {
                 'id': item.id,
                 };
-             var m = "Do you want to deleted User?";
-             var mt = "The User will be delete";
-             var btn = "Delete";
+             var m = "¿Estas segurop  que deseas eliminar la juego programado?";
+             var mt = "Se eliminara la programcion";
+             var btn = "Eliminalo";
 
 
             if(item.deleted_at != null){
-                 m = "Do you want to restored User?";
-                 mt = "The User will be restore";
-                 btn = "Restore";
+                 m = "¿Estas segurop  que deseas restaurar la juego programado?";
+                 mt = "Se restaura la programcion";
+                 btn = "Restauralo";
             }
 
                 Swal.fire({
@@ -158,7 +158,7 @@ export default {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, eliminalo!'
+                    confirmButtonText: 'Si,'+btn+'!'
                 }).then((result) => {
                     if (result.value) {
                          axios.post('/schedule/deleteOrResotore',data).then(function (response) {
@@ -175,48 +175,6 @@ export default {
                             }).catch(function (error) {}) 
                     }
                 }) 
-        },
-        changeStatus(item,nStatus){
-            let me = this;
-            var data = {
-                'id': item.id,
-                'nStatus': nStatus,
-                };
-             var m = "Do you want to deactived User?";
-             var mt = "The User will be deactived";
-             var btn = "Deactived";
-
-
-            if(item.active == 0){
-                 m = "Do you want to actived User?";
-                 mt = "The User will be actived";
-                 btn = "Actived";
-            }
-             Swal.fire({
-                    title: m,
-                    text:  mt,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, eliminalo!'
-                }).then((result) => {
-                    if (result.value) {
-                         axios.post('/schedule/change_status',data).then(function (response) {
-                                me.ListUsers();
-                                $.notify({
-                                            // options
-                                            title: "Success!",
-                                            message:"Exito",
-                                        },{
-                                            // settings
-                                            type: 'success'
-                                        });
-
-                            }).catch(function (error) {}) 
-                    }
-                }) 
-               
         },
         openModal(model, action, data = []){
            

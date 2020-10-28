@@ -2642,14 +2642,14 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "Do you want to deleted User?";
-      var mt = "The User will be delete";
-      var btn = "Delete";
+      var m = "¿Estas segurop  que deseas eliminar la juego programado?";
+      var mt = "Se eliminara la programcion";
+      var btn = "Eliminalo";
 
       if (item.deleted_at != null) {
-        m = "Do you want to restored User?";
-        mt = "The User will be restore";
-        btn = "Restore";
+        m = "¿Estas segurop  que deseas restaurar la juego programado?";
+        mt = "Se restaura la programcion";
+        btn = "Restauralo";
       }
 
       Swal.fire({
@@ -2659,50 +2659,10 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminalo!'
+        confirmButtonText: 'Si,' + btn + '!'
       }).then(function (result) {
         if (result.value) {
           axios.post('/schedule/deleteOrResotore', data).then(function (response) {
-            me.ListUsers();
-            $.notify({
-              // options
-              title: "Success!",
-              message: "Exito"
-            }, {
-              // settings
-              type: 'success'
-            });
-          })["catch"](function (error) {});
-        }
-      });
-    },
-    changeStatus: function changeStatus(item, nStatus) {
-      var me = this;
-      var data = {
-        'id': item.id,
-        'nStatus': nStatus
-      };
-      var m = "Do you want to deactived User?";
-      var mt = "The User will be deactived";
-      var btn = "Deactived";
-
-      if (item.active == 0) {
-        m = "Do you want to actived User?";
-        mt = "The User will be actived";
-        btn = "Actived";
-      }
-
-      Swal.fire({
-        title: m,
-        text: mt,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminalo!'
-      }).then(function (result) {
-        if (result.value) {
-          axios.post('/schedule/change_status', data).then(function (response) {
             me.ListUsers();
             $.notify({
               // options
@@ -42492,7 +42452,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("New")]
+                  [_vm._v("Progranar Nuevo Juego +")]
                 )
               ])
             ])
@@ -42997,7 +42957,7 @@ var staticRenderFns = [
       [
         _c("h2", [
           _c("span", { staticClass: "badge  badge-pill badge-info" }, [
-            _vm._v("Data Not Found")
+            _vm._v("NO hay Juegos Porgamados")
           ])
         ])
       ]
@@ -48871,7 +48831,7 @@ var render = function() {
                                         }
                                       }
                                     },
-                                    [_c("i", { staticClass: "ti-money" })]
+                                    [_c("i", { staticClass: "ti-medall" })]
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
@@ -48887,7 +48847,7 @@ var render = function() {
                                         }
                                       }
                                     },
-                                    [_c("i", { staticClass: "ti-na" })]
+                                    [_c("i", { staticClass: "ti-medall" })]
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
