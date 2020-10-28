@@ -37,7 +37,7 @@
                                 <label v-text="dataUser.phone"></label>
                             </div>
                             <div class="form-group">
-                                <label for="pwd">Correo:</label>
+                                <label for="pwd">E-mail:</label>
                                 <label v-text="dataUser.email"></label>
                             </div>
                              <div class="form-group">
@@ -99,9 +99,9 @@
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Save</button>
-                        <button type="button" class="btn btn-primary" v-if="action==2" @click="updateOrCreate(2)">Update</button>
-                        <button type="button" class="btn btn-danger" @click="closeModal()" >Close</button>
+                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Actualizar</button>
+                        <button type="button" class="btn btn-primary" v-if="action==2" @click="updateOrCreate(2)">Cambiar</button>
+                        <button type="button" class="btn btn-danger" @click="closeModal()" >Cancelar</button>
                     </div>
                      </form>
 

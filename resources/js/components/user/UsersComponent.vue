@@ -7,17 +7,17 @@
                         <div class="row">
                             <div class="col-sm-5">
                                  <h4 class="card-title mb-0">
-                                     User
+                                     USUARIOS
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
-                                            <option value="1" >Actived</option>
-                                            <option value="D">Delete</option>
+                                            <option value="1" >Activos</option>
+                                            <option value="D">Eliminados</option>
                                         </select>
                                     </div> 
                                 </h4>
                             </div>
                             <div class="col-sm-7 text-right">
-                                 <button class="btn btn-success" @click="openModal('modal', 'add')">New</button>
+                                 <button class="btn btn-success" @click="openModal('modal', 'add')">Nuevo Usuario +</button>
                             </div>
                                    
          
@@ -29,7 +29,7 @@
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <select class="form-control col-sm-2" v-model="criterion">
-                                        <option value="name">name</option>
+                                        <option value="name">Nombre</option>
                                         <option value="last_name">Apellido</option>
                                         <option value="Phone">Telefono</option>
                                     </select>
@@ -49,17 +49,17 @@
                                 <th>Nombre</th>
                                 <th>Apellido</th>
                                 <th>Telefono</th>
-                                <th>Status</th>
-                                <th>created_at</th>
-                                <th>Updated_at</th>
-                                <th>deleted_at</th>
-                                <th>actions</th>
+                                <th>Estado</th>
+                                <th>Creado</th>
+                                <th>Actualizado</th>
+                                <th>Eliminado</th>
+                                <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-if="pagination.total == 0" class="text-center">
                                     <th colspan="9" class="text-center no-data">
-                                        <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                        <h2><span class="badge  badge-pill badge-info">No hay Usuarios</span></h2>
                                     </th>
                                 </tr>
 
@@ -170,10 +170,10 @@
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Save</button>
-                        <button type="button" class="btn btn-primary" v-if="action==2" @click="updateOrCreate(2)">Update</button>
-                        <button type="button" class="btn btn-primary" v-if="action==3" @click="updateOrCreate(3)">Update</button>
-                        <button type="button" class="btn btn-danger" @click="closeModal()" >Close</button>
+                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Guardar</button>
+                        <button type="button" class="btn btn-primary" v-if="action==2" @click="updateOrCreate(2)">Actualizar</button>
+                        <button type="button" class="btn btn-primary" v-if="action==3" @click="updateOrCreate(3)">Cambiar</button>
+                        <button type="button" class="btn btn-danger" @click="closeModal()" >Cancelar</button>
                     </div>
                      </form>
 

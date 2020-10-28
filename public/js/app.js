@@ -4081,14 +4081,14 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "Do you want to deleted User?";
-      var mt = "The User will be delete";
-      var btn = "Delete";
+      var m = "¿Estas seguro que deseas eliminar el Usuario?";
+      var mt = "El Usuario sera eliminado";
+      var btn = "Eliminalo";
 
       if (item.deleted_at != null) {
-        m = "Do you want to restored User?";
-        mt = "The User will be restore";
-        btn = "Restore";
+        m = "¿Estas seguro que deseas restaurar el Usuario?";
+        mt = "El Usuario sera restaurado";
+        btn = "Restauralo";
       }
 
       Swal.fire({
@@ -4098,7 +4098,7 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminalo!'
+        confirmButtonText: 'Si,' + btn + '!'
       }).then(function (result) {
         if (result.value) {
           axios.post('/users/deleteOrResotore', data).then(function (response) {
@@ -4191,7 +4191,7 @@ __webpack_require__.r(__webpack_exports__);
             switch (action) {
               case 'add':
                 {
-                  this.titleModal = 'New User';
+                  this.titleModal = 'Nuevo Usuario';
                   this.name = '';
                   this.last_name = '';
                   this.type = '';
@@ -4204,7 +4204,7 @@ __webpack_require__.r(__webpack_exports__);
 
               case 'update':
                 {
-                  this.titleModal = 'Update User';
+                  this.titleModal = 'Actualizar Usuario';
                   this.id = data.id;
                   this.type = data.type_user_id;
                   this.name = data.name;
@@ -4218,7 +4218,7 @@ __webpack_require__.r(__webpack_exports__);
 
               case 'password':
                 {
-                  this.titleModal = 'Change password';
+                  this.titleModal = 'Cambiar Contraseña';
                   this.id = data.id;
                   this.password = '';
                   this.password_confirm = '', this.action = 3;
@@ -47349,7 +47349,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "pwd" } }, [_vm._v("Correo:")]),
+                _c("label", { attrs: { for: "pwd" } }, [_vm._v("E-mail:")]),
                 _vm._v(" "),
                 _c("label", {
                   domProps: { textContent: _vm._s(_vm.dataUser.email) }
@@ -47623,7 +47623,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Save")]
+                    [_vm._v("Actualizar")]
                   )
                 : _vm._e(),
               _vm._v(" "),
@@ -47639,7 +47639,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Update")]
+                    [_vm._v("Cambiar")]
                   )
                 : _vm._e(),
               _vm._v(" "),
@@ -47654,7 +47654,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Close")]
+                [_vm._v("Cancelar")]
               )
             ])
           ])
@@ -47707,7 +47707,7 @@ var render = function() {
               _c("div", { staticClass: "col-sm-5" }, [
                 _c("h4", { staticClass: "card-title mb-0" }, [
                   _vm._v(
-                    "\n                                 User\n                                "
+                    "\n                                 USUARIOS\n                                "
                   ),
                   _c("div", { staticClass: "btn-group" }, [
                     _c(
@@ -47740,11 +47740,11 @@ var render = function() {
                       },
                       [
                         _c("option", { attrs: { value: "1" } }, [
-                          _vm._v("Actived")
+                          _vm._v("Activos")
                         ]),
                         _vm._v(" "),
                         _c("option", { attrs: { value: "D" } }, [
-                          _vm._v("Delete")
+                          _vm._v("Eliminados")
                         ])
                       ]
                     )
@@ -47763,7 +47763,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("New")]
+                  [_vm._v("Nuevo Usuario +")]
                 )
               ])
             ])
@@ -47803,7 +47803,7 @@ var render = function() {
                     },
                     [
                       _c("option", { attrs: { value: "name" } }, [
-                        _vm._v("name")
+                        _vm._v("Nombre")
                       ]),
                       _vm._v(" "),
                       _c("option", { attrs: { value: "last_name" } }, [
@@ -48395,7 +48395,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Save")]
+                    [_vm._v("Guardar")]
                   )
                 : _vm._e(),
               _vm._v(" "),
@@ -48411,7 +48411,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Update")]
+                    [_vm._v("Actualizar")]
                   )
                 : _vm._e(),
               _vm._v(" "),
@@ -48427,7 +48427,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Update")]
+                    [_vm._v("Cambiar")]
                   )
                 : _vm._e(),
               _vm._v(" "),
@@ -48442,7 +48442,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Close")]
+                [_vm._v("Cancelar")]
               )
             ])
           ])
@@ -48466,15 +48466,15 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Telefono")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Status")]),
+        _c("th", [_vm._v("Estado")]),
         _vm._v(" "),
-        _c("th", [_vm._v("created_at")]),
+        _c("th", [_vm._v("Creado")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Updated_at")]),
+        _c("th", [_vm._v("Actualizado")]),
         _vm._v(" "),
-        _c("th", [_vm._v("deleted_at")]),
+        _c("th", [_vm._v("Eliminado")]),
         _vm._v(" "),
-        _c("th", [_vm._v("actions")])
+        _c("th", [_vm._v("Acciones")])
       ])
     ])
   },
@@ -48488,7 +48488,7 @@ var staticRenderFns = [
       [
         _c("h2", [
           _c("span", { staticClass: "badge  badge-pill badge-info" }, [
-            _vm._v("Data Not Found")
+            _vm._v("No hay Usuarios")
           ])
         ])
       ]

@@ -9,9 +9,9 @@
             </div>
             <div class="col-sm-5">
                 <div class="btn-group float-right">
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>  
+                    <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar sesion') }}</a>  
                     @if (Route::has('register'))
-                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>    
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Registrarse') }}</a>    
                     @endif
                 </div>
             </div>

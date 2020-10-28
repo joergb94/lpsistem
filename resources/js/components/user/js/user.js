@@ -152,15 +152,15 @@
                 var data = {
                     'id': item.id,
                     };
-                 var m = "Do you want to deleted User?";
-                 var mt = "The User will be delete";
-                 var btn = "Delete";
+                 var m = "¿Estas seguro que deseas eliminar el Usuario?";
+                 var mt = "El Usuario sera eliminado";
+                 var btn = "Eliminalo";
 
 
                 if(item.deleted_at != null){
-                     m = "Do you want to restored User?";
-                     mt = "The User will be restore";
-                     btn = "Restore";
+                     m = "¿Estas seguro que deseas restaurar el Usuario?";
+                     mt = "El Usuario sera restaurado";
+                     btn = "Restauralo";
                 }
 
                     Swal.fire({
@@ -170,7 +170,7 @@
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Si, eliminalo!'
+                        confirmButtonText: 'Si,'+btn+'!'
                     }).then((result) => {
                         if (result.value) {
                              axios.post('/users/deleteOrResotore',data).then(function (response) {
@@ -268,7 +268,7 @@
                         switch(action){
                             case 'add':
                             {
-                                this.titleModal = 'New User';
+                                this.titleModal = 'Nuevo Usuario';
                                 this.name= '';
                                 this.last_name = '';
                                 this.type = '';
@@ -281,7 +281,7 @@
                             }
                             case 'update':
                             {  
-                                this.titleModal = 'Update User';
+                                this.titleModal = 'Actualizar Usuario';
                                 this.id = data.id;
                                 this.type = data.type_user_id;
                                 this.name = data.name;
@@ -294,7 +294,7 @@
                             }
                             case 'password':
                             {  
-                                this.titleModal = 'Change password';
+                                this.titleModal = 'Cambiar Contraseña';
                                 this.id = data.id;
                                 this.password ='';
                                 this.password_confirm ='',
