@@ -11,7 +11,7 @@
                                 </h4>
                             </div>
                             <div class="col-sm-7 text-right">
-                                 <button class="btn btn-success" @click="openModal('modal', 'add')">New</button>
+                                 <button class="btn btn-success" @click="openModal('modal', 'add')">Nuevo Ticket +</button>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                             <div class="table-responsive">
                                 <ul class="list-group">
                                     <li class="list-group-item text-center"  v-if="dataTicktes.length == 0">
-                                         <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                         <h2><span class="badge  badge-pill badge-info">No hay Tickets</span></h2>
                                     </li>
                                     <li class="list-group-item"  v-for="item in dataTicktes" :key="item.id">
                                         <div class="row text-center">
@@ -248,8 +248,8 @@
                     <!-- End Modal body Detail-->
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Save</button>
-                        <button type="button" class="btn btn-danger" @click="closeModal()" >Close</button>
+                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Guardar</button>
+                        <button type="button" class="btn btn-danger" @click="closeModal()" >Cancelar</button>
                     </div>
 
                     </div>

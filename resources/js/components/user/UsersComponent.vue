@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-sm-5">
                                  <h4 class="card-title mb-0">
-                                     USUARIOS
+                                     Usuarios
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
                                             <option value="1" >Activos</option>

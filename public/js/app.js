@@ -44405,11 +44405,11 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Total")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Status")]),
+        _c("th", [_vm._v("Estado")]),
         _vm._v(" "),
         _c("th", [_vm._v("Fecha")]),
         _vm._v(" "),
-        _c("th", [_vm._v("actions")])
+        _c("th", [_vm._v("Acciones")])
       ])
     ])
   },
@@ -44423,7 +44423,7 @@ var staticRenderFns = [
       [
         _c("h2", [
           _c("span", { staticClass: "badge  badge-pill badge-info" }, [
-            _vm._v("Data Not Found")
+            _vm._v("No hay Tickets")
           ])
         ])
       ]
@@ -44548,7 +44548,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("New")]
+                  [_vm._v("Nuevo Ticket +")]
                 )
               ])
             ])
@@ -44888,7 +44888,7 @@ var render = function() {
                         item.deleted_at !== null
                           ? _c("td", [
                               _vm._v(
-                                "\n                                        No actions\n                                    "
+                                "\n                                        Sin acciones\n                                    "
                               )
                             ])
                           : _vm._e()
@@ -45915,7 +45915,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Save")]
+                  [_vm._v("Guardar")]
                 )
               : _vm._e(),
             _vm._v(" "),
@@ -45930,7 +45930,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Close")]
+              [_vm._v("Cancelar")]
             )
           ])
         ])
@@ -45951,11 +45951,11 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Total")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Status")]),
+        _c("th", [_vm._v("Estado")]),
         _vm._v(" "),
         _c("th", [_vm._v("Fecha")]),
         _vm._v(" "),
-        _c("th", [_vm._v("actions")])
+        _c("th", [_vm._v("Acciones")])
       ])
     ])
   },
@@ -45969,7 +45969,7 @@ var staticRenderFns = [
       [
         _c("h2", [
           _c("span", { staticClass: "badge  badge-pill badge-info" }, [
-            _vm._v("Data Not Found")
+            _vm._v("No Hay Tickets")
           ])
         ])
       ]
@@ -46044,7 +46044,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("New")]
+                  [_vm._v("Nuevo Ticket +")]
                 )
               ])
             ])
@@ -47176,7 +47176,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Save")]
+                  [_vm._v("Guardar")]
                 )
               : _vm._e(),
             _vm._v(" "),
@@ -47191,7 +47191,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Close")]
+              [_vm._v("Cancelar")]
             )
           ])
         ])
@@ -47218,7 +47218,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h2", [
       _c("span", { staticClass: "badge  badge-pill badge-info" }, [
-        _vm._v("Data Not Found")
+        _vm._v("No hay Tickets")
       ])
     ])
   },
@@ -47707,7 +47707,7 @@ var render = function() {
               _c("div", { staticClass: "col-sm-5" }, [
                 _c("h4", { staticClass: "card-title mb-0" }, [
                   _vm._v(
-                    "\n                                 USUARIOS\n                                "
+                    "\n                                 Usuarios\n                                "
                   ),
                   _c("div", { staticClass: "btn-group" }, [
                     _c(

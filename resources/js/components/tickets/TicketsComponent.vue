@@ -47,15 +47,15 @@
                                     <th>#</th>
                                     <th>Telefono</th>
                                     <th>Total</th>
-                                    <th>Status</th>
+                                    <th>Estado</th>
                                     <th>Fecha</th>
-                                    <th>actions</th>
+                                    <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-if="pagination.total == 0" class="text-center">
                                         <th colspan="9" class="text-center no-data">
-                                            <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                            <h2><span class="badge  badge-pill badge-info">No hay Tickets</span></h2>
                                         </th>
                                     </tr>
 

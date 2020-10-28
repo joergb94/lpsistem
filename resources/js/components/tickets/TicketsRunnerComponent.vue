@@ -18,7 +18,7 @@
                                 </h4>
                             </div>
                             <div class="col-sm-7 text-right">
-                                 <button class="btn btn-success" @click="openModal('modal', 'add')">New</button>
+                                 <button class="btn btn-success" @click="openModal('modal', 'add')">Nuevo Ticket +</button>
                             </div>
                         </div>
                     </div>
@@ -53,15 +53,15 @@
                                     <th>#</th>
                                     <th>Telefono</th>
                                     <th>Total</th>
-                                    <th>Status</th>
+                                    <th>Estado</th>
                                     <th>Fecha</th>
-                                    <th>actions</th>
+                                    <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-if="pagination.total == 0" class="text-center">
                                         <th colspan="9" class="text-center no-data">
-                                            <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                            <h2><span class="badge  badge-pill badge-info">No Hay Tickets</span></h2>
                                         </th>
                                     </tr>
 
@@ -97,7 +97,7 @@
                                             </button>
                                         </td>
                                         <td v-if="item.deleted_at !== null">
-                                            No actions
+                                            Sin acciones
                                         </td>
                                     </tr>
                                 </tbody>
@@ -310,8 +310,8 @@
                     <!-- End Modal body Detail-->
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Save</button>
-                        <button type="button" class="btn btn-danger" @click="closeModal()" >Close</button>
+                        <button type="button" class="btn btn-primary" v-if="action==1" @click="updateOrCreate(1)">Guardar</button>
+                        <button type="button" class="btn btn-danger" @click="closeModal()" >Cancelar</button>
                     </div>
 
                     </div>
