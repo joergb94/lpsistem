@@ -43020,7 +43020,11 @@ var render = function() {
                         }),
                         _vm._v(" "),
                         _c("td", {
-                          domProps: { textContent: _vm._s(item.payroll) }
+                          domProps: {
+                            textContent: _vm._s(
+                              item.payroll > 0 ? "$" + item.payroll : "$" + 0
+                            )
+                          }
                         })
                       ])
                     })

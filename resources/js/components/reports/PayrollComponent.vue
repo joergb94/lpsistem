@@ -63,7 +63,7 @@
                                     <td v-text="item.name"></td>
                                     <td v-text="item.last_name"></td>
                                     <td v-text="item.phone"></td>
-                                    <td v-text="item.payroll"></td>
+                                    <td v-text="item.payroll > 0?'$'+item.payroll:'$'+0"></td>
                                 </tr>
                             </tbody>
                             </table>
