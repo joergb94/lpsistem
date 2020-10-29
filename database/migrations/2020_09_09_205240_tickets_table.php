@@ -21,6 +21,8 @@ class TicketsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->integer('ticket_type')->nullable();
             $table->string('phone')->nullable();
+            $table->decimal('total_seller')->default(0);
+            $table->decimal('total_gain')->default(0);
             $table->decimal('total')->nullable();
             $table->boolean('active')->default(1);
             $table->boolean('winner')->default(0);

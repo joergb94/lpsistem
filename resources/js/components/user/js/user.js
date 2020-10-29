@@ -9,6 +9,7 @@
             phone:'',
             email:'',
             password:'',
+            percentage:'',
             password_confirmation:'',
             type:'',
             titleModal:'',
@@ -89,6 +90,7 @@
                  var data = {
                     'name': this.name,
                     'last_name': this.last_name,
+                    'percentage': this.percentage,
                     'phone': this.phone,
                     'email':this.email,
                     'password':this.password,
@@ -102,6 +104,7 @@
                         'id': this.id,
                         'name': this.name,
                         'last_name': this.last_name,
+                        'percentage': this.percentage,
                         'phone': this.phone,
                         'email':this.email,
                         'password':this.password,
@@ -271,6 +274,7 @@
                                 this.titleModal = 'Nuevo Usuario';
                                 this.name= '';
                                 this.last_name = '';
+                                this.percentage = '',
                                 this.type = '';
                                 this.phone = '';
                                 this.email = '';
@@ -286,6 +290,7 @@
                                 this.type = data.type_user_id;
                                 this.name = data.name;
                                 this.last_name = data.last_name;
+                                this.percentage = data.percentage;
                                 this.phone = data.phone;
                                 this.email = data.email;
                                 this.password = data.password;

@@ -91,6 +91,7 @@ class RepositoryUser
                 'last_name' => $data['last_name'],
                 'phone' => $data['phone'],
                 'email' => $data['email'],
+                'percentage'=>$data['percentage'],
                 'password' =>Hash::make($data['password']),
             ]);
 
@@ -128,6 +129,7 @@ class RepositoryUser
                 'last_name' => $data['last_name'],
                 'phone' => $data['phone'],
                 'email' => $data['email'],
+                'percentage'=>$data['percentage'],
             ])) {
 
                 return $User;

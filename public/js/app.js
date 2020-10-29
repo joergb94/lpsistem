@@ -2216,6 +2216,7 @@ __webpack_require__.r(__webpack_exports__);
       tickets_pay_off: 0,
       tickets_not_pay_off: 0,
       incomes: 0,
+      pay_seller: 0,
       not_pay: 0,
       titleModal: '',
       action: 0,
@@ -2276,9 +2277,10 @@ __webpack_require__.r(__webpack_exports__);
 
         me.tickets_pay_off = respuesta.tickets_pay_off;
         me.tickets_not_pay_off = respuesta.tickets_not_pay_off;
-        me.incomes = respuesta.incomes.total_bet;
-        me.not_pay = respuesta.not_pay.total_bet;
+        me.incomes = respuesta.incomes[0].total_bet_gain;
+        me.not_pay = respuesta.not_pay[0].total_bet_gain;
         me.prize = respuesta.prizes.total_prize;
+        me.pay_seller = respuesta.incomes[0].total_bet_seller;
         me.dataTicktes = respuesta.TableTickets.Tickets.data;
         me.date = respuesta.date;
         me.typeU = respuesta.type;
@@ -3903,6 +3905,7 @@ __webpack_require__.r(__webpack_exports__);
       phone: '',
       email: '',
       password: '',
+      percentage: '',
       password_confirmation: '',
       type: '',
       titleModal: '',
@@ -3982,6 +3985,7 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'name': this.name,
         'last_name': this.last_name,
+        'percentage': this.percentage,
         'phone': this.phone,
         'email': this.email,
         'password': this.password,
@@ -3995,6 +3999,7 @@ __webpack_require__.r(__webpack_exports__);
           'id': this.id,
           'name': this.name,
           'last_name': this.last_name,
+          'percentage': this.percentage,
           'phone': this.phone,
           'email': this.email,
           'password': this.password,
@@ -4154,7 +4159,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.titleModal = 'Nuevo Usuario';
                   this.name = '';
                   this.last_name = '';
-                  this.type = '';
+                  this.percentage = '', this.type = '';
                   this.phone = '';
                   this.email = '';
                   this.password = '';
@@ -4169,6 +4174,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.type = data.type_user_id;
                   this.name = data.name;
                   this.last_name = data.last_name;
+                  this.percentage = data.percentage;
                   this.phone = data.phone;
                   this.email = data.email;
                   this.password = data.password;
@@ -41737,9 +41743,7 @@ var render = function() {
                       _c("h6", {
                         domProps: {
                           textContent: _vm._s(
-                            this.typeU > 0 && this.typeU < 4
-                              ? "Pagados"
-                              : "Cobrados"
+                            this.typeU < 4 ? "Pagados" : "Cobrados"
                           )
                         }
                       })
@@ -41766,9 +41770,7 @@ var render = function() {
                       _c("h6", {
                         domProps: {
                           textContent: _vm._s(
-                            this.typeU > 0 && this.typeU < 4
-                              ? "No Pagados"
-                              : "No Cobrados"
+                            this.typeU < 4 ? "No Pagados" : "No Cobrados"
                           )
                         }
                       })
@@ -41798,9 +41800,7 @@ var render = function() {
                       _c("h6", {
                         domProps: {
                           textContent: _vm._s(
-                            this.typeU > 0 && this.typeU < 4
-                              ? "No Pagados"
-                              : "No Cobrados"
+                            this.typeU < 4 ? "No Pagados" : "No Cobrados"
                           )
                         }
                       })
@@ -41815,8 +41815,8 @@ var render = function() {
                       {
                         name: "show",
                         rawName: "v-show",
-                        value: this.typeU > 0 && this.typeU < 4,
-                        expression: "this.typeU > 0 && this.typeU < 4"
+                        value: this.typeU < 4,
+                        expression: "this.typeU < 4"
                       }
                     ],
                     staticClass: "col-sm"
@@ -41844,6 +41844,44 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: this.typeU < 4,
+                        expression: "this.typeU < 4"
+                      }
+                    ],
+                    staticClass: "col-sm"
+                  },
+                  [
+                    _c("div", { staticClass: "card bg-info text-white" }, [
+                      _c("div", { staticClass: "card-body text-center" }, [
+                        _c(
+                          "h1",
+                          {
+                            domProps: {
+                              textContent: _vm._s(
+                                this.pay_seller > 0
+                                  ? "$" + this.pay_seller
+                                  : "$" + 0
+                              )
+                            }
+                          },
+                          [_vm._v("0")]
+                        ),
+                        _c("p", { staticClass: "text-white" }, [
+                          _vm._v("pesos.")
+                        ]),
+                        _vm._v("Pagos a vendedor")
+                      ])
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
                 _c("div", { staticClass: "col-sm" }, [
                   _c("div", { staticClass: "card bg-success text-white" }, [
                     _c("div", { staticClass: "card-body text-center" }, [
@@ -41866,9 +41904,7 @@ var render = function() {
                       _c("h6", {
                         domProps: {
                           textContent: _vm._s(
-                            this.typeU > 0 && this.typeU < 4
-                              ? "Pagados"
-                              : "Cobrados"
+                            this.typeU < 4 ? "Pagados" : "Cobrados"
                           )
                         }
                       })
@@ -48204,6 +48240,40 @@ var render = function() {
                       ],
                       2
                     )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.action == 1 || _vm.action == 2
+                ? _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "pwd" } }, [
+                      _vm._v("Porcentaje de ganacia:")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.percentage,
+                          expression: "percentage"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Enter percentage",
+                        id: "percentage"
+                      },
+                      domProps: { value: _vm.percentage },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.percentage = $event.target.value
+                        }
+                      }
+                    })
                   ])
                 : _vm._e(),
               _vm._v(" "),

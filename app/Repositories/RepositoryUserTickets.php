@@ -117,6 +117,7 @@ class RepositoryUserTickets
                             'user_id' => Auth::user()->id,
                             'ticket_type'=>$data['ticket_type'],
                             'phone' => Auth::user()->phone,
+                            'total_gain' => $data['total'],
                             'total' => $data['total'],
                             'active'=>true,
                         ]);
@@ -135,6 +136,7 @@ class RepositoryUserTickets
                                         'game_id'=>$data['game']['id'],
                                         'game_number' => $detail['number'],
                                         'bet' => $detail['subtotal'],
+                                        'bet_gain'=>$detail['subtotal'],
                                         'figures'=>$detail['figures'],
                                         'active'=>true,
                                     ]);

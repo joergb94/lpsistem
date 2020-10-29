@@ -80,6 +80,7 @@
                                             <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                                 <i class="ti-eye"></i>
                                             </button>
+                                            
                                             <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                                 <i class="ti-trash"></i>
                                             </button>

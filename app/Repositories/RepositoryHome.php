@@ -36,7 +36,9 @@ class RepositoryHome
     public function data_tickets($date,$type,$pay)
     {
 
-          $Ticket = Day_ticket::select(DB::raw('SUM(ticket_details.bet) as total_bet'))
+          $Ticket = Day_ticket::select( DB::raw('SUM(ticket_details.bet_gain) as total_bet_gain'),
+                                        DB::raw('SUM(ticket_details.bet_seller) as total_bet_seller'),
+                                        DB::raw('SUM(ticket_details.bet) as total_bet'))
                                 ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
                                 ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id');
 
@@ -45,8 +47,8 @@ class RepositoryHome
                     
                             }else if(Auth::user()->type_user_id == 3){
                     
-                                    $Ticket->where('tickets.seller_id',Auth::user()->id); 
-                                    
+                                $Ticket->where('tickets.seller_id',Auth::user()->id); 
+                                
                             }else if(Auth::user()->type_user_id == 4){
                     
                                     $Ticket->where('tickets.charged_id',Auth::user()->id);
@@ -72,7 +74,7 @@ class RepositoryHome
                             }
                             
                             
-                         $data=$Ticket->where('ticket_details.active',$pay)->first();
+                         $data=$Ticket->where('ticket_details.active',$pay)->get();
         return $data;
     }
     public function data_winners($date,$type)

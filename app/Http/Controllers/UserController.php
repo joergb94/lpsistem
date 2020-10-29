@@ -48,6 +48,7 @@ class UserController extends Controller
             'name',
             'type',
             'last_name',
+            'percentage',
             'phone',
             'email',
         ));

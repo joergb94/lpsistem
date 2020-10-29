@@ -107,7 +107,7 @@ class RepositoryManagmentTickets
                 'Games'=>Game::whereTime('time_end', '>=',Carbon::now())->get(),
                 'Days'=>Day::all(),
                 'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
-                'Sellers' =>User::where('type_user_id',3)->get(),
+                'Sellers' =>Auth::user()->type_user_id < 3?User::whereNotIn('type_user_id',[1,5])->get():User::where('type_user_id',3)->get(),
                 'type'=>Auth::user()->type_user_id,
             ];
     }
@@ -126,14 +126,14 @@ class RepositoryManagmentTickets
 
             $Client = (User::where('phone',$data['phone'])->count() == 0)
             ? User::create([
-                'type_user_id'=>4,
+                'type_user_id'=>5,
                 'name' => $data['phone'],
                 'phone' => $data['phone'],
                 'email' => $data['phone'].'@lp.com',
                 'password' =>Hash::make($data['phone']),
             ])
             : User::where('phone',$data['phone'])
-                    ->where('type_user_id',4)
+                    ->where('type_user_id','>',1)
                     ->first();
 
             if ($Client) {
@@ -142,7 +142,7 @@ class RepositoryManagmentTickets
                 {
 
                 $type = ($data['ticket_type'] > 1)? 4 : 0;
-
+                $percentage = Auth::user()->percentage/100;
                 for ($i=0; $i <= $type; $i++) { 
                    
                     $Ticket = $this->model::create([
@@ -150,6 +150,8 @@ class RepositoryManagmentTickets
                         'user_id' => $Client['id'],
                         'ticket_type'=>$data['ticket_type'],
                         'phone' => $data['phone'],
+                        'total_seller' => $data['total']*$percentage,
+                        'total_gain' => $data['total'] - ($data['total']*$percentage),
                         'total' => $data['total'],
                         'active'=>false,
                     ]);
@@ -171,6 +173,8 @@ class RepositoryManagmentTickets
                                 'figures'=>$detail['figures'],
                                 'game_number' => $detail['number'],
                                 'bet' => $detail['subtotal'],
+                                'bet_seller'=>$detail['subtotal']*$percentage,
+                                'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
                                 'active'=>false,
                             ]);
                         }
@@ -193,7 +197,10 @@ class RepositoryManagmentTickets
 
                         $noDays = Day_ticket::where('ticket_id',$Ticket['id'])->count();
                         $totalDays = $totalDetail * $noDays;
-                        $this->model->find($Ticket['id'])->update(['total'=>$totalDays]);
+                        $this->model->find($Ticket['id'])->update([
+                                                                    'total_seller' => $data['total']*$percentage,
+                                                                    'total_gain' => $data['total'] - ($data['total']*$percentage),
+                                                                    'total'=>$totalDays]);
                     }
                
                 }
@@ -287,9 +294,11 @@ class RepositoryManagmentTickets
 
             if($Bval){
                 $Ticket = Ticket::withTrashed()->find($Ticket_id)->restore();
+                $Ticket_detail=TicketDetail::where('ticket_id',$Ticket_id)->restore();
                 $b=4;
             }else{
                 $Ticket = Ticket::find($Ticket_id)->delete();
+                $Ticket_detail=TicketDetail::where('ticket_id',$Ticket_id)->delete();
                 $b=3;
             }
 

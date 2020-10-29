@@ -16,18 +16,21 @@ class UserSeeder extends Seeder
             'name'=> 'LP',
             'last_name'=>'AdminDueño',
             'email'=>'admin@LP.com',
-            'password'=> bcrypt('admin'),],
+            'password'=> bcrypt('admin'),
+            'percentage'=>100,],
 
             ['type_user_id' => 2,
             'name'=> 'LP',
             'last_name'=>'Admin',
             'email'=>'adminB@LP.com',
+            'percentage'=>40,
             'password'=> bcrypt('example'),],
 
             ['type_user_id' => 3,
             'name'=> 'LP',
             'last_name'=>'vendendor',
             'email'=>'vendendor@LP.com',
+            'percentage'=>25,
             'password'=> bcrypt('example'),],
 
             ['type_user_id' => 5,
@@ -40,6 +43,7 @@ class UserSeeder extends Seeder
             'name'=> 'LP',
             'last_name'=>'usuario',
             'email'=>'Corredor@LP.com',
+            'percentage'=>25,
             'password'=> bcrypt('example'),],
         ];
       

@@ -148,6 +148,10 @@
                                         </option>
                                     </select>
                             </div>
+                            <div class="form-group" v-if="action==1 ||action==2">
+                                <label for="pwd">Porcentaje de ganacia:</label>
+                                <input type="text" v-model="percentage"  class="form-control" placeholder="Enter percentage" id="percentage">
+                            </div>
                             <div class="form-group" v-if="action==1||action==2">
                                 <label for="pwd">Telefono:</label>
                                 <input type="text" v-model="phone"  class="form-control" placeholder="Enter phone" id="phone">

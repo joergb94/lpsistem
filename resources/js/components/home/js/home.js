@@ -8,6 +8,7 @@ export default {
             tickets_pay_off:0,
             tickets_not_pay_off:0,
             incomes:0,
+            pay_seller:0,
             not_pay:0,
             titleModal:'',
             action:0,
@@ -67,9 +68,10 @@ export default {
                     //me.dataUsers = respuesta.TableTickets.Tikets.data;
                     me.tickets_pay_off = respuesta.tickets_pay_off;
                     me.tickets_not_pay_off = respuesta.tickets_not_pay_off;
-                    me.incomes = respuesta.incomes.total_bet;
-                    me.not_pay = respuesta.not_pay.total_bet;
+                    me.incomes = respuesta.incomes[0].total_bet_gain;
+                    me.not_pay = respuesta.not_pay[0].total_bet_gain;
                     me.prize = respuesta.prizes.total_prize;
+                    me.pay_seller = respuesta.incomes[0].total_bet_seller;
                     me.dataTicktes = respuesta.TableTickets.Tickets.data;
                     me.date = respuesta.date;
                     me.typeU = respuesta.type;

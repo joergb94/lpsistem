@@ -36,14 +36,14 @@
                                     <div class="col-sm">
                                         <div class="card bg-primary text-white">
                                             <div class="card-body  text-center"><h1 v-text="this.tickets_pay_off">0</h1><p class="text-white">Tickets</p>
-                                                <h6 v-text="this.typeU > 0 && this.typeU < 4?'Pagados':'Cobrados'"></h6>
+                                                <h6 v-text="this.typeU < 4?'Pagados':'Cobrados'"></h6>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="card bg-secondary text-white">
                                             <div class="card-body text-center"><h1 v-text="this.tickets_not_pay_off">0</h1><p class="text-white">Tickets</p> 
-                                            <h6 v-text="this.typeU > 0 && this.typeU < 4?'No Pagados':'No Cobrados'"></h6>
+                                            <h6 v-text="this.typeU < 4?'No Pagados':'No Cobrados'"></h6>
                                             </div>
                                         </div>
                                     </div>
@@ -51,13 +51,18 @@
                                         <div class="card bg-danger text-white">
                                             <div class="card-body text-center"><h1 v-text="this.not_pay > 0?'$'+this.not_pay:'$'+0">0</h1>
                                             <p class="text-white">pesos.</p>
-                                            <h6 v-text="this.typeU > 0 && this.typeU < 4?'No Pagados':'No Cobrados'"></h6>
+                                            <h6 v-text="this.typeU < 4?'No Pagados':'No Cobrados'"></h6>
                                             </div>
                                         </div>
                                     </div>
-                                     <div class="col-sm" v-show="this.typeU > 0 && this.typeU < 4">
+                                     <div class="col-sm" v-show="this.typeU < 4">
                                         <div class="card bg-warning text-white">
                                             <div class="card-body text-center"><h1 v-text="this.prize > 0?'$'+this.prize:'$'+0">0</h1><p class="text-white">pesos.</p>Premios</div>
+                                        </div>
+                                    </div>
+                                      <div class="col-sm" v-show="this.typeU < 4">
+                                        <div class="card bg-info text-white">
+                                            <div class="card-body text-center"><h1 v-text="this.pay_seller > 0?'$'+this.pay_seller:'$'+0">0</h1><p class="text-white">pesos.</p>Pagos a vendedor</div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
@@ -65,7 +70,7 @@
                                             <div class="card-body text-center">
                                                 <h1 v-text="this.incomes > 0?'$'+this.incomes:'$'+0">0</h1>
                                                 <p class="text-white">pesos.</p> 
-                                                <h6 v-text="this.typeU > 0 && this.typeU < 4?'Pagados':'Cobrados'"></h6></div>
+                                                <h6 v-text="this.typeU < 4?'Pagados':'Cobrados'"></h6></div>
                                         </div>
                                     </div>
                                 </div>
