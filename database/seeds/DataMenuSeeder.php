@@ -18,7 +18,7 @@ class DataMenuSeeder extends Seeder
             ['name'=> 'Ganadores','icon'=> 'ti-star','link'=>'/winners','prioridad'=> '3','active'=> 1,],
             ['name'=> 'Depositos','icon'=> 'ti-money','link'=>'/deposits','prioridad'=> '3','active'=> 1,],
             ['name'=> 'Calendario de Juegos','icon'=> 'ti-calendar','link'=>'/schedule','prioridad'=> '3','active'=> 1,],
-            ['name'=> 'Juegos','icon'=> 'ti-game','link'=>'/games','prioridad'=> '3','active'=> 1,],
+            ['name'=> 'Reportes','icon'=> 'ti-bookmark-alt','link'=>'/reports','prioridad'=> '3','active'=> 1,],
       ];
       
       foreach($menus as $menu){

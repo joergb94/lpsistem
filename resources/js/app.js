@@ -26,6 +26,7 @@ Vue.component('admin-tickets-component', require('./components/tickets/TicketsRu
 Vue.component('management-tickets-component', require('./components/tickets/TicketsComponent.vue').default);
 Vue.component('user-tickets-component', require('./components/tickets/UserTicketsComponent.vue').default);
 Vue.component('user-component', require('./components/user/UsersComponent.vue').default);
+Vue.component('payroll-component', require('./components/reports/PayrollComponent.vue').default);
 Vue.component('profile-component', require('./components/user/ProfileComponent.vue').default);
 Vue.component('home-component', require('./components/home/HomeComponent.vue').default); 
 Vue.component('home-component-client', require('./components/home/HomeClientComponent.vue').default);

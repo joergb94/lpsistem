@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
 
             ['type_user_id' => 4,
             'name'=> 'LP',
-            'last_name'=>'usuario',
+            'last_name'=>'Corredor',
             'email'=>'Corredor@LP.com',
             'percentage'=>25,
             'password'=> bcrypt('example'),],

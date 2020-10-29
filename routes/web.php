@@ -31,6 +31,9 @@ Route::post('/users/password', 'UserController@change_password');
 Route::post('/users/change_status','UserController@change_status');
 Route::post('/users/deleteOrResotore','UserController@deleteOrResotore');
 
+//payroll
+Route::get('/reports', 'PayrollController@index');
+
 //profile
 Route::get('/profile', 'ProfileController@index');
 Route::post('/profile/update', 'ProfileController@update');

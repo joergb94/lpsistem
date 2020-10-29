@@ -263,6 +263,7 @@ class RepositoryUserTickets
             if ($coins->save()) {
              
                     if(Ticket::find($ticket['id'])->delete()){
+                        $Ticket_detail=TicketDetail::where('ticket_id',$Ticket_id)->delete();
                         return $coins;
                     }
                 throw new GeneralException(__('Error deleteOrResotore of Ticket.'));
