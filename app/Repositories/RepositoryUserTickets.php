@@ -128,20 +128,7 @@ class RepositoryUserTickets
             
                             $now = Carbon::now();
                             $totalDetail = 0;
-                                foreach ($data['dataNumbers'] as $detail){
-                                    $totalDetail +=$detail['subtotal'];
-                                    $this->model_detail::create([
-                                        'ticket_id'=>$Ticket['id'],
-                                        'user_id' => Auth::user()->id,
-                                        'game_id'=>$data['game']['id'],
-                                        'game_number' => $detail['number'],
-                                        'bet' => $detail['subtotal'],
-                                        'bet_gain'=>$detail['subtotal'],
-                                        'figures'=>$detail['figures'],
-                                        'active'=>true,
-                                    ]);
-                                }
-
+                                
                                 foreach ($data['dataNewDays'] as $item){
                                     $date = ($item['day']['value'] > 0)
                                             ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])
@@ -153,6 +140,22 @@ class RepositoryUserTickets
                                             'day_id' => $item['day']['id'],
                                             'game_date'=>$date,
                                         ]);
+
+                                        foreach ($data['dataNumbers'] as $detail){
+                                            $totalDetail +=$detail['subtotal'];
+                                            $this->model_detail::create([
+                                                'ticket_id'=>$Ticket['id'],
+                                                'user_id' => Auth::user()->id,
+                                                'game_id'=>$data['game']['id'],
+                                                'date_ticket'=>$date,
+                                                'game_number' => $detail['number'],
+                                                'bet' => $detail['subtotal'],
+                                                'bet_gain'=>$detail['subtotal'],
+                                                'figures'=>$detail['figures'],
+                                                'active'=>true,
+                                            ]);
+                                        }
+        
                                 }
                                        
 
@@ -163,8 +166,8 @@ class RepositoryUserTickets
                                     ->where('ticket_id',$Ticket['id'])
                                     ->count() > 0)
                                 {
-                                    $noDays = Day_ticket::where('ticket_id',$Ticket['id'])->count();
-                                    $totalDays = $totalDetail * $noDays;
+                                    
+                                    $totalDays = $totalDetail;
                                     $this->model->find($Ticket['id'])->update(['total'=>$totalDays]);
 
                                     $coin =Coin_purse::where('user_id',Auth::user()->id)->first();
@@ -201,7 +204,7 @@ class RepositoryUserTickets
         return DB::transaction(function () use ($Ticket_id) {
             if ($Ticket = $this->model->find($Ticket_id)) {
                 
-                $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->get();
+                $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->with('games')->get();
                 $client = User::find($Ticket['user_id']);
                 $days = Day_ticket::select('day.name as name', 'day_tickets.game_date as date')
                                     ->join('days as day','day.id', "=", 'day_tickets.day_id')

@@ -3080,7 +3080,7 @@ __webpack_require__.r(__webpack_exports__);
       dataDays: [],
       dataNewDays: [],
       dataSeller: [],
-      dataFigure: [1, 2, 3, 4, 5],
+      dataFigure: [1, 2, 3],
       id: '',
       type: '',
       phone: '',
@@ -3088,6 +3088,7 @@ __webpack_require__.r(__webpack_exports__);
       subtotal: '',
       number: '',
       game: '',
+      games: '',
       seller: 0,
       figures: 0,
       day: '',
@@ -3207,6 +3208,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/tickets?page=' + page + '&search=' + this.search + '&criterion=' + this.criterion + '&status=' + this.status + '&date=' + this.date + '&seller=' + this.seller.id;
       axios.get(url).then(function (response) {
         var answer = response.data;
+        console.log(answer);
         me.dataTicktes = answer.Tickets.data;
         me.date = answer.Date;
         me.dataGames = answer.Games;
@@ -3359,7 +3361,6 @@ __webpack_require__.r(__webpack_exports__);
                   me.action = 2;
                   axios.get('/tickets/detail?id=' + data.id).then(function (response) {
                     var answer = response.data;
-                    console.log(answer);
                     me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
                     me.dataNumbers = answer.ticketDetail;
                     me.total = answer.ticket.total;
@@ -3551,7 +3552,7 @@ __webpack_require__.r(__webpack_exports__);
       dataGames: [],
       dataDays: [],
       dataNewDays: [],
-      dataFigure: [1, 2, 3, 4, 5],
+      dataFigure: [1, 2, 3],
       id: '',
       total: 0,
       multiplier: 0,
@@ -3559,6 +3560,7 @@ __webpack_require__.r(__webpack_exports__);
       subtotal: '',
       number: '',
       game: '',
+      games: '',
       figures: 0,
       day: '',
       ticket_type: '1',
@@ -4572,6 +4574,7 @@ __webpack_require__.r(__webpack_exports__);
       subtotal: '',
       number: '',
       game: '',
+      games: '',
       game_detail: '0',
       figures: '0',
       day: '',
@@ -4859,7 +4862,8 @@ __webpack_require__.r(__webpack_exports__);
                     me.dataNumbers = answer.ticketDetail;
                     me.total = answer.ticket.total;
                     me.phone = answer.client.phone;
-                    me.dataNewDays = answer.days;
+                    me.dataNewDays = answer.days; //me.games.answer.gamet.name;
+
                     $('#send-text').html("<a class=\"btn btn-block btn-success text-white\" href=\"https://wa.me/52".concat(answer.client.phone, "\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar mensaje &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>"));
                     $("#myModal").modal('show');
                   })["catch"](function (error) {});
@@ -41683,24 +41687,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
-                  },
-                  [
-                    _c("h3", [
-                      _vm._v("Jugadas para "),
-                      _c("strong", {
-                        staticClass: "text-primary",
-                        domProps: {
-                          textContent: _vm._s(_vm.dataNumbers[0].games.name)
-                        }
-                      })
-                    ])
-                  ]
-                ),
+                _vm._m(6),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -41726,12 +41713,10 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-6 col-lg-6 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                                Numero:"
-                                    ),
+                                    _vm._v("Numero:"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
@@ -41741,8 +41726,11 @@ var render = function() {
                                     item.winner == 1
                                       ? _c(
                                           "h6",
-                                          { staticClass: "text-success" },
-                                          [_vm._v(" Ganador")]
+                                          { staticClass: "text-warning" },
+                                          [
+                                            _vm._v(" Ganador "),
+                                            _c("i", { staticClass: "ti-star" })
+                                          ]
                                         )
                                       : _vm._e()
                                   ]
@@ -41752,34 +41740,56 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-6 col-lg-6 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                                Inversion:$"
-                                    ),
+                                    _vm._v("Juego:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.games.name)
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Inversion:$"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(
-                                      " pesos\n                                                "
-                                    ),
+                                    _vm._v(" pesos "),
                                     item.winner == 1
-                                      ? _c(
-                                          "h6",
-                                          { staticClass: "text-success" },
-                                          [
-                                            _vm._v("Premio: "),
-                                            _c("p", {
-                                              domProps: {
-                                                textContent: _vm._s(item.prize)
-                                              }
-                                            })
-                                          ]
-                                        )
+                                      ? _c("h6", {
+                                          staticClass: "text-warning",
+                                          domProps: {
+                                            textContent: _vm._s(item.prize)
+                                          }
+                                        })
                                       : _vm._e()
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Fecha:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.date_ticket)
+                                      }
+                                    })
                                   ]
                                 )
                               ])
@@ -41933,6 +41943,16 @@ var staticRenderFns = [
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
       [_c("h3", [_vm._v("Dias de juego")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
+      [_c("h3", [_vm._v("Jugadas para:")])]
     )
   }
 ]
@@ -42540,26 +42560,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
-                  },
-                  [
-                    _c("h3", [
-                      _c("h3", [
-                        _vm._v("Jugadas para "),
-                        _c("strong", {
-                          staticClass: "text-primary",
-                          domProps: {
-                            textContent: _vm._s(_vm.dataNumbers[0].games.name)
-                          }
-                        })
-                      ])
-                    ])
-                  ]
-                ),
+                _vm._m(4),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -42585,12 +42586,10 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                                Numero:"
-                                    ),
+                                    _vm._v("Numero:"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
@@ -42600,8 +42599,11 @@ var render = function() {
                                     item.winner == 1
                                       ? _c(
                                           "h6",
-                                          { staticClass: "text-success" },
-                                          [_vm._v(" Ganador")]
+                                          { staticClass: "text-warning" },
+                                          [
+                                            _vm._v(" Ganador "),
+                                            _c("i", { staticClass: "ti-star" })
+                                          ]
                                         )
                                       : _vm._e()
                                   ]
@@ -42611,34 +42613,56 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                                Inversion:$"
-                                    ),
+                                    _vm._v("Juego:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.games.name)
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Inversion:$"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(
-                                      " pesos\n                                                "
-                                    ),
+                                    _vm._v(" pesos "),
                                     item.winner == 1
-                                      ? _c(
-                                          "h6",
-                                          { staticClass: "text-success" },
-                                          [
-                                            _vm._v("Premio: "),
-                                            _c("p", {
-                                              domProps: {
-                                                textContent: _vm._s(item.prize)
-                                              }
-                                            })
-                                          ]
-                                        )
+                                      ? _c("h6", {
+                                          staticClass: "text-warning",
+                                          domProps: {
+                                            textContent: _vm._s(item.prize)
+                                          }
+                                        })
                                       : _vm._e()
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Fecha:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.date_ticket)
+                                      }
+                                    })
                                   ]
                                 )
                               ])
@@ -42777,6 +42801,16 @@ var staticRenderFns = [
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
       [_c("h3", [_vm._v("Dias de juego")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
+      [_c("h3", [_c("h3", [_vm._v("Jugadas para:")])])]
     )
   }
 ]
@@ -44197,61 +44231,63 @@ var render = function() {
                   [
                     _c("label", { attrs: { for: "pwd" } }, [_vm._v("Juego:")]),
                     _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
+                    _vm.action == 1
+                      ? _c(
+                          "select",
                           {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.game,
-                            expression: "game"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { id: "game", name: "game" },
-                        on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.game = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { value: "" } }, [
-                          _vm._v("Seleciona un Juego")
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.dataGames, function(item) {
-                          return _c(
-                            "option",
-                            {
-                              key: item.id,
-                              domProps: {
-                                value: { id: item.id, text: item.name }
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.game,
+                                expression: "game"
                               }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                        " +
-                                  _vm._s(item.name) +
-                                  "\n                                    "
+                            ],
+                            staticClass: "form-control",
+                            attrs: { id: "game", name: "game" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.game = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("Seleciona un Juego")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.dataGames, function(item) {
+                              return _c(
+                                "option",
+                                {
+                                  key: item.id,
+                                  domProps: {
+                                    value: { id: item.id, text: item.name }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(item.name) +
+                                      "\n                                    "
+                                  )
+                                ]
                               )
-                            ]
-                          )
-                        })
-                      ],
-                      2
-                    )
+                            })
+                          ],
+                          2
+                        )
+                      : _vm._e()
                   ]
                 ),
                 _vm._v(" "),
@@ -44878,24 +44914,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
-                  },
-                  [
-                    _c("h3", [
-                      _vm._v("Jugadas para "),
-                      _c("strong", {
-                        staticClass: "text-primary",
-                        domProps: {
-                          textContent: _vm._s(_vm.dataNumbers[0].games.name)
-                        }
-                      })
-                    ])
-                  ]
-                ),
+                _vm._m(5),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -44921,12 +44940,10 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                        Numero:"
-                                    ),
+                                    _vm._v("Numero:"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
@@ -44936,8 +44953,11 @@ var render = function() {
                                     item.winner == 1
                                       ? _c(
                                           "h6",
-                                          { staticClass: "text-success" },
-                                          [_vm._v(" Ganador")]
+                                          { staticClass: "text-warning" },
+                                          [
+                                            _vm._v(" Ganador "),
+                                            _c("i", { staticClass: "ti-star" })
+                                          ]
                                         )
                                       : _vm._e()
                                   ]
@@ -44947,13 +44967,13 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
                                     _vm._v("Juego:"),
                                     _c("strong", {
                                       domProps: {
-                                        textContent: _vm._s(item.game_number)
+                                        textContent: _vm._s(item.games.name)
                                       }
                                     })
                                   ]
@@ -44963,34 +44983,40 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                        Inversion:$"
-                                    ),
+                                    _vm._v("Inversion:$"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(
-                                      " pesos\n                                        "
-                                    ),
+                                    _vm._v(" pesos "),
                                     item.winner == 1
-                                      ? _c(
-                                          "h6",
-                                          { staticClass: "text-success" },
-                                          [
-                                            _vm._v("Premio: "),
-                                            _c("p", {
-                                              domProps: {
-                                                textContent: _vm._s(item.prize)
-                                              }
-                                            })
-                                          ]
-                                        )
+                                      ? _c("h6", {
+                                          staticClass: "text-warning",
+                                          domProps: {
+                                            textContent: _vm._s(item.prize)
+                                          }
+                                        })
                                       : _vm._e()
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Fecha:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.date_ticket)
+                                      }
+                                    })
                                   ]
                                 )
                               ])
@@ -45151,6 +45177,16 @@ var staticRenderFns = [
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
       [_c("h3", [_vm._v("Dias de juego")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
+      [_c("h3", [_vm._v("Jugadas para:")])]
     )
   }
 ]
@@ -46424,24 +46460,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
-                  },
-                  [
-                    _c("h3", [
-                      _vm._v("Jugadas para "),
-                      _c("strong", {
-                        staticClass: "text-primary",
-                        domProps: {
-                          textContent: _vm._s(_vm.dataNumbers[0].games.name)
-                        }
-                      })
-                    ])
-                  ]
-                ),
+                _vm._m(5),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -46467,12 +46486,10 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                        Numero:"
-                                    ),
+                                    _vm._v("Numero:"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
@@ -46482,8 +46499,11 @@ var render = function() {
                                     item.winner == 1
                                       ? _c(
                                           "h6",
-                                          { staticClass: "text-success" },
-                                          [_vm._v(" Ganador")]
+                                          { staticClass: "text-warning" },
+                                          [
+                                            _vm._v(" Ganador "),
+                                            _c("i", { staticClass: "ti-star" })
+                                          ]
                                         )
                                       : _vm._e()
                                   ]
@@ -46493,13 +46513,13 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
                                     _vm._v("Juego:"),
                                     _c("strong", {
                                       domProps: {
-                                        textContent: _vm._s(item.game_number)
+                                        textContent: _vm._s(item.games.name)
                                       }
                                     })
                                   ]
@@ -46509,34 +46529,40 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                        Inversion:$"
-                                    ),
+                                    _vm._v("Inversion:$"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(
-                                      " pesos\n                                        "
-                                    ),
+                                    _vm._v(" pesos "),
                                     item.winner == 1
-                                      ? _c(
-                                          "h6",
-                                          { staticClass: "text-success" },
-                                          [
-                                            _vm._v("Premio: "),
-                                            _c("p", {
-                                              domProps: {
-                                                textContent: _vm._s(item.prize)
-                                              }
-                                            })
-                                          ]
-                                        )
+                                      ? _c("h6", {
+                                          staticClass: "text-warning",
+                                          domProps: {
+                                            textContent: _vm._s(item.prize)
+                                          }
+                                        })
                                       : _vm._e()
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Fecha:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.date_ticket)
+                                      }
+                                    })
                                   ]
                                 )
                               ])
@@ -46697,6 +46723,16 @@ var staticRenderFns = [
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
       [_c("h3", [_vm._v("Dias de juego")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
+      [_c("h3", [_vm._v("Jugadas para:")])]
     )
   }
 ]
@@ -47757,12 +47793,10 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                        Numero:"
-                                    ),
+                                    _vm._v("Numero:"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.game_number)
@@ -47786,13 +47820,13 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
                                     _vm._v("Juego:"),
                                     _c("strong", {
                                       domProps: {
-                                        textContent: _vm._s(item.game_number)
+                                        textContent: _vm._s(item.games.name)
                                       }
                                     })
                                   ]
@@ -47802,34 +47836,40 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                        Inversion:$"
-                                    ),
+                                    _vm._v("Inversion:$"),
                                     _c("strong", {
                                       domProps: {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(
-                                      " pesos\n                                        "
-                                    ),
+                                    _vm._v(" pesos "),
                                     item.winner == 1
-                                      ? _c(
-                                          "h6",
-                                          { staticClass: "text-success" },
-                                          [
-                                            _vm._v("Premio: "),
-                                            _c("p", {
-                                              domProps: {
-                                                textContent: _vm._s(item.prize)
-                                              }
-                                            })
-                                          ]
-                                        )
+                                      ? _c("h6", {
+                                          staticClass: "text-warning",
+                                          domProps: {
+                                            textContent: _vm._s(item.prize)
+                                          }
+                                        })
                                       : _vm._e()
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Fecha:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.date_ticket)
+                                      }
+                                    })
                                   ]
                                 )
                               ])
@@ -47953,7 +47993,7 @@ var staticRenderFns = [
     return _c(
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
-      [_c("h3", [_vm._v("Jugadas")])]
+      [_c("h3", [_vm._v("Jugadas para:")])]
     )
   }
 ]
@@ -49844,24 +49884,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
-                  },
-                  [
-                    _c("h3", [
-                      _vm._v("Jugadas para "),
-                      _c("strong", {
-                        staticClass: "text-primary",
-                        domProps: {
-                          textContent: _vm._s(_vm.dataNumbers[0].games.name)
-                        }
-                      })
-                    ])
-                  ]
-                ),
+                _vm._m(4),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -49887,7 +49910,7 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
                                     _vm._v("Numero:"),
@@ -49914,13 +49937,13 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
                                     _vm._v("Juego:"),
                                     _c("strong", {
                                       domProps: {
-                                        textContent: _vm._s(item.game_number)
+                                        textContent: _vm._s(item.games.name)
                                       }
                                     })
                                   ]
@@ -49930,7 +49953,7 @@ var render = function() {
                                   "div",
                                   {
                                     staticClass:
-                                      "col-sm-12 col-md-4 col-lg-4 text-center"
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
                                   },
                                   [
                                     _vm._v("Inversion:$"),
@@ -49939,7 +49962,31 @@ var render = function() {
                                         textContent: _vm._s(item.bet)
                                       }
                                     }),
-                                    _vm._v(" pesos")
+                                    _vm._v(" pesos "),
+                                    item.winner == 1
+                                      ? _c("h6", {
+                                          staticClass: "text-warning",
+                                          domProps: {
+                                            textContent: _vm._s(item.prize)
+                                          }
+                                        })
+                                      : _vm._e()
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-sm-12 col-md-3 col-lg-3 text-center"
+                                  },
+                                  [
+                                    _vm._v("Fecha:"),
+                                    _c("strong", {
+                                      domProps: {
+                                        textContent: _vm._s(item.date_ticket)
+                                      }
+                                    })
                                   ]
                                 )
                               ])
@@ -50099,6 +50146,16 @@ var staticRenderFns = [
       "div",
       { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
       [_c("h3", [_vm._v("Dias de juego")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group col-sm-12 col-md-12 col-lg-12 text-center" },
+      [_c("h3", [_vm._v("Jugadas para:")])]
     )
   }
 ]

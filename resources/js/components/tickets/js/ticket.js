@@ -7,7 +7,7 @@ export default {
         dataDays:[],
         dataNewDays:[],
         dataSeller:[],
-        dataFigure:[1,2,3,4,5],
+        dataFigure:[1,2,3],
         id:'',
         type:'',
         phone:'',
@@ -15,6 +15,7 @@ export default {
         subtotal:'', 
         number:'',
         game:'',
+        games:'',
         seller:0,
         figures:0,
         day:'',
@@ -150,6 +151,7 @@ export default {
              axios.get(url)
             .then(function (response) {
                 var answer= response.data;
+                console.log(answer)
                 me.dataTicktes = answer.Tickets.data;
                 me.date = answer.Date;
                 me.dataGames = answer.Games;
@@ -307,7 +309,6 @@ export default {
                             me.action = 2;
                             axios.get('/tickets/detail?id='+data.id).then(function (response) {
                                 var answer = response.data;
-                                console.log(answer)
                                 me.titleModal = 'Info Ticket Numero: '+answer.ticket.id;
                                 me.dataNumbers = answer.ticketDetail;
                                 me.total = answer.ticket.total;

@@ -21,6 +21,7 @@ class TicketDetailsTable extends Migration
             $table->unsignedBigInteger('game_id')->nullable();
             $table->integer('figures')->nullable();
             $table->string('game_number',5)->nullable();
+            $table->date('date_ticket')->nullable();
             $table->decimal('bet')->nullable();
             $table->decimal('bet_seller')->nullable();
             $table->decimal('bet_gain')->nullable();

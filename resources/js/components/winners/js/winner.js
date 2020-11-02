@@ -14,6 +14,7 @@ export default {
         subtotal:'',
         number:'',
         game:'',
+        games:'',
         game_detail:'0',
         figures:'0',
         day:'',
@@ -156,6 +157,7 @@ export default {
                 me.dataGame =me.get_games();
                 me.dataDays = answer.Days;
                 me.pagination= answer.pagination;
+                
             
             })
             .catch(function (error) {
@@ -328,6 +330,7 @@ export default {
                                 me.total = answer.ticket.total;
                                 me.phone =answer.client.phone;
                                 me.dataNewDays = answer.days;
+                                //me.games.answer.gamet.name;
                               
                                 $('#send-text').html(`<a class="btn btn-block btn-success text-white" href="https://wa.me/52${answer.client.phone}" target="_blank" style="color:#000;">
                                                         Enviar mensaje &nbsp; 

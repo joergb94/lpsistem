@@ -81,9 +81,9 @@ class RepositoryGameWinner
                                         'ticket_details.bet as bet',
                                         'ticket_details.prize as prize',
                                         'tickets.deleted_at as deleted_at',
-                                        'day_tickets.game_date as date')
+                                        'ticket_details.date_ticket as date')
                             ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
-                            ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id');
+                            ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
 
             (strlen($criterion) > 0 &&  strlen($search) > 0) 
                      ? $rg->where('tickets.phone', 'like', '%'. $search . '%')->whereDate('day_tickets.game_date',$date)
@@ -246,12 +246,13 @@ class RepositoryGameWinner
                 
                 $detail = $this->model_detail->where('ticket_id',$Ticket['id'])->with('games')->get();
                 $client = User::find($Ticket['user_id']);
+                $game =Game::where('id',$detail[0]['game_id'])->first();
                 $days = Day_ticket::select('day.name as name', 'day_tickets.game_date as date')
                                     ->join('days as day','day.id', "=", 'day_tickets.day_id')
                                     ->where('day_tickets.ticket_id',$Ticket_id)
                                     ->get();
 
-                return ['ticket' => $Ticket, 'ticketDetail'=>$detail,'client'=>$client,'days'=>$days];
+                return ['ticket' => $Ticket, 'ticketDetail'=>$detail,'client'=>$client,'days'=>$days,'gamet'=>$game];
             }
 
             throw new GeneralException(__('There was an error on show the Ticket.'));

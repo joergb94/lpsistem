@@ -130,7 +130,7 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                     <label for="pwd">Juego:</label>
-                                    <select class="form-control" v-model="game" id="game" name="game">
+                                    <select v-if="action==1" class="form-control" v-model="game" id="game" name="game">
                                         <option value="" >Seleciona un Juego</option>
                                         <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
                                             {{ item.name }}
@@ -244,6 +244,7 @@
                             </div>
                              
                          </div>
+                         
                          <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                              <h3>Dias de juego</h3>
                          </div>
@@ -261,7 +262,7 @@
                             </ul>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                             <h3>Jugadas para <strong class="text-primary" v-text="dataNumbers[0].games.name"></strong></h3>
+                             <h3>Jugadas para:</h3>
                          </div>
                          <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <ul class="list-group">
@@ -270,15 +271,11 @@
                                 </li>
                                 <li class="list-group-item"  v-for="item in dataNumbers" :key="item.id">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
-                                            Numero:<strong v-text="item.game_number"></strong>
-                                            <h6 v-if="item.winner == 1" class="text-success"> Ganador</h6>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >Juego:<strong v-text="item.game_number"></strong></div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 text-center" >
-                                            Inversion:$<strong v-text="item.bet"></strong> pesos
-                                            <h6 v-if="item.winner == 1" class="text-success">Premio: <p v-text="item.prize"></p></h6>
-                                        </div>                  
+                                       <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Numero:<strong v-text="item.game_number"></strong>
+                                            <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6></div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Juego:<strong v-text="item.games.name"></strong></div>
+                                           <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos <h6 v-if="item.winner == 1" class="text-warning" v-text="item.prize"></h6></div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Fecha:<strong v-text="item.date_ticket"></strong></div>                      
                                     </div>
                                 </li>
                             </ul>

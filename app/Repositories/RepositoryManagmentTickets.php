@@ -162,22 +162,6 @@ class RepositoryManagmentTickets
                         $time_end = Carbon::parse($gameT['time_end']);
                         $now = Carbon::now();
                         $totalDetail = 0;
-                       
-                        foreach ($data['dataNumbers'] as $detail){
-                            $totalDetail +=$detail['subtotal'];
-                            
-                            $this->model_detail::create([
-                                'ticket_id'=>$Ticket['id'],
-                                'user_id' => $Client['id'],
-                                'game_id'=>$data['game']['id'],
-                                'figures'=>$detail['figures'],
-                                'game_number' => $detail['number'],
-                                'bet' => $detail['subtotal'],
-                                'bet_seller'=>$detail['subtotal']*$percentage,
-                                'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
-                                'active'=>false,
-                            ]);
-                        }
 
                         foreach ($data['dataNewDays'] as $item){
                           
@@ -192,11 +176,27 @@ class RepositoryManagmentTickets
                                     'game_date'=>$date,
                                 ]);
 
+                                foreach ($data['dataNumbers'] as $detail){
+                                    $totalDetail +=$detail['subtotal'];
+                                    
+                                    $this->model_detail::create([
+                                        'ticket_id'=>$Ticket['id'],
+                                        'user_id' => $Client['id'],
+                                        'game_id'=>$data['game']['id'],
+                                        'figures'=>$detail['figures'],
+                                        'date_ticket'=>$date,
+                                        'game_number' => $detail['number'],
+                                        'bet' => $detail['subtotal'],
+                                        'bet_seller'=>$detail['subtotal']*$percentage,
+                                        'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
+                                        'active'=>false,
+                                    ]);
+                                }
+
                             }
                         }
 
-                        $noDays = Day_ticket::where('ticket_id',$Ticket['id'])->count();
-                        $totalDays = $totalDetail * $noDays;
+                        $totalDays = $totalDetail ;
                         $this->model->find($Ticket['id'])->update([
                                                                     'total_seller' => $data['total']*$percentage,
                                                                     'total_gain' => $data['total'] - ($data['total']*$percentage),

@@ -40,7 +40,7 @@ class RepositoryHome
                                         DB::raw('SUM(ticket_details.bet_seller) as total_bet_seller'),
                                         DB::raw('SUM(ticket_details.bet) as total_bet'))
                                 ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
-                                ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id');
+                                ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
 
                             if(Auth::user()->type_user_id < 3 ){
                                     $Ticket->where('tickets.id','>=',0);
@@ -59,17 +59,17 @@ class RepositoryHome
 
                         switch ($type) {
                                 case 'day':
-                                    $Ticket->whereDate('day_tickets.game_date', $date);
+                                    $Ticket->whereDate('ticket_details.date_ticket', $date);
                                     break;
                                 case 'week':
-                                    $Ticket->whereDate('day_tickets.game_date','>=',$date->startOfWeek())->whereDate('day_tickets.game_date','<=',$date->endOfWeek());
+                                    $Ticket->whereDate('ticket_details.date_ticket','>=',$date->startOfWeek())->whereDate('ticket_details.date_ticket','<=',$date->endOfWeek());
                                     break;
                                     
                                 case 'month':
-                                    $Ticket->whereMonth('day_tickets.game_date', $date->month)->whereYear('day_tickets.game_date', $date->year);
+                                    $Ticket->whereMonth('ticket_details.date_ticket', $date->month)->whereYear('ticket_details.date_ticket', $date->year);
                                     break;
                                 default:
-                                    $Ticket->whereDate('day_tickets.game_date', $date);
+                                    $Ticket->whereDate('ticket_details.date_ticket', $date);
                                     break;
                             }
                             
@@ -82,7 +82,7 @@ class RepositoryHome
 
         $Ticket = Day_ticket::select(DB::raw('SUM(ticket_details.prize) as total_prize'))
                                 ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
-                                ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id');
+                                ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
 
                         if(Auth::user()->type_user_id < 3 || Auth::user()->type_user_id > 4){
                                 $Ticket->where('tickets.id','>=',0);
@@ -97,17 +97,17 @@ class RepositoryHome
 
                         switch ($type) {
                                 case 'day':
-                                    $Ticket->whereDate('day_tickets.game_date', $date);
+                                    $Ticket->whereDate('ticket_details.date_ticket', $date);
                                     break;
                                 case 'week':
-                                    $Ticket->whereDate('day_tickets.game_date','>=',$date->startOfWeek())->whereDate('day_tickets.game_date','<=',$date->endOfWeek());
+                                    $Ticket->whereDate('ticket_details.date_ticket','>=',$date->startOfWeek())->whereDate('ticket_details.date_ticket','<=',$date->endOfWeek());
                                     break;
                                     
                                 case 'month':
-                                    $Ticket->whereMonth('day_tickets.game_date', $date->month)->whereYear('day_tickets.game_date', $date->year);
+                                    $Ticket->whereMonth('ticket_details.date_ticket', $date->month)->whereYear('ticket_details.date_ticket', $date->year);
                                     break;
                                 default:
-                                    $Ticket->whereDate('day_tickets.game_date', $date);
+                                    $Ticket->whereDate('ticket_details.date_ticket', $date);
                                     break;
                             }
                             
@@ -124,8 +124,9 @@ class RepositoryHome
                                         'tickets.winner as winner',
                                         'tickets.total as total',
                                         'tickets.deleted_at as deleted_at',
-                                        'day_tickets.game_date as date')
-                                ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
+                                        'ticket_details.date_ticket as date')
+                                ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
+                                ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
 
         if(Auth::user()->type_user_id < 3 ){
                 $Ticket->where('tickets.id','>=',0);
@@ -144,21 +145,21 @@ class RepositoryHome
 
         switch ($type) {
             case 'day':
-                $Ticket->whereDate('day_tickets.game_date', $date);
+                $Ticket->whereDate('ticket_details.date_ticket', $date);
                 break;
             case 'week':
-                $Ticket->whereDate('day_tickets.game_date','>=',$date->startOfWeek())->whereDate('day_tickets.game_date','<=',$date->endOfWeek());
+                $Ticket->whereDate('ticket_details.date_ticket','>=',$date->startOfWeek())->whereDate('ticket_details.date_ticket','<=',$date->endOfWeek());
                 break;
                 
             case 'month':
-                $Ticket->whereMonth('day_tickets.game_date', $date->month)->whereYear('day_tickets.game_date', $date->year);
+                $Ticket->whereMonth('ticket_details.date_ticket', $date->month)->whereYear('ticket_details.date_ticket', $date->year);
                 break;
             default:
-                $Ticket->whereDate('day_tickets.game_date', $date);
+                $Ticket->whereDate('ticket_details.date_ticket', $date);
                 break;
         }
         
-        $data=$Ticket->where('active',$pay)->count();
+        $data=$Ticket->where('tickets.active',$pay)->count();
         return $data;
     }
 
@@ -170,42 +171,67 @@ class RepositoryHome
                                         'tickets.winner as winner',
                                         'tickets.total as total',
                                         'tickets.deleted_at as deleted_at',
-                                        'day_tickets.game_date as date')
-                                ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
+                                        'ticket_details.date_ticket as date')
+                                ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
+                                ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
 
-        if(Auth::user()->type_user_id < 3 || Auth::user()->type_user_id > 4){
+         if(Auth::user()->type_user_id < 3 ){
                 $Ticket->where('tickets.id','>=',0);
 
         }else if(Auth::user()->type_user_id == 3){
 
                 $Ticket->where('tickets.seller_id',Auth::user()->id); 
                 
+        }else if(Auth::user()->type_user_id == 4){
+
+                $Ticket->where('tickets.charged_id',Auth::user()->id);
         }else{
-                $Ticket->where('tickets.user_id',Auth::user()->id);
+                
+                $Ticket->where('tickets.id','>=',0);
         }
 
         if(Auth::user()->type_user_id < 3 || Auth::user()->type_user_id > 4){
             switch ($type) {
                 case 'day':
-                    $Ticket->whereDate('day_tickets.game_date', $date);
+                    $Ticket->whereDate('ticket_details.date_ticket', $date);
                     break;
                 case 'week':
-                    $Ticket->whereDate('day_tickets.game_date','>=',$date->startOfWeek())->whereDate('day_tickets.game_date','<=',$date->endOfWeek());
+                    $Ticket->whereDate('ticket_details.date_ticket','>=',$date->startOfWeek())->whereDate('ticket_details.date_ticket','<=',$date->endOfWeek());
                     break;
                     
                 case 'month':
-                    $Ticket->whereMonth('day_tickets.game_date', $date->month)->whereYear('day_tickets.game_date', $date->year);
+                    $Ticket->whereMonth('ticket_details.date_ticket', $date->month)->whereYear('ticket_details.date_ticket', $date->year);
                     break;
                 default:
-                    $Ticket->whereDate('day_tickets.game_date', $date);
+                    $Ticket->whereDate('ticket_details.date_ticket', $date);
                     break;
             }
         }
         if(Auth::user()->type_user_id < 4 || Auth::user()->type_user_id > 4){
-            $data = $Ticket->whereNull('tickets.deleted_at')->where('active',true)->paginate(10);
+            $data = $Ticket->groupBy(   'tickets.id',
+                                        'tickets.phone',
+                                        'tickets.active',
+                                        'tickets.winner',
+                                        'tickets.total',
+                                        'tickets.deleted_at',
+                                        'ticket_details.date_ticket')
+                            ->whereNull('tickets.deleted_at')
+                            ->where('tickets.active',true)
+                            ->where('ticket_details.winner',true)
+                            ->paginate(10);
 
           }else{
-            $data = $Ticket->whereNull('tickets.deleted_at')->where('winner',true)->paginate(10);
+            $data = $Ticket->groupBy(   'tickets.id',
+                                        'tickets.phone',
+                                        'tickets.active',
+                                        'tickets.winner',
+                                        'tickets.total',
+                                        'tickets.deleted_at',
+                                        'ticket_details.date_ticket')
+                            ->whereNull('tickets.deleted_at')
+                            ->where('tickets.winner',true)
+                            ->where('ticket_details.winner',true)
+                            ->paginate(10);
             }
        
 
