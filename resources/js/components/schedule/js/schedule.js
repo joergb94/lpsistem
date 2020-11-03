@@ -177,7 +177,7 @@ export default {
                 }) 
         },
         openModal(model, action, data = []){
-           
+           console.table(data)
             switch(model){
                 case 'modal':
                 {
@@ -197,8 +197,8 @@ export default {
                             
                             this.titleModal = 'Modificar Programacion del juego';
                             this.id= data.id;
-                            this.number_win= data.number_win;
-                            this.number_win2= data.number_win2;
+                            this.number_win= data.game_schedule_details.length > 0?data.game_schedule_details[0].number_win:'';
+                            this.number_win2= data.game_schedule_details.length > 1?data.game_schedule_details[1].number_win:'';
                             this.game_id =data.game_id;
                             this.date =data.date;
                             this.action = 2;
