@@ -50,6 +50,7 @@
                                 <th>Apellido</th>
                                 <th>Telefono</th>
                                 <th>Nomina</th>
+                                <th>Ganacia</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,6 +65,7 @@
                                     <td v-text="item.last_name"></td>
                                     <td v-text="item.phone"></td>
                                     <td v-text="item.payroll > 0?'$'+item.payroll:'$'+0"></td>
+                                    <td v-text="item.gain > 0?'$'+item.gain:'$'+0"></td>
                                 </tr>
                             </tbody>
                             </table>

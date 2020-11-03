@@ -43059,6 +43059,14 @@ var render = function() {
                               item.payroll > 0 ? "$" + item.payroll : "$" + 0
                             )
                           }
+                        }),
+                        _vm._v(" "),
+                        _c("td", {
+                          domProps: {
+                            textContent: _vm._s(
+                              item.gain > 0 ? "$" + item.gain : "$" + 0
+                            )
+                          }
                         })
                       ])
                     })
@@ -43161,7 +43169,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Telefono")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nomina")])
+        _c("th", [_vm._v("Nomina")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Ganacia")])
       ])
     ])
   },
@@ -49571,8 +49581,8 @@ var render = function() {
                       ? _c("tr", { staticClass: "text-center" }, [_vm._m(2)])
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm._l(_vm.dataTicktes, function(item) {
-                      return _c("tr", { key: item.id }, [
+                    _vm._l(_vm.dataTicktes, function(item, i) {
+                      return _c("tr", { key: i }, [
                         _c("td", [
                           _vm._v(
                             "\n                                        No."

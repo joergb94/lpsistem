@@ -48,7 +48,8 @@ class RepositoryPayroll
                                         'users.phone as phone',
                                         'users.last_name as last_name',
                                         'users.name as name',
-                                        DB::raw('SUM(ticket_details.bet_seller) as payroll')
+                                        DB::raw('SUM(ticket_details.bet_seller) as payroll'),
+                                        DB::raw('SUM(ticket_details.bet_gain) as gain')
                                         )
                             ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
                             ->join('ticket_details','ticket_details.ticket_id', "=", 'day_tickets.ticket_id')
