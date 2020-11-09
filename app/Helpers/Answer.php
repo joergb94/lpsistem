@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('answerUser')) {
+if (!function_exists('Answer')) {
 
     function validate_title($type){
         switch ($type) {
