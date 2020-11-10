@@ -104,7 +104,7 @@ class RepositoryManagmentTickets
                     'to'           => $Tickets->lastItem(),
                 ],
                 'Tickets' => $Tickets,
-                'Games'=>Game::whereTime('time_end', '>=',Carbon::now())->get(),
+                'Games'=>Game::all(),
                 'Days'=>Day::all(),
                 'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
                 'Sellers' =>Auth::user()->type_user_id < 3?User::whereNotIn('type_user_id',[1,5])->get():User::where('type_user_id',3)->get(),

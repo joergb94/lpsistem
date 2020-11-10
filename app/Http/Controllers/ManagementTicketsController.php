@@ -44,12 +44,8 @@ class ManagementTicketsController extends Controller
     }
     public function store(TicketStoreRequest $request){
 
-        if(Game::whereTime('time_end', '>=',Carbon::now())
-                ->exists())
-            {
                 $this->RepositoryManagmentTickets->create($request->input());
                 return response()->json(Answer('success','Ticket'));
-            }
 
         throw new GeneralException(__('El horario para crear tickets a terminado, intente mañana.'));
         
