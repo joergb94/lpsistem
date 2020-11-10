@@ -168,6 +168,7 @@ class RepositoryManagmentTickets
                             $date = ($item['day']['value'] > 0)
                                     ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks($i)
                                     : Carbon::now()->startOfWeek()->addWeeks($i);
+                                    
                             if($now <= $time_end){
 
                                 Day_ticket::create([
