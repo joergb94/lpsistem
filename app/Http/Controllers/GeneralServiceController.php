@@ -15,6 +15,6 @@ class GeneralServiceController extends Controller
     }
 
     public function games_active(Request $request){   
-        return response()->json(Game::whereTime('time_end', '>=',Carbon::now())->get());
+        return response()->json(Game::all());
     }
 }

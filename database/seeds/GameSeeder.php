@@ -55,7 +55,7 @@ class GameSeeder extends Seeder
                     ['game_id'=> 8,'figures'=>1,'prize'=>'5'],
       
                 ];
-
+ 
       
         foreach($games as $game){
             DB::table('games')->insert($game);
