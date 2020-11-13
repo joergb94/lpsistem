@@ -73,6 +73,9 @@ class RepositoryUserTickets
                                 case 2:
                                 $rg->where('tickets.active',false);
                                 break;
+                                case 3:
+                                $rg->where('tickets.active',true)->where('tickets.winner',true);
+                                break;
                                 default:
                                 $rg->where('tickets.active',true);
                             } 

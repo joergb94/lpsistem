@@ -13,6 +13,7 @@
                                             <option value="all" >Todos</option>
                                             <option value="1" >Pagados</option>
                                             <option value="2" >Por pagar</option>
+                                            <option value="3" >Ganadores</option>
                                         </select>
                                     </div> 
                                 </h4>

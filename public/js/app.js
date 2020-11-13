@@ -43817,6 +43817,10 @@ var render = function() {
                         _vm._v(" "),
                         _c("option", { attrs: { value: "2" } }, [
                           _vm._v("Por pagar")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "3" } }, [
+                          _vm._v("Ganadores")
                         ])
                       ]
                     )
@@ -45273,6 +45277,10 @@ var render = function() {
                         _vm._v(" "),
                         _c("option", { attrs: { value: "2" } }, [
                           _vm._v("Por pagar")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "3" } }, [
+                          _vm._v("Ganadores")
                         ])
                       ]
                     )
