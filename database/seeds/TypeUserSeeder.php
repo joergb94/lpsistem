@@ -29,6 +29,7 @@ class TypeUserSeeder extends Seeder
                   ['type_user_id'=> 1,'data_menu_id'=> 4,'active'=> 1,],
                   ['type_user_id'=> 1,'data_menu_id'=> 6,'active'=> 1,],
                   ['type_user_id'=> 1,'data_menu_id'=> 7,'active'=> 1,],
+                  ['type_user_id'=> 1,'data_menu_id'=> 8,'active'=> 1,],
                 
 
                 //Gestor
@@ -37,6 +38,7 @@ class TypeUserSeeder extends Seeder
                   ['type_user_id'=> 2,'data_menu_id'=> 3,'active'=> 1,],
                   ['type_user_id'=> 2,'data_menu_id'=> 4,'active'=> 1,],
                   ['type_user_id'=> 2,'data_menu_id'=> 7,'active'=> 1,],
+                  ['type_user_id'=> 2,'data_menu_id'=> 8,'active'=> 1,],
 
       
               
@@ -44,16 +46,21 @@ class TypeUserSeeder extends Seeder
                   ['type_user_id'=> 3,'data_menu_id'=> 1,'active'=> 1,],
                   ['type_user_id'=> 3,'data_menu_id'=> 2,'active'=> 1,],
                   ['type_user_id'=> 3,'data_menu_id'=> 3,'active'=> 1,],
+                  ['type_user_id'=> 3,'data_menu_id'=> 8,'active'=> 1,],
+
 
                 //cliente
                   ['type_user_id'=> 4,'data_menu_id'=> 1,'active'=> 1,],
                   ['type_user_id'=> 4,'data_menu_id'=> 2,'active'=> 1,],
-                  ['type_user_id'=> 4,'data_menu_id'=> 3,'active'=> 1,],
+                  ['type_user_id'=> 4,'data_menu_id'=> 8,'active'=> 1,],
+
 
                 //Corredor
                    ['type_user_id'=> 5,'data_menu_id'=> 1,'active'=> 1,],
                    ['type_user_id'=> 5,'data_menu_id'=> 2,'active'=> 1,],
                    ['type_user_id'=> 5,'data_menu_id'=> 3,'active'=> 1,],
+                   ['type_user_id'=> 5,'data_menu_id'=> 8,'active'=> 1,],
+                   
 
                 ];
       

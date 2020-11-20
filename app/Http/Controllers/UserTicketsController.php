@@ -31,7 +31,7 @@ class UserTicketsController extends Controller
 
     public function index(TicketRequest $request){
         
-        if (!$request->ajax()) return view('tickets.index',);
+        if (!$request->ajax()) return view('mytickets.index',['dm'=>accesUrl(Auth::user(),3)]);
         
         $search = trim($request->search);
         $criterion = trim($request->criterion);

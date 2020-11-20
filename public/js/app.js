@@ -3113,7 +3113,8 @@ __webpack_require__.r(__webpack_exports__);
       date: '',
       status: 'all',
       search: '',
-      norepeat: 0
+      norepeat: 0,
+      week: ''
     };
   },
   computed: {
@@ -3217,6 +3218,7 @@ __webpack_require__.r(__webpack_exports__);
         me.dataSeller = answer.Sellers;
         me.pagination = answer.pagination;
         me.type = answer.type;
+        me.week = answer.week;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3334,6 +3336,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     openModal: function openModal(model, action) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+      var me = this;
 
       switch (model) {
         case 'modal':
@@ -3344,7 +3347,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.get_games();
 
                   if (this.dataGames.length > 0) {
-                    this.titleModal = 'Nuevo Ticket';
+                    this.titleModal = 'Nuevo Ticket ' + me.week + '';
                     this.phone = '';
                     this.game = '';
                     this.figures = 0;
@@ -3369,15 +3372,16 @@ __webpack_require__.r(__webpack_exports__);
 
               case 'detail':
                 {
-                  var me = this;
-                  me.action = 2;
+                  var _me = this;
+
+                  _me.action = 2;
                   axios.get('/tickets/detail?id=' + data.id).then(function (response) {
                     var answer = response.data;
-                    me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
-                    me.dataNumbers = answer.ticketDetail;
-                    me.total = answer.ticket.total;
-                    me.phone = answer.client.phone;
-                    me.dataNewDays = answer.days;
+                    _me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
+                    _me.dataNumbers = answer.ticketDetail;
+                    _me.total = answer.ticket.total;
+                    _me.phone = answer.client.phone;
+                    _me.dataNewDays = answer.days;
 
                     if (answer.client.created_at == answer.client.updated_at) {
                       $('#send-text').html("<a class=\"btn btn-block btn-primary text-white\" href=\"https://wa.me/52".concat(answer.client.phone, "?text=USUARIO%20").concat(answer.client.email, "%20CONTRASE\xD1A:%20").concat(answer.client.phone, "%20\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar Usuario y Contrase\xF1a &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>\n                                                    <a class=\"btn btn-block btn-success text-white\" href=\"https://wa.me/52").concat(answer.client.phone, "\" target=\"_blank\" style=\"color:#000;\">\n                                                        Enviar mensaje &nbsp; \n                                                        <i style=\"font-size:18px;\" class=\"fa fa-mobile-phone\"></i>\n                                                    </a>"));
@@ -43789,7 +43793,7 @@ var render = function() {
               _c("div", { staticClass: "col-sm-5" }, [
                 _c("h4", { staticClass: "card-title mb-0" }, [
                   _vm._v(
-                    "\n                                 Tickets\n                                "
+                    "\n                                 Tickets Vendidos\n                                "
                   ),
                   _c("div", { staticClass: "btn-group" }, [
                     _c(
@@ -44356,12 +44360,24 @@ var render = function() {
                         }
                       },
                       [
+                        _c("option", { attrs: { value: "0" } }, [
+                          _vm._v("No Repetir")
+                        ]),
+                        _vm._v(" "),
                         _c("option", { attrs: { value: "1" } }, [
-                          _vm._v("No recurrente")
+                          _vm._v("Repetir 1 semana")
                         ]),
                         _vm._v(" "),
                         _c("option", { attrs: { value: "2" } }, [
-                          _vm._v("Recurrente")
+                          _vm._v("Repetir 2 semana")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "3" } }, [
+                          _vm._v("Repetir 3 semana")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "4" } }, [
+                          _vm._v("Repetir 4 semana")
                         ])
                       ]
                     )
@@ -45249,7 +45265,7 @@ var render = function() {
               _c("div", { staticClass: "col-sm-5" }, [
                 _c("h4", { staticClass: "card-title mb-0" }, [
                   _vm._v(
-                    "\n                                 Tickets\n                                "
+                    "\n                                 Tickets Vendidos\n                                "
                   ),
                   _c("div", { staticClass: "btn-group" }, [
                     _c(
@@ -45906,12 +45922,24 @@ var render = function() {
                         }
                       },
                       [
+                        _c("option", { attrs: { value: "0" } }, [
+                          _vm._v("No Repetir")
+                        ]),
+                        _vm._v(" "),
                         _c("option", { attrs: { value: "1" } }, [
-                          _vm._v("No recurrente")
+                          _vm._v("Repetir 1 semana")
                         ]),
                         _vm._v(" "),
                         _c("option", { attrs: { value: "2" } }, [
-                          _vm._v("Recurrente")
+                          _vm._v("Repetir 2 semana")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "3" } }, [
+                          _vm._v("Repetir 3 semana")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "4" } }, [
+                          _vm._v("Repetir 4 semana")
                         ])
                       ]
                     )

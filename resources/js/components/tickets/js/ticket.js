@@ -39,8 +39,8 @@ export default {
         date:'',
         status : 'all',
         search : '',
-        norepeat: 0
-
+        norepeat: 0,
+        week:''
         }
     },
     computed:{
@@ -159,6 +159,7 @@ export default {
                 me.dataSeller = answer.Sellers;
                 me.pagination= answer.pagination;
                 me.type =answer.type;
+                me.week = answer.week;
             })
             .catch(function (error) {
                 console.log(error);
@@ -175,7 +176,7 @@ export default {
             me.ListTickets(page)
         },
         updateOrCreate(action){
-            
+
             if(!navigator.onLine){
                 me.message({title:'Error',text:'No hay conexion a internet intenta nuevamente',type:'danger'});
             }
@@ -282,6 +283,7 @@ export default {
                
         },
         openModal(model,action, data = ''){
+            let me = this;
             switch(model){
                 case 'modal': 
                 {
@@ -289,7 +291,7 @@ export default {
                         case 'add':
                         {   this.get_games();
                             if(this.dataGames.length > 0){
-                                this.titleModal = 'Nuevo Ticket';
+                                this.titleModal = 'Nuevo Ticket '+me.week+'';
                                 this.phone = '';
                                 this.game ='';
                                 this.figures=0;

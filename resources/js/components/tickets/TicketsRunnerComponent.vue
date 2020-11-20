@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-sm-5">
                                  <h4 class="card-title mb-0">
-                                     Tickets
+                                     Tickets Vendidos
                                     <div class="btn-group">
                                         <select class="form-control text-center" v-model="status">
                                             <option value="all" >Todos</option>
@@ -152,8 +152,11 @@
                                 <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                     <label for="pwd">Tipo:</label>
                                     <select class="form-control" v-model="ticket_type" id="ticket_type" name="ticket_type">
-                                        <option value="1">No recurrente</option>
-                                        <option value="2">Recurrente</option>
+                                        <option value="0">No Repetir</option>
+                                        <option value="1">Repetir 1 semana</option>
+                                        <option value="2">Repetir 2 semana</option>
+                                        <option value="3">Repetir 3 semana</option>
+                                        <option value="4">Repetir 4 semana</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">

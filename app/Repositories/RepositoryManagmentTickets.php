@@ -112,6 +112,7 @@ class RepositoryManagmentTickets
                 'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
                 'Sellers' =>Auth::user()->type_user_id < 3?User::whereNotIn('type_user_id',[1,5])->get():User::where('type_user_id',3)->get(),
                 'type'=>Auth::user()->type_user_id,
+                'week'=>'Para la Semana del '.Carbon::now()->startOfWeek()->toDateString().' al '.Carbon::now()->endOfWeek()->toDateString()
             ];
     }
 
@@ -140,78 +141,85 @@ class RepositoryManagmentTickets
                     ->first();
 
             if ($Client) {
-                if(Coin_purse::create(['user_id' => $Client->id,
-                                        'coins' => 0]))
-                {
 
-                $type = ($data['ticket_type'] > 1)? 4 : 0;
-                $percentage = Auth::user()->percentage/100;
-                for ($i=0; $i <= $type; $i++) { 
-                   
-                    $Ticket = $this->model::create([
-                        'seller_id'=>Auth::user()->id,
-                        'user_id' => $Client['id'],
-                        'ticket_type'=>$data['ticket_type'],
-                        'phone' => $data['phone'],
-                        'total_seller' => $data['total']*$percentage,
-                        'total_gain' => $data['total'] - ($data['total']*$percentage),
-                        'total' => $data['total'],
-                        'active'=>false,
-                    ]);
-                    
-            
-                    if ($Ticket) {
-                        $gameT = Game::where('id',$data['game']['id'])->first();
-                        $time_end = Carbon::parse($gameT['time_end']);
-                        $now = Carbon::now();
-                        $totalDetail = 0;
-
-                        foreach ($data['dataNewDays'] as $item){
-                          
-                            $date = ($item['day']['value'] > 0)
-                                    ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks($i)
-                                    : Carbon::now()->startOfWeek()->addWeeks($i);
-                                    
-                            if($now <= $time_end){
-
-                                Day_ticket::create([
-                                    'ticket_id'=>$Ticket['id'],
-                                    'day_id' => $item['day']['id'],
-                                    'game_date'=>$date,
-                                ]);
-
-                                foreach ($data['dataNumbers'] as $detail){
-                                    $totalDetail +=$detail['subtotal'];
-                                    
-                                    $this->model_detail::create([
-                                        'ticket_id'=>$Ticket['id'],
-                                        'user_id' => $Client['id'],
-                                        'game_id'=>$data['game']['id'],
-                                        'figures'=>$detail['figures'],
-                                        'date_ticket'=>$date,
-                                        'game_number' => $detail['number'],
-                                        'bet' => $detail['subtotal'],
-                                        'bet_seller'=>$detail['subtotal']*$percentage,
-                                        'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
-                                        'active'=>false,
-                                    ]);
-                                }
-
-                            }
-                        }
-
-                        $totalDays = $totalDetail ;
-                        $this->model->find($Ticket['id'])->update([
-                                                                    'total_seller' => $data['total']*$percentage,
-                                                                    'total_gain' => $data['total'] - ($data['total']*$percentage),
-                                                                    'total'=>$totalDays]);
+                    if(!Coin_purse::where('user_id',$Client->id)->exists()) 
+                    {
+                        Coin_purse::create(['user_id' => $Client->id,
+                                            'coins' => 0]);
                     }
-               
-                }
+
+                    if(Coin_purse::where('user_id',$Client->id)->exists())
+                    {
+
+                    $type = ($data['ticket_type'] > 0)? $data['ticket_type']: 0;
+                    $percentage = ($Client->id !== Auth::user()->id)? Auth::user()->percentage/100:0;
+                    for ($i=0; $i <= $type; $i++) {  
                     
+                        $Ticket = $this->model::create([
+                            'seller_id'=>Auth::user()->id,
+                            'user_id' => $Client['id'],
+                            'ticket_type'=>$data['ticket_type'],
+                            'phone' => $data['phone'],
+                            'total_seller' => $data['total']*$percentage,
+                            'total_gain' => $data['total'] - ($data['total']*$percentage),
+                            'total' => $data['total'],
+                            'active'=>false,
+                        ]);
                         
-                return 'exito';
-             }
+                
+                        if ($Ticket) {
+                            $gameT = Game::where('id',$data['game']['id'])->first();
+                            $time_end = Carbon::parse($gameT['time_end']);
+                            $now = Carbon::now();
+                            $totalDetail = 0;
+
+                            foreach ($data['dataNewDays'] as $item){
+                            
+                                $date = ($item['day']['value'] > 0)
+                                        ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks($i)
+                                        : Carbon::now()->startOfWeek()->addWeeks($i);
+                                        
+                                if($now <= $time_end){
+
+                                    Day_ticket::create([
+                                        'ticket_id'=>$Ticket['id'],
+                                        'day_id' => $item['day']['id'],
+                                        'game_date'=>$date,
+                                    ]);
+
+                                    foreach ($data['dataNumbers'] as $detail){
+                                        $totalDetail +=$detail['subtotal'];
+                                        
+                                        $this->model_detail::create([
+                                            'ticket_id'=>$Ticket['id'],
+                                            'user_id' => $Client['id'],
+                                            'game_id'=>$data['game']['id'],
+                                            'figures'=>$detail['figures'],
+                                            'date_ticket'=>$date,
+                                            'game_number' => $detail['number'],
+                                            'bet' => $detail['subtotal'],
+                                            'bet_seller'=>$detail['subtotal']*$percentage,
+                                            'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
+                                            'active'=>false,
+                                        ]);
+                                    }
+
+                                }
+                            }
+
+                            $totalDays = $totalDetail ;
+                            $this->model->find($Ticket['id'])->update([
+                                                                        'total_seller' => $data['total']*$percentage,
+                                                                        'total_gain' => $data['total'] - ($data['total']*$percentage),
+                                                                        'total'=>$totalDays]);
+                        }
+                
+                    }
+                        
+                            
+                    return 'exito';
+                }
+                
             }
             throw new GeneralException(__('El numero que esta Ingresando no es valido.'));
         });
