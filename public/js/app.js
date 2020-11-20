@@ -3231,6 +3231,14 @@ __webpack_require__.r(__webpack_exports__);
       me.ListTickets(page);
     },
     updateOrCreate: function updateOrCreate(action) {
+      if (!navigator.onLine) {
+        me.message({
+          title: 'Error',
+          text: 'No hay conexion a internet intenta nuevamente',
+          type: 'danger'
+        });
+      }
+
       var me = this;
       var url = '/tickets/add';
       var data = {
@@ -3338,6 +3346,9 @@ __webpack_require__.r(__webpack_exports__);
                   if (this.dataGames.length > 0) {
                     this.titleModal = 'Nuevo Ticket';
                     this.phone = '';
+                    this.game = '';
+                    this.figures = 0;
+                    this.day = '';
                     this.total = '';
                     this.number = '';
                     this.subtotal = '';
@@ -3385,12 +3396,15 @@ __webpack_require__.r(__webpack_exports__);
     closeModal: function closeModal() {
       this.titleModal = '';
       this.phone = '';
+      this.game = '';
+      this.figures = 0;
+      this.day = '';
       this.total = '';
       this.number = '';
+      this.subtotal = '';
       this.multiplier = 0;
       this.mTotal = 0;
       this.ticket_type = '1';
-      this.subtotal = '';
       this.dataNumbers = [];
       this.dataNewDays = [];
       this.client = '';

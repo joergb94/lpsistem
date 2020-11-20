@@ -175,28 +175,33 @@ export default {
             me.ListTickets(page)
         },
         updateOrCreate(action){
-             let me = this;
-             var url = '/tickets/add'
-             var data = {
-                'phone': this.phone,
-                'game':this.game,
-                'ticket_type':this.ticket_type,
-                'total':me.total,
-                'dataNumbers':me.dataNumbers,
-                'dataNewDays':me.dataNewDays,
-            };
-            axios.post(url,data).then(function (response) {
+            
+            if(!navigator.onLine){
+                me.message({title:'Error',text:'No hay conexion a internet intenta nuevamente',type:'danger'});
+            }
 
-                me.closeModal();
-                var answer = response.data;
-                me.message(answer);
+                let me = this;
+                var url = '/tickets/add'
+                var data = {
+                    'phone': this.phone,
+                    'game':this.game,
+                    'ticket_type':this.ticket_type,
+                    'total':me.total,
+                    'dataNumbers':me.dataNumbers,
+                    'dataNewDays':me.dataNewDays,
+                };
+                axios.post(url,data).then(function (response) {
 
-                me.ListTickets('');
-            }).catch(function (error) {
-                console.log(error.response.data.errors);
-                var e = error.response.data.errors;
-                me.erros(e);
-            })              
+                    me.closeModal();
+                    var answer = response.data;
+                    me.message(answer);
+
+                    me.ListTickets('');
+                }).catch(function (error) {
+                    console.log(error.response.data.errors);
+                    var e = error.response.data.errors;
+                    me.erros(e);
+                })            
         },
         DeleteOrRestore(item){
             let me = this;
@@ -278,7 +283,7 @@ export default {
         },
         openModal(model,action, data = ''){
             switch(model){
-                case 'modal':
+                case 'modal': 
                 {
                     switch(action){
                         case 'add':
@@ -286,6 +291,9 @@ export default {
                             if(this.dataGames.length > 0){
                                 this.titleModal = 'Nuevo Ticket';
                                 this.phone = '';
+                                this.game ='';
+                                this.figures=0;
+                                this.day ='';
                                 this.total = '';
                                 this.number = '';
                                 this.subtotal = '';
@@ -344,12 +352,15 @@ export default {
         closeModal(){
                 this.titleModal = '';
                 this.phone = '';
+                this.game ='';
+                this.figures=0;
+                this.day ='';
                 this.total = '';
                 this.number = '';
+                this.subtotal = '';
                 this.multiplier = 0;
                 this.mTotal = 0;
                 this.ticket_type = '1';
-                this.subtotal = '';
                 this.dataNumbers =[];
                 this.dataNewDays = [];
                 this.client ='';
