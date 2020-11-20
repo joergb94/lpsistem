@@ -293,22 +293,23 @@ class RepositoryManagmentTickets
     }
 
     public function deleteOrResotore($Ticket_id)
-    {    
-        $Bval = Ticket::withTrashed()->find($Ticket_id)->trashed();
+    {  
+                 
+                $Bval = $this->model->find($Ticket_id)->exists();
+                if($Bval){
+                    $Ticket = $this->model->find($Ticket_id)->delete();
+                    $Ticket_detail=$this->model_detail->where('ticket_id',$Ticket_id)->delete();
+                    $b=3;
 
-            if($Bval){
-                $Ticket = Ticket::withTrashed()->find($Ticket_id)->restore();
-                $Ticket_detail=TicketDetail::where('ticket_id',$Ticket_id)->restore();
-                $b=4;
-            }else{
-                $Ticket = Ticket::find($Ticket_id)->delete();
-                $Ticket_detail=TicketDetail::where('ticket_id',$Ticket_id)->delete();
-                $b=3;
-            }
+                }else{
+                    $Ticket = $this->model->withTrashed()->find($Ticket_id)->restore();
+                    $Ticket_detail=$this->model_detail->where('ticket_id',$Ticket_id)->restore();
+                    $b=4;
+                }
 
-            if ($b) {
-                return $b;
-            }
+                if ($b) {
+                    return $b;
+                }
     
             throw new GeneralException(__('Error deleteOrResotore of Ticket.'));
     }

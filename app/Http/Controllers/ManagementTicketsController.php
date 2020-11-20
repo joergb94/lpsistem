@@ -64,7 +64,7 @@ class ManagementTicketsController extends Controller
 
     public function deleteOrResotore(Request $request)
     {    
-        Ticket::find($request->id)->delete();
+        $this->RepositoryManagmentTickets->deleteOrResotore($request->id);
         return response()->json(Answer('success','Ticket'));
     }
 }

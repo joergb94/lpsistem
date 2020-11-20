@@ -18,6 +18,7 @@ class Ticket extends Model
     {
         return $this->belongsTo('App\Models\Type_user','user_id','id');
     }
+    
       /**
      * @return bool
      */
@@ -37,4 +38,5 @@ class Ticket extends Model
         //changed 'active' to 'status'
         return $query->where('active', $status);
     }
+    
 }

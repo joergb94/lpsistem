@@ -74,7 +74,7 @@ class RepositoryHome
                             }
                             
                             
-                         $data=$Ticket->where('ticket_details.active',$pay)->get();
+                         $data=$Ticket->where('ticket_details.active',$pay)->whereNull('tickets.deleted_at')->get();
         return $data;
     }
     public function data_winners($date,$type)
@@ -159,7 +159,7 @@ class RepositoryHome
                 break;
         }
         
-        $data=$Ticket->where('tickets.active',$pay)->count();
+        $data=$Ticket->where('tickets.active',$pay)->whereNull('tickets.deleted_at')->count();
         return $data;
     }
 
