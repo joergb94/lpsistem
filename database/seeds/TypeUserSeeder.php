@@ -49,16 +49,16 @@ class TypeUserSeeder extends Seeder
                   ['type_user_id'=> 3,'data_menu_id'=> 8,'active'=> 1,],
 
 
-                //cliente
+                //Corredor
                   ['type_user_id'=> 4,'data_menu_id'=> 1,'active'=> 1,],
                   ['type_user_id'=> 4,'data_menu_id'=> 2,'active'=> 1,],
+                  ['type_user_id'=> 4,'data_menu_id'=> 3,'active'=> 1,],
                   ['type_user_id'=> 4,'data_menu_id'=> 8,'active'=> 1,],
 
 
-                //Corredor
+                //Cliente
                    ['type_user_id'=> 5,'data_menu_id'=> 1,'active'=> 1,],
                    ['type_user_id'=> 5,'data_menu_id'=> 2,'active'=> 1,],
-                   ['type_user_id'=> 5,'data_menu_id'=> 3,'active'=> 1,],
                    ['type_user_id'=> 5,'data_menu_id'=> 8,'active'=> 1,],
                    
 

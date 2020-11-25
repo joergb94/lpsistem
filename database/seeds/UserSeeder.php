@@ -33,17 +33,17 @@ class UserSeeder extends Seeder
             'percentage'=>25,
             'password'=> bcrypt('example'),],
 
-            ['type_user_id' =>4,
-            'name'=> 'LP',
-            'last_name'=>'usuario',
-            'email'=>'usuario@LP.com',
-            'password'=> bcrypt('example'),],
-
-            ['type_user_id' => 5,
+            ['type_user_id' => 4,
             'name'=> 'LP',
             'last_name'=>'Corredor',
             'email'=>'Corredor@LP.com',
             'percentage'=>25,
+            'password'=> bcrypt('example'),],
+
+            ['type_user_id' =>5,
+            'name'=> 'LP',
+            'last_name'=>'usuario',
+            'email'=>'usuario@LP.com',
             'password'=> bcrypt('example'),],
         ];
       
@@ -52,6 +52,6 @@ class UserSeeder extends Seeder
             DB::table('users')->insert($admin);
         }
 
-        DB::table('coin_purses')->insert(['user_id' => 4,'coins' => 1000]);
+        DB::table('coin_purses')->insert(['user_id' => 5,'coins' => 1000]);
     }
 }

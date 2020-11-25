@@ -37,7 +37,7 @@
         
                 </div>
                 <div id ="coins-user" class="user-area dropdown float-right">
-                     @if($dm['type_user'] == 5)
+                     @if($dm['type_user'] == 5 && $dm['coins']['coins'])
                             <a class="nav-link {{($dm['coins']['coins'] > 0)? 'text-success' : 'text-danger' }}" href="#">
                                 <i class="fa fa-money"></i> 
                                  $<span id="coins-data">{{$dm['coins']['coins']}}</span>
