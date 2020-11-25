@@ -11,7 +11,7 @@
                                 </h4>
                             </div>
                             <div class="col-sm-7 text-right">
-                                 <button class="btn btn-success" @click="openModal('modal', 'add')">Nuevo Ticket +</button>
+                                 <!--<button class="btn btn-success" @click="openModal('modal', 'add')">Nuevo Ticket +</button>-->
                             </div>
                         </div>
                     </div>
@@ -42,18 +42,18 @@
                                                 <h6 v-if="item.winner == 1" class="text-success"> Ganador <i clsass="ti-star"></i></h6>
                                             </div>
                                             <div class="col-sm-12 col-md-3 col-lg-3" v-text="item.date"></div>
-                                            <div class="col-sm-12 col-md-3 col-lg-3">$<span v-text="item.total"></span> pesos</div>
+                                            <div class="col-sm-12 col-md-3 col-lg-3">$<span v-text="item.total"></span> pesos <h6 v-if="item.active == 1" class="text-primary"> Pagado <i clsass="ti-star"></i></h6></div>
                                             <div v-if="item.winner == 0" class="col-sm-12 col-md-3 col-lg-3">
                                                 <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                                     <i class="ti-eye"></i>
                                                 </button>
-                                                 <button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
+                                                 <!--<button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
                                                 <i class="ti-money"></i>
                                                 </button>
                                                 <button v-if="item.active == 1" type="button" class="btn btn-secondary btn-sm" @click="changeStatus(item)">
                                                     <i class="ti-na"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
+                                                </button>-->
+                                                <button v-if="item.active == 0" type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                                     <i class="ti-trash"></i>
                                                 </button>
                                             </div>

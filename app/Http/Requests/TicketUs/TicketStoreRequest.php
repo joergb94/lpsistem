@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Requests\Ticket;
+namespace App\Http\Requests\TicketUs;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class TicketIdRequest extends FormRequest
+class TicketStoreRequest extends FormRequest
 {
-   /**
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
     public function authorize()
     {
-        return validateAccess(Auth::user(),3); 
+        return validateAccess(Auth::user(),8); 
     }
 
     /**
@@ -25,7 +25,10 @@ class TicketIdRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required',
+            'phone' => 'required|string|max:15',
+            'total' => 'required|numeric|gt:0',
+            'dataNumbers' =>'required|array',
+        
         ];
     }
 }

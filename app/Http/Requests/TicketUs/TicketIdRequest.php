@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Ticket;
+namespace App\Http\Requests\TicketUs;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +14,7 @@ class TicketIdRequest extends FormRequest
      */
     public function authorize()
     {
-        return validateAccess(Auth::user(),3); 
+        return validateAccess(Auth::user(),8); 
     }
 
     /**

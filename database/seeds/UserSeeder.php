@@ -33,13 +33,13 @@ class UserSeeder extends Seeder
             'percentage'=>25,
             'password'=> bcrypt('example'),],
 
-            ['type_user_id' => 5,
+            ['type_user_id' =>4,
             'name'=> 'LP',
             'last_name'=>'usuario',
             'email'=>'usuario@LP.com',
             'password'=> bcrypt('example'),],
 
-            ['type_user_id' => 4,
+            ['type_user_id' => 5,
             'name'=> 'LP',
             'last_name'=>'Corredor',
             'email'=>'Corredor@LP.com',

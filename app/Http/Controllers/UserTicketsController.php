@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Exceptions\GeneralException;
-use App\Http\Requests\Ticket\TicketRequest;
-use App\Http\Requests\Ticket\TicketIdRequest;
-use App\Http\Requests\Ticket\TicketPassRequest;
-use App\Http\Requests\Ticket\TicketUpdateRequest;
-use App\Http\Requests\Ticket\TicketStoreRequest;
+use App\Http\Requests\TicketUs\TicketRequest;
+use App\Http\Requests\TicketUs\TicketIdRequest;
+use App\Http\Requests\TicketUs\TicketPassRequest;
+use App\Http\Requests\TicketUs\TicketUpdateRequest;
+use App\Http\Requests\TicketUs\TicketStoreRequest;
 use App\Models\Ticket;
 use App\Models\Game;
 use App\Repositories\RepositoryUserTickets;
@@ -31,7 +31,7 @@ class UserTicketsController extends Controller
 
     public function index(TicketRequest $request){
         
-        if (!$request->ajax()) return view('mytickets.index',['dm'=>accesUrl(Auth::user(),3)]);
+        if (!$request->ajax()) return view('mytickets.index',['dm'=>accesUrl(Auth::user(),8)]);
         
         $search = trim($request->search);
         $criterion = trim($request->criterion);

@@ -112,7 +112,7 @@ class RepositoryHome
                             }
                             
                             
-                         $data=$Ticket->where('ticket_details.active',1)->where('ticket_details.winner',1)->first();
+                         $data=$Ticket->whereNull('tickets.deleted_at')->where('ticket_details.active',1)->where('ticket_details.winner',1)->first();
         return $data;
     }
 

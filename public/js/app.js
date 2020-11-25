@@ -46822,26 +46822,7 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-sm-12" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("div", { staticClass: "row" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm-7 text-right" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-success",
-                    on: {
-                      click: function($event) {
-                        return _vm.openModal("modal", "add")
-                      }
-                    }
-                  },
-                  [_vm._v("Nuevo Ticket +")]
-                )
-              ])
-            ])
-          ]),
+          _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "form-group row" }, [
@@ -46990,7 +46971,13 @@ var render = function() {
                               _c("span", {
                                 domProps: { textContent: _vm._s(item.total) }
                               }),
-                              _vm._v(" pesos")
+                              _vm._v(" pesos "),
+                              item.active == 1
+                                ? _c("h6", { staticClass: "text-primary" }, [
+                                    _vm._v(" Pagado "),
+                                    _c("i", { attrs: { clsass: "ti-star" } })
+                                  ])
+                                : _vm._e()
                             ]
                           ),
                           _vm._v(" "),
@@ -47021,48 +47008,17 @@ var render = function() {
                                     ? _c(
                                         "button",
                                         {
-                                          staticClass: "btn btn-success btn-sm",
+                                          staticClass: "btn btn-primary btn-sm",
                                           attrs: { type: "button" },
                                           on: {
                                             click: function($event) {
-                                              return _vm.changeStatus(item)
+                                              return _vm.DeleteOrRestore(item)
                                             }
                                           }
                                         },
-                                        [_c("i", { staticClass: "ti-money" })]
+                                        [_c("i", { staticClass: "ti-trash" })]
                                       )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  item.active == 1
-                                    ? _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "btn btn-secondary btn-sm",
-                                          attrs: { type: "button" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.changeStatus(item)
-                                            }
-                                          }
-                                        },
-                                        [_c("i", { staticClass: "ti-na" })]
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-primary btn-sm",
-                                      attrs: { type: "button" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.DeleteOrRestore(item)
-                                        }
-                                      }
-                                    },
-                                    [_c("i", { staticClass: "ti-trash" })]
-                                  )
+                                    : _vm._e()
                                 ]
                               )
                             : _vm._e(),
@@ -48001,11 +47957,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-5" }, [
-      _c("h4", { staticClass: "card-title mb-0" }, [
-        _vm._v(
-          "\n                                 Mis Tickets\n                            "
-        )
+    return _c("div", { staticClass: "card-header" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-sm-5" }, [
+          _c("h4", { staticClass: "card-title mb-0" }, [
+            _vm._v(
+              "\n                                 Mis Tickets\n                            "
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-sm-7 text-right" })
       ])
     ])
   },
