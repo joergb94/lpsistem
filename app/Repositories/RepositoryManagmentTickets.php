@@ -124,7 +124,7 @@ class RepositoryManagmentTickets
          }elseif($date < $now){
              $valdate = false;
          }elseif ($date->format('Y-m-d') == $now->format('Y-m-d')) {
-             if($now->format('H:i') > $time_end->format('H:i')){
+             if(strtotime(date('H:i:s',$now)) > strtotime(date('H:i:s',$time_end))){
                  $valdate = false;
              }else{
                  $valdate = true;
@@ -132,6 +132,42 @@ class RepositoryManagmentTickets
          } 
 
          return $valdate;
+    }
+
+    public function calculate_duration($date,$now,$time_end){
+        $res = false;
+        $s = Carbon::parse($date);
+        $ds = Carbon::parse($date);
+        $dateS = Carbon::parse($date)->format('Y-m-d');
+        $timeS = Carbon::parse($now)->format('H:i:s');
+        
+        $e= Carbon::parse($time_end);
+        $de= Carbon::parse($time_end);
+        $dateE = Carbon::parse($time_end)->format('Y-m-d');
+        $timeE = Carbon::parse($time_end)->format('H:i:s');
+        $ope=1;
+
+        $days = $e->diffInDays($s);
+        $diffDate = $e->diffInSeconds($s);
+        $d = Carbon::parse($diffDate);
+
+        if($dateS < $dateE){
+            $ope=-1;
+        }
+        $h = $d->hour*$ope;
+        $m = Carbon::parse($diffDate)->minute*$ope;
+        $s = Carbon::parse($diffDate)->second*$ope;
+        $H= ($h < 0)? false:true;
+        $M= ($m < 0)? false:true;
+        $S = ($s < 0)? false:true;
+        
+        if($H && $M && $S){
+            $res = true;
+        }
+        return $res;
+        
+
+       
     }
 
     /**
@@ -195,9 +231,7 @@ class RepositoryManagmentTickets
                                         ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks($i)
                                         : Carbon::now()->startOfWeek()->addWeeks($i);
 
-                                
-
-                                if(RepositoryManagmentTickets::checkDate($date,$now,$time_end) == true){
+                                if(RepositoryManagmentTickets::calculate_duration($date,$now,$time_end) == true){
                                     $dayT=Day_ticket::create([
                                             'ticket_id'=>$Ticket['id'],
                                             'day_id' => $item['day']['id'],
