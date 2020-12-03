@@ -135,39 +135,23 @@ class RepositoryManagmentTickets
     }
 
     public function calculate_duration($date,$now,$time_end){
-        $res = false;
-        $s = Carbon::parse($date);
-        $ds = Carbon::parse($date);
+        $res = true;
         $dateS = Carbon::parse($date)->format('Y-m-d');
-        $timeS = Carbon::parse($now)->format('H:i:s');
+        $timeS = Carbon::parse($now);
+        $dateTimeS = Carbon::parse($date)->addHour($timeS->hour)->addMinutes($timeS->minute)->addSeconds($timeS->second);
         
-        $e= Carbon::parse($time_end);
-        $de= Carbon::parse($time_end);
+    
+        $dateTimeE= Carbon::parse($time_end);
         $dateE = Carbon::parse($time_end)->format('Y-m-d');
-        $timeE = Carbon::parse($time_end)->format('H:i:s');
-        $ope=1;
-
-        $days = $e->diffInDays($s);
-        $diffDate = $e->diffInSeconds($s);
-        $d = Carbon::parse($diffDate);
 
         if($dateS < $dateE){
-            $ope=-1;
+            $res = false;
+        }else if($dateS == $dateE){
+            $res = $dateTimeS->lt($dateTimeE);
         }
-        $h = $d->hour*$ope;
-        $m = Carbon::parse($diffDate)->minute*$ope;
-        $s = Carbon::parse($diffDate)->second*$ope;
-        $H= ($h < 0)? false:true;
-        $M= ($m < 0)? false:true;
-        $S = ($s < 0)? false:true;
         
-        if($H && $M && $S){
-            $res = true;
-        }
         return $res;
-        
 
-       
     }
 
     /**
