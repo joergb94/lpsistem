@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repositories;
-
 use App\Exceptions\GeneralException;
 use App\Models\Ticket;
 use App\Models\User;
@@ -14,7 +13,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon; 
+use Carbon\Carbon;
+use Validator; 
+
 
 /**
  * Class TicketRepository.
@@ -110,13 +111,29 @@ class RepositoryManagmentTickets
                 'Games'=>Game::all(),
                 'Days'=>Day::all(),
                 'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
-                'Sellers' =>Auth::user()->type_user_id < 3?User::whereNotIn('type_user_id',[1,5])->get():User::where('type_user_id',3)->get(),
+                'Sellers' =>Auth::user()->type_user_id < 3?User::whereNotIn('type_user_id',[1,5])->get():User::where('type_user_id',[3])->get(),
                 'type'=>Auth::user()->type_user_id,
+                'user'=>Auth::user()->id,
                 'week'=>'Para la Semana del '.Carbon::now()->startOfWeek()->toDateString().' al '.Carbon::now()->endOfWeek()->toDateString()
             ];
     }
 
-  
+    public function checkDate($date,$now,$time_end){
+        if($date > $now){
+            $valdate = true;
+         }elseif($date < $now){
+             $valdate = false;
+         }elseif ($date->format('Y-m-d') == $now->format('Y-m-d')) {
+             if($now->format('H:i') > $time_end->format('H:i')){
+                 $valdate = false;
+             }else{
+                 $valdate = true;
+             }
+         } 
+
+         return $valdate;
+    }
+
     /**
      * @param array $data
      *
@@ -172,54 +189,69 @@ class RepositoryManagmentTickets
                             $time_end = Carbon::parse($gameT['time_end']);
                             $now = Carbon::now();
                             $totalDetail = 0;
-
                             foreach ($data['dataNewDays'] as $item){
                             
                                 $date = ($item['day']['value'] > 0)
                                         ? Carbon::now()->startOfWeek()->addDays($item['day']['value'])->addWeeks($i)
                                         : Carbon::now()->startOfWeek()->addWeeks($i);
-                                        
-                                if($now <= $time_end){
 
-                                    Day_ticket::create([
-                                        'ticket_id'=>$Ticket['id'],
-                                        'day_id' => $item['day']['id'],
-                                        'game_date'=>$date,
-                                    ]);
+                                
 
-                                    foreach ($data['dataNumbers'] as $detail){
-                                        $totalDetail +=$detail['subtotal'];
-                                        
-                                        $this->model_detail::create([
+                                if(RepositoryManagmentTickets::checkDate($date,$now,$time_end) == true){
+                                    $dayT=Day_ticket::create([
                                             'ticket_id'=>$Ticket['id'],
-                                            'user_id' => $Client['id'],
-                                            'game_id'=>$data['game']['id'],
-                                            'figures'=>$detail['figures'],
-                                            'date_ticket'=>$date,
-                                            'game_number' => $detail['number'],
-                                            'bet' => $detail['subtotal'],
-                                            'bet_seller'=>$detail['subtotal']*$percentage,
-                                            'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
-                                            'active'=>false,
+                                            'day_id' => $item['day']['id'],
+                                            'game_date'=>$date,
                                         ]);
-                                    }
 
+                                    if($dayT){
+                                            foreach ($data['dataNumbers'] as $detail){
+                                                $totalDetail +=$detail['subtotal'];
+                                                
+                                            $tcd = $this->model_detail::create([
+                                                    'ticket_id'=>$Ticket['id'],
+                                                    'user_id' => $Client['id'],
+                                                    'game_id'=>$data['game']['id'],
+                                                    'figures'=>$detail['figures'],
+                                                    'date_ticket'=>$date,
+                                                    'game_number' => $detail['number'],
+                                                    'bet' => $detail['subtotal'],
+                                                    'bet_seller'=>$detail['subtotal']*$percentage,
+                                                    'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
+                                                    'prize'=>0,
+                                                    'active'=>false,
+                                                ]);
+                                                if(!$tcd){
+                                                    throw new GeneralException(__('detalle error.'));
+                                                    break; 
+                                                }
+                                            }
+    
+                                    }else{
+                                        throw new GeneralException(__('dia error.'));
+                                                    break; 
+                                    }
                                 }
                             }
+                          
 
-                            $totalDays = $totalDetail ;
-                            $this->model->find($Ticket['id'])->update([
-                                                                        'total_seller' => $data['total']*$percentage,
-                                                                        'total_gain' => $data['total'] - ($data['total']*$percentage),
-                                                                        'total'=>$totalDays]);
+                          
+                                $totalDays = $totalDetail ;
+                                $this->model->find($Ticket['id'])->update([
+                                                                            'total_seller' => $data['total']*$percentage,
+                                                                            'total_gain' => $data['total'] - ($data['total']*$percentage),
+                                                                            'total'=>$totalDays]);
+                         
+                        }else{
+                            throw new GeneralException(__('Error en crear ticket.'));
+                            break;
                         }
                 
                     }
-                        
-                            
-                    return 'exito';
+                    
                 }
-                
+               
+                return 'exito';
             }
             throw new GeneralException(__('El numero que esta Ingresando no es valido.'));
         });

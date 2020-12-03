@@ -3099,6 +3099,7 @@ __webpack_require__.r(__webpack_exports__);
       titleModal: '',
       action: 0,
       page: 1,
+      user: '',
       users: 1,
       pagination: {
         'total': 0,
@@ -3219,6 +3220,7 @@ __webpack_require__.r(__webpack_exports__);
         me.pagination = answer.pagination;
         me.type = answer.type;
         me.week = answer.week;
+        me.user = annswer.user;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -45409,6 +45411,10 @@ var render = function() {
                         [
                           _c("option", { attrs: { value: "0" } }, [
                             _vm._v("Selecione un vendedor")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: _vm.user } }, [
+                            _vm._v("Yo")
                           ]),
                           _vm._v(" "),
                           _vm._l(_vm.dataSeller, function(item) {

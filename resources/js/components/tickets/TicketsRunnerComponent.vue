@@ -31,6 +31,7 @@
                                     <input type="date" v-model="date" @keyup.enter="ListTickets(1)" class="form-control col-sm-12 col-md-12 col-lg-12" placeholder="Texto a buscar">
                                     <select v-if="this.type !== 3" class="form-control col-sm-12 col-md-12 col-lg-12" v-model="seller">
                                         <option value="0">Selecione un vendedor</option>
+                                        <option  v-bind:value="user">Yo</option>
                                         <option v-for="item in dataSeller" :key="item.id" v-bind:value="{ id:item.id,text:item.name}">
                                             {{ item.name }} {{item.last_name}}
                                         </option>   

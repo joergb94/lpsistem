@@ -25,6 +25,7 @@ export default {
         titleModal:'',
         action:0,
         page:1,
+        user:'',
         users: 1,
         pagination : {
                 'total' : 0,
@@ -160,6 +161,7 @@ export default {
                 me.pagination= answer.pagination;
                 me.type =answer.type;
                 me.week = answer.week;
+                me.user =annswer.user;
             })
             .catch(function (error) {
                 console.log(error);
