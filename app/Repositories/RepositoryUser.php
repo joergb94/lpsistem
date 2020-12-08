@@ -132,6 +132,11 @@ class RepositoryUser
                 'percentage'=>$data['percentage'],
             ])) {
 
+                if(!Coin_purse::where('user_id',$User->id)->exists()) 
+                {
+                    Coin_purse::create(['user_id' => $User->id,
+                                        'coins' => 0]);
+                }
                 return $User;
             }
 

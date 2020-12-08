@@ -19,7 +19,7 @@ if (!function_exists('accesUrl')) {
           //get all data for user menu
           $menuU = Type_user_detail::where('type_user_id',  $user->type_user_id);
 
-          $coins = Coin_purse::where('user_id',$user->id)->first();
+          $coins = (Coin_purse::where('user_id',$user->id)->exists())?Coin_purse::where('user_id',$user->id)->first():0;
 
           $menuU->with(['data_menu' => function($query) {
               $query->orderby('prioridad');
