@@ -67,7 +67,7 @@
                                         </th>
                                     </tr>
 
-                                    <tr v-for="(item,i) in dataTicktes" :key="i">
+                                    <tr v-for="item in dataTicktes" :key="item.id">
                                         <td>
                                             No.<strong v-text="item.number"></strong>
                                             <h6 v-if="item.winner == 1" class="text-warning"> Ganador </h6>

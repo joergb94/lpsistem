@@ -49600,8 +49600,8 @@ var render = function() {
                       ? _c("tr", { staticClass: "text-center" }, [_vm._m(2)])
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm._l(_vm.dataTicktes, function(item, i) {
-                      return _c("tr", { key: i }, [
+                    _vm._l(_vm.dataTicktes, function(item) {
+                      return _c("tr", { key: item.id }, [
                         _c("td", [
                           _vm._v(
                             "\n                                        No."

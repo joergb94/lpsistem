@@ -73,7 +73,7 @@ class RepositoryGameWinner
      */
     public function getSearchPaginated($criterion, $search, $status, $date, $game , $game_schedule , $game_detail,$figures)
     {      
-        $rg = $this->modelDAT->select( 'ticket_details.id as id',
+        $rg = $this->model_detail->select( 'ticket_details.id as id',
                                         'tickets.id as ticket_id',
                                         'ticket_details.winner as winner',
                                         'tickets.phone as phone',
@@ -82,12 +82,11 @@ class RepositoryGameWinner
                                         'ticket_details.prize as prize',
                                         'tickets.deleted_at as deleted_at',
                                         'ticket_details.date_ticket as date')
-                            ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
-                            ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
+                            ->join('tickets','tickets.id', "=", 'ticket_details.ticket_id');
 
             (strlen($criterion) > 0 &&  strlen($search) > 0) 
-                     ? $rg->where('tickets.phone', 'like', '%'. $search . '%')->whereDate('day_tickets.game_date',$date)
-                     : $rg->where('tickets.id','>',0)->whereDate('day_tickets.game_date',$date);
+                     ? $rg->where('tickets.phone', 'like', '%'. $search . '%')->whereDate('ticket_details.date_ticket',$date)
+                     : $rg->where('tickets.id','>',0)->whereDate('ticket_details.date_ticket',$date);
                 
                      $rg->where('tickets.active',true)->where('ticket_details.active',true);
 
