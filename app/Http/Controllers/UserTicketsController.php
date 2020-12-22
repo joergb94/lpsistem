@@ -32,7 +32,6 @@ class UserTicketsController extends Controller
     public function index(TicketRequest $request){
         
         if (!$request->ajax()) return view('mytickets.index',['dm'=>accesUrl(Auth::user(),8)]);
-        
         $search = trim($request->search);
         $criterion = trim($request->criterion);
         $status = ($request->status)? $request->status : 'all';
@@ -41,12 +40,10 @@ class UserTicketsController extends Controller
         return $this->RepositoryUserTickets->getSearchPaginated($criterion, $search, $status, $date);
     }
     public function store(Request $request){
-        if(Game::whereTime('time_end', '>=',Carbon::now())
-        ->exists())
-        {
+      
             $this->RepositoryUserTickets->create($request->input());
             return response()->json(Answer('success','Ticket'));
-        }
+
         throw new GeneralException(__('El horario para crear tickets a terminado, intente mañana.'));
     }
 

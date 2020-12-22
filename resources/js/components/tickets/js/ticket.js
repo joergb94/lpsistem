@@ -9,6 +9,8 @@ export default {
         dataSeller:[],
         dataFigure:[1,2,3],
         id:'',
+        pay_to:-1,
+        pay_now:0,
         type:'',
         phone:'',
         total: 0,
@@ -192,6 +194,7 @@ export default {
                     'total':me.total,
                     'dataNumbers':me.dataNumbers,
                     'dataNewDays':me.dataNewDays,
+                    'pay_to':this.pay_to,
                 };
                 axios.post(url,data).then(function (response) {
 
@@ -357,6 +360,7 @@ export default {
                 this.titleModal = '';
                 this.phone = '';
                 this.game ='';
+                this.pay_to=-1;
                 this.figures=0;
                 this.day ='';
                 this.total = '';
@@ -503,6 +507,17 @@ export default {
                 me.dataGames = answer;
 
             }).catch(function (error) {});
+        },
+        get_pay_now(){
+            let me = this;
+            this.pay_now=0;
+            var m = Number(this.pay_to) + 1;
+            console.log(m)
+            this.pay_now =(m > 0)? me.total*m:0;
+        },
+        set_pay_to(){
+            this.pay_to = -1;
+            this.get_pay_now();
         }
     },
     mounted () {

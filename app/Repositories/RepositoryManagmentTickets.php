@@ -190,6 +190,8 @@ class RepositoryManagmentTickets
 
                     $type = ($data['ticket_type'] > 0)? $data['ticket_type']: 0;
                     $percentage = ($Client->id !== Auth::user()->id)? Auth::user()->percentage/100:0;
+                    $checked = 0;
+                    $no_pay_to = $data['pay_to'];
                     for ($i=0; $i <= $type; $i++) {  
                     
                         $Ticket = $this->model::create([
@@ -200,7 +202,7 @@ class RepositoryManagmentTickets
                             'total_seller' => $data['total']*$percentage,
                             'total_gain' => $data['total'] - ($data['total']*$percentage),
                             'total' => $data['total'],
-                            'active'=>false,
+                            'active'=>($no_pay_to >= $i)?true:false,
                         ]);
                         
                 
@@ -223,6 +225,7 @@ class RepositoryManagmentTickets
                                         ]);
 
                                     if($dayT){
+                                        $checked += 1;
                                             foreach ($data['dataNumbers'] as $detail){
                                                 $totalDetail +=$detail['subtotal'];
                                                 
@@ -237,7 +240,7 @@ class RepositoryManagmentTickets
                                                     'bet_seller'=>$detail['subtotal']*$percentage,
                                                     'bet_gain'=>$detail['subtotal']-($detail['subtotal']*$percentage),
                                                     'prize'=>0,
-                                                    'active'=>false,
+                                                    'active'=>($no_pay_to >= $i)?true:false,
                                                 ]);
                                                 if(!$tcd){
                                                     throw new GeneralException(__('detalle error.'));
@@ -269,6 +272,9 @@ class RepositoryManagmentTickets
                     
                 }
                
+                if($checked == 0){
+                    throw new GeneralException(__('Error en crear ticket.'));
+                }
                 return 'exito';
             }
             throw new GeneralException(__('El numero que esta Ingresando no es valido.'));

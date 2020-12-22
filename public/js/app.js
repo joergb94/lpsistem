@@ -3083,6 +3083,8 @@ __webpack_require__.r(__webpack_exports__);
       dataSeller: [],
       dataFigure: [1, 2, 3],
       id: '',
+      pay_to: -1,
+      pay_now: 0,
       type: '',
       phone: '',
       total: 0,
@@ -3251,7 +3253,8 @@ __webpack_require__.r(__webpack_exports__);
         'ticket_type': this.ticket_type,
         'total': me.total,
         'dataNumbers': me.dataNumbers,
-        'dataNewDays': me.dataNewDays
+        'dataNewDays': me.dataNewDays,
+        'pay_to': this.pay_to
       };
       axios.post(url, data).then(function (response) {
         me.closeModal();
@@ -3403,6 +3406,7 @@ __webpack_require__.r(__webpack_exports__);
       this.titleModal = '';
       this.phone = '';
       this.game = '';
+      this.pay_to = -1;
       this.figures = 0;
       this.day = '';
       this.total = '';
@@ -3547,6 +3551,17 @@ __webpack_require__.r(__webpack_exports__);
         var answer = response.data;
         me.dataGames = answer;
       })["catch"](function (error) {});
+    },
+    get_pay_now: function get_pay_now() {
+      var me = this;
+      this.pay_now = 0;
+      var m = Number(this.pay_to) + 1;
+      console.log(m);
+      this.pay_now = m > 0 ? me.total * m : 0;
+    },
+    set_pay_to: function set_pay_to() {
+      this.pay_to = -1;
+      this.get_pay_now();
     }
   },
   mounted: function mounted() {
@@ -3576,6 +3591,8 @@ __webpack_require__.r(__webpack_exports__);
       dataFigure: [1, 2, 3],
       id: '',
       total: 0,
+      pay_to: -1,
+      pay_now: 0,
       multiplier: 0,
       mTotal: 0,
       subtotal: '',
@@ -3584,7 +3601,7 @@ __webpack_require__.r(__webpack_exports__);
       games: '',
       figures: 0,
       day: '',
-      ticket_type: '1',
+      ticket_type: '0',
       titleModal: '',
       action: 0,
       page: 1,
@@ -3723,7 +3740,8 @@ __webpack_require__.r(__webpack_exports__);
         'ticket_type': this.ticket_type,
         'total': me.total,
         'dataNumbers': me.dataNumbers,
-        'dataNewDays': me.dataNewDays
+        'dataNewDays': me.dataNewDays,
+        'pay_to': this.pay_to
       };
       axios.post(url, data).then(function (response) {
         me.closeModal();
@@ -3774,14 +3792,14 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         'id': item.id
       };
-      var m = "Do you want to deactived Ticket?";
-      var mt = "The Ticket will be deactived";
-      var btn = "Deactived";
+      var m = "¿Deseas confirmar que el Ticket esta pagado?";
+      var mt = "El Ticket sera pagado";
+      var btn = "pagalo";
 
-      if (item.active == 0) {
-        m = "Do you want to actived Ticket?";
-        mt = "The Ticket will be actived";
-        btn = "Actived";
+      if (item.active == 1) {
+        m = "¿Deseas cancelar que el Ticket esta pagado?";
+        mt = "El Ticket sera cancelado";
+        btn = "cancelalo";
       }
 
       Swal.fire({
@@ -3791,7 +3809,7 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminalo!'
+        confirmButtonText: 'Si, ' + btn + '!'
       }).then(function (result) {
         if (result.value) {
           axios.post('/my-tickets/payment', data).then(function (response) {
@@ -3852,6 +3870,7 @@ __webpack_require__.r(__webpack_exports__);
                     me.titleModal = 'Info Ticket Numero: ' + answer.ticket.id;
                     me.dataNumbers = answer.ticketDetail;
                     me.dataNewDays = answer.days;
+                    me.phone = answer.client.phone;
                     me.total = answer.ticket.total;
                     $("#myModal").modal('show');
                   })["catch"](function (error) {});
@@ -3864,14 +3883,19 @@ __webpack_require__.r(__webpack_exports__);
     closeModal: function closeModal() {
       this.titleModal = '';
       this.phone = '';
+      this.game = '';
+      this.pay_to = -1;
+      this.figures = 0;
+      this.day = '';
       this.total = '';
+      this.number = '';
+      this.subtotal = '';
       this.multiplier = 0;
       this.mTotal = 0;
-      this.number = '';
-      this.ticket_type = '1';
-      this.subtotal = '';
+      this.ticket_type = '0';
       this.dataNumbers = [];
       this.dataNewDays = [];
+      this.client = '';
       $('#send-text').html('');
       $.notifyClose();
       $("#myModal").modal('hide');
@@ -4005,6 +4029,17 @@ __webpack_require__.r(__webpack_exports__);
         var answer = response.data;
         me.dataGames = answer;
       })["catch"](function (error) {});
+    },
+    get_pay_now: function get_pay_now() {
+      var me = this;
+      this.pay_now = 0;
+      var m = Number(this.pay_to) + 1;
+      console.log(m);
+      this.pay_now = m > 0 ? me.total * m : 0;
+    },
+    set_pay_to: function set_pay_to() {
+      this.pay_to = -1;
+      this.get_pay_now();
     }
   },
   mounted: function mounted() {
@@ -44346,19 +44381,24 @@ var render = function() {
                         staticClass: "form-control",
                         attrs: { id: "ticket_type", name: "ticket_type" },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.ticket_type = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.ticket_type = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.set_pay_to()
+                            }
+                          ]
                         }
                       },
                       [
@@ -44820,6 +44860,99 @@ var render = function() {
                           )
                         ])
                       : _vm._e()
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                  [
+                    _c("label", { attrs: { for: "pwd" } }, [_vm._v("Pagar:")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.pay_to,
+                            expression: "pay_to"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "ticket_type", name: "ticket_type" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.pay_to = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.get_pay_now()
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "-1" } }, [
+                          _vm._v("Ninguno")
+                        ]),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 0
+                          ? _c("option", { attrs: { value: "0" } }, [
+                              _vm._v("Pagar el 1er")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 1
+                          ? _c("option", { attrs: { value: "1" } }, [
+                              _vm._v("Pagar el 1er y 2do ")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 2
+                          ? _c("option", { attrs: { value: "2" } }, [
+                              _vm._v("Pagar el 1er, 2do y 3er")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 3
+                          ? _c("option", { attrs: { value: "3" } }, [
+                              _vm._v("Pagar el 1er, 2do , 3er y 4to")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 4
+                          ? _c("option", { attrs: { value: "4" } }, [
+                              _vm._v("Pagar Todos")
+                            ])
+                          : _vm._e()
+                      ]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                  [
+                    _c("label", { attrs: { for: "pwd" } }, [
+                      _vm._v("Pagar ahora:")
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "text-primary" }, [
+                      _vm._v("$ " + _vm._s(_vm.pay_now) + " Pesos")
+                    ])
                   ]
                 ),
                 _vm._v(" "),
@@ -45912,19 +46045,24 @@ var render = function() {
                         staticClass: "form-control",
                         attrs: { id: "ticket_type", name: "ticket_type" },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.ticket_type = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.ticket_type = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.set_pay_to()
+                            }
+                          ]
                         }
                       },
                       [
@@ -46391,6 +46529,99 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "div",
+                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                  [
+                    _c("label", { attrs: { for: "pwd" } }, [_vm._v("Pagar:")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.pay_to,
+                            expression: "pay_to"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "ticket_type", name: "ticket_type" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.pay_to = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.get_pay_now()
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "-1" } }, [
+                          _vm._v("Ninguno")
+                        ]),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 0
+                          ? _c("option", { attrs: { value: "0" } }, [
+                              _vm._v("Pagar el 1er")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 1
+                          ? _c("option", { attrs: { value: "1" } }, [
+                              _vm._v("Pagar el 1er y 2do ")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 2
+                          ? _c("option", { attrs: { value: "2" } }, [
+                              _vm._v("Pagar el 1er, 2do y 3er")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 3
+                          ? _c("option", { attrs: { value: "3" } }, [
+                              _vm._v("Pagar el 1er, 2do , 3er y 4to")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.ticket_type >= 4
+                          ? _c("option", { attrs: { value: "4" } }, [
+                              _vm._v("Pagar Todos")
+                            ])
+                          : _vm._e()
+                      ]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                  [
+                    _c("label", { attrs: { for: "pwd" } }, [
+                      _vm._v("Pagar ahora:")
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "text-primary" }, [
+                      _vm._v("$ " + _vm._s(_vm.pay_now) + " Pesos")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
                   {
                     staticClass:
                       "form-group col-sm-12 col-md-12 col-lg-12 text-left"
@@ -46828,7 +47059,81 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-sm-12" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "card-header" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-5" }, [
+                _c("h4", { staticClass: "card-title mb-0" }, [
+                  _vm._v(
+                    "\n                                 Mis Tickets\n                            "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "btn-group" }, [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.status,
+                          expression: "status"
+                        }
+                      ],
+                      staticClass: "form-control text-center",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.status = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "all" } }, [
+                        _vm._v("Todos")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "1" } }, [
+                        _vm._v("Pagados")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "2" } }, [
+                        _vm._v("Por pagar")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "3" } }, [
+                        _vm._v("Ganadores")
+                      ])
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-7 text-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    on: {
+                      click: function($event) {
+                        return _vm.openModal("modal", "add")
+                      }
+                    }
+                  },
+                  [_vm._v("Nuevo Ticket +")]
+                )
+              ])
+            ])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "form-group row" }, [
@@ -46934,7 +47239,7 @@ var render = function() {
                 [
                   _vm.dataTicktes.length == 0
                     ? _c("li", { staticClass: "list-group-item text-center" }, [
-                        _vm._m(1)
+                        _vm._m(0)
                       ])
                     : _vm._e(),
                   _vm._v(" "),
@@ -47009,6 +47314,39 @@ var render = function() {
                                     },
                                     [_c("i", { staticClass: "ti-eye" })]
                                   ),
+                                  _vm._v(" "),
+                                  item.active == 0
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-success btn-sm",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.changeStatus(item)
+                                            }
+                                          }
+                                        },
+                                        [_c("i", { staticClass: "ti-money" })]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  item.active == 1
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-secondary btn-sm",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.changeStatus(item)
+                                            }
+                                          }
+                                        },
+                                        [_c("i", { staticClass: "ti-na" })]
+                                      )
+                                    : _vm._e(),
                                   _vm._v(" "),
                                   item.active == 0
                                     ? _c(
@@ -47172,9 +47510,75 @@ var render = function() {
             ? _c("div", { staticClass: "modal-body" }, [
                 _c(
                   "div",
-                  { staticClass: "form-group col-sm-12 col-md-12 col-lg-12" },
+                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
                   [
                     _c("label", { attrs: { for: "pwd" } }, [_vm._v("Juego:")]),
+                    _vm._v(" "),
+                    _vm.action == 1
+                      ? _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.game,
+                                expression: "game"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { id: "game", name: "game" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.game = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("Seleciona un Juego")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.dataGames, function(item) {
+                              return _c(
+                                "option",
+                                {
+                                  key: item.id,
+                                  domProps: {
+                                    value: { id: item.id, text: item.name }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(item.name) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      : _vm._e()
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-sm-12 col-md-6 col-lg-6" },
+                  [
+                    _c("label", { attrs: { for: "pwd" } }, [_vm._v("Tipo:")]),
                     _vm._v(" "),
                     _c(
                       "select",
@@ -47183,53 +47587,54 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.game,
-                            expression: "game"
+                            value: _vm.ticket_type,
+                            expression: "ticket_type"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { id: "game", name: "game" },
+                        attrs: { id: "ticket_type", name: "ticket_type" },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.game = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.ticket_type = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.set_pay_to()
+                            }
+                          ]
                         }
                       },
                       [
-                        _c("option", { attrs: { value: "" } }, [
-                          _vm._v("Seleciona un Juego")
+                        _c("option", { attrs: { value: "0" } }, [
+                          _vm._v("No Repetir")
                         ]),
                         _vm._v(" "),
-                        _vm._l(_vm.dataGames, function(item) {
-                          return _c(
-                            "option",
-                            {
-                              key: item.id,
-                              domProps: {
-                                value: { id: item.id, text: item.name }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                        " +
-                                  _vm._s(item.name) +
-                                  "\n                                    "
-                              )
-                            ]
-                          )
-                        })
-                      ],
-                      2
+                        _c("option", { attrs: { value: "1" } }, [
+                          _vm._v("Repetir 1 semana")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "2" } }, [
+                          _vm._v("Repetir 2 semana")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "3" } }, [
+                          _vm._v("Repetir 3 semana")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "4" } }, [
+                          _vm._v("Repetir 4 semana")
+                        ])
+                      ]
                     )
                   ]
                 ),
@@ -47241,7 +47646,7 @@ var render = function() {
                       "form-group col-sm-12 col-md-12 col-lg-12 text-center"
                   },
                   [
-                    _vm._m(2),
+                    _vm._m(1),
                     _vm._v(" "),
                     _c("br"),
                     _vm._v(" "),
@@ -47408,7 +47813,7 @@ var render = function() {
                       "form-group col-sm-12 col-md-12 col-lg-12 text-center"
                   },
                   [
-                    _vm._m(3),
+                    _vm._m(2),
                     _vm._v(" "),
                     _c("br"),
                     _vm._v(" "),
@@ -47454,9 +47859,9 @@ var render = function() {
                               { key: "A" + i, domProps: { value: item } },
                               [
                                 _vm._v(
-                                  "\n                                                " +
+                                  "\n                                                #Cifras " +
                                     _vm._s(item) +
-                                    " Cifras \n                                            "
+                                    "\n                                            "
                                 )
                               ]
                             )
@@ -47604,7 +48009,7 @@ var render = function() {
                                         _c("div", { staticClass: "row" }, [
                                           _c("div", {
                                             staticClass:
-                                              "col-sm-12 col-md-3 col-lg-4",
+                                              "col-sm-12 col-md-4 col-lg-4",
                                             domProps: {
                                               textContent: _vm._s(item.number)
                                             }
@@ -47614,7 +48019,7 @@ var render = function() {
                                             "div",
                                             {
                                               staticClass:
-                                                "col-sm-12 col-md-3 col-lg-4"
+                                                "col-sm-12 col-md-4 col-lg-4"
                                             },
                                             [
                                               _vm._v(
@@ -47637,7 +48042,7 @@ var render = function() {
                                             "div",
                                             {
                                               staticClass:
-                                                "col-sm-12 col-md-3 col-lg-4"
+                                                "col-sm-12 col-md-4 col-lg-4"
                                             },
                                             [
                                               _c(
@@ -47653,11 +48058,7 @@ var render = function() {
                                                     }
                                                   }
                                                 },
-                                                [
-                                                  _c("i", {
-                                                    staticClass: "ti-trash"
-                                                  })
-                                                ]
+                                                [_vm._v("-")]
                                               )
                                             ]
                                           )
@@ -47711,15 +48112,14 @@ var render = function() {
                   "div",
                   {
                     staticClass:
-                      "form-group col-sm-12 col-md-6 col-lg-6 text-left"
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
                   },
                   [
-                    _c("label", [_vm._v("Total por dias:")]),
-                    _vm._v("\n                                $"),
-                    _c("label", {
-                      domProps: { textContent: _vm._s(_vm.total) }
-                    }),
-                    _vm._v(" pesos\n                            ")
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Total por dias:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [_vm._v("$ " + _vm._s(_vm.total) + " Pesos")])
                   ]
                 )
               ])
@@ -47727,7 +48127,31 @@ var render = function() {
           _vm._v(" "),
           _vm.action == 2
             ? _c("div", { staticClass: "modal-body" }, [
-                _vm._m(4),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-center"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Mi Telefono:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [
+                      _c("strong", {
+                        domProps: { textContent: _vm._s(_vm.phone) }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", {
+                      staticClass: "col-sm-12",
+                      attrs: { id: "send-text" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(3),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -47790,7 +48214,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(5),
+                _vm._m(4),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -47913,6 +48337,38 @@ var render = function() {
                   },
                   [
                     _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Total Jugadas:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", [_vm._v("$ " + _vm._s(_vm.mTotal) + " Pesos")])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Numero de dias:")
+                    ]),
+                    _vm._v(" "),
+                    _c("label", {
+                      domProps: { textContent: _vm._s(_vm.dataNewDays.length) }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-group col-sm-12 col-md-12 col-lg-12 text-left"
+                  },
+                  [
+                    _c("label", { attrs: { for: "email" } }, [
                       _vm._v("Total por dias:")
                     ]),
                     _vm._v(" "),
@@ -47959,24 +48415,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-sm-5" }, [
-          _c("h4", { staticClass: "card-title mb-0" }, [
-            _vm._v(
-              "\n                                 Mis Tickets\n                            "
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-sm-7 text-right" })
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

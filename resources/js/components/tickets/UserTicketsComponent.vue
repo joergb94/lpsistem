@@ -9,9 +9,17 @@
                                  <h4 class="card-title mb-0">
                                      Mis Tickets
                                 </h4>
+                                 <div class="btn-group">
+                                        <select class="form-control text-center" v-model="status">
+                                            <option value="all" >Todos</option>
+                                            <option value="1" >Pagados</option>
+                                            <option value="2" >Por pagar</option>
+                                            <option value="3" >Ganadores</option>
+                                        </select>
+                                    </div> 
                             </div>
                             <div class="col-sm-7 text-right">
-                                 <!--<button class="btn btn-success" @click="openModal('modal', 'add')">Nuevo Ticket +</button>-->
+                                 <button class="btn btn-success" @click="openModal('modal', 'add')">Nuevo Ticket +</button>
                             </div>
                         </div>
                     </div>
@@ -47,12 +55,12 @@
                                                 <button type="button" class="btn btn-danger btn-sm" @click="openModal('modal','detail',item)">
                                                     <i class="ti-eye"></i>
                                                 </button>
-                                                 <!--<button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
+                                                 <button v-if="item.active == 0" type="button" class="btn btn-success btn-sm" @click="changeStatus(item)">
                                                 <i class="ti-money"></i>
                                                 </button>
                                                 <button v-if="item.active == 1" type="button" class="btn btn-secondary btn-sm" @click="changeStatus(item)">
                                                     <i class="ti-na"></i>
-                                                </button>-->
+                                                </button>
                                                 <button v-if="item.active == 0" type="button" class="btn btn-primary btn-sm" @click="DeleteOrRestore(item)">
                                                     <i class="ti-trash"></i>
                                                 </button>
@@ -97,15 +105,25 @@
                         <button type="button"  class="close" @click="closeModal()" >&times;</button>
                     </div>
 
-                    <!-- Modal body Create/Edit -->
+                 <!-- Modal body Create/Edit -->
                     <div class="modal-body" v-if="action==1"> 
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                     <label for="pwd">Juego:</label>
-                                    <select class="form-control" v-model="game" id="game" name="game">
+                                    <select v-if="action==1" class="form-control" v-model="game" id="game" name="game">
                                         <option value="" >Seleciona un Juego</option>
                                         <option v-for="item in dataGames" :key="item.id" v-bind:value="{ id:item.id, text:item.name }">
                                             {{ item.name }}
                                         </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                    <label for="pwd">Tipo:</label>
+                                    <select class="form-control" v-model="ticket_type" v-on:change="set_pay_to()" id="ticket_type" name="ticket_type">
+                                        <option value="0">No Repetir</option>
+                                        <option value="1">Repetir 1 semana</option>
+                                        <option value="2">Repetir 2 semana</option>
+                                        <option value="3">Repetir 3 semana</option>
+                                        <option value="4">Repetir 4 semana</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
@@ -142,17 +160,17 @@
                                         </div>
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                                     <h3><span class="badge badge-warning">Jugada</span></h3>
+                                    <h3><span class="badge badge-warning">Jugada</span></h3>
                                     <br>
-                                    <div class="col-sm-12">
+                                        <div class="col-sm-12">
                                              <select class="form-control col-sm-12 col-md-12 col-lg-12" v-model="figures" id="figures" name="figures">
                                                 <option value="0" >Selecione el numero de cifras</option>
                                                 <option v-for="(item,i) in dataFigure" :key="'A'+ i" v-bind:value="item">
-                                                    {{ item }} Cifras 
+                                                    #Cifras {{ item }}
                                                 </option>
                                             </select>
                                         </div>
-                                        <div  v-if="figures > 0" class="row">
+                                        <div v-if="figures > 0" class="row">
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label for="pwd">Numero:</label>
                                                 <input type="number" maxlength="5" v-model="number"  class="form-control" placeholder="Enter total" id="number">
@@ -171,13 +189,13 @@
                                                     </li>
                                                     <li class="list-group-item"  v-for="(item,index) in dataNumbers" :key="index">
                                                         <div class="row">
-                                                            <div class="col-sm-12 col-md-3 col-lg-4" v-text="item.number">
+                                                            <div class="col-sm-12 col-md-4 col-lg-4" v-text="item.number">
                                                             </div>
-                                                            <div class="col-sm-12 col-md-3 col-lg-4">
+                                                            <div class="col-sm-12 col-md-4 col-lg-4">
                                                                 $<span v-text="item.subtotal"></span> pesos
                                                             </div>
-                                                            <div class="col-sm-12 col-md-3 col-lg-4">
-                                                                <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" ><i class="ti-trash"></i></button>
+                                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                                <button type="button" class="btn btn-danger" v-on:click="removeNumber(index)" >-</button>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -185,7 +203,7 @@
                                             </div>
                                         </div>
                                 </div>
-                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
                                     <label for="email">Total Jugadas:</label>
                                     <label >$ {{mTotal}} Pesos</label>
                                 </div>
@@ -193,15 +211,22 @@
                                     <label for="email">Numero de dias:</label>
                                     <label v-text="dataNewDays.length" ></label>
                                 </div>
-                                <div class="form-group col-sm-12 col-md-6 col-lg-6 text-left">
-                                    <label>Total por dias:</label>
-                                    $<label v-text="total"></label> pesos
-                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
+                                    <label for="email">Total por dias:</label>
+                                    <label >$ {{total}} Pesos</label>
+                                </div> 
                     </div>
                     <!-- End Modal body  Create/Edit-->
                     <!-- Modal body Detail-->
                     <div class="modal-body" v-if="action==2">
-                          <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
+                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
+                            <label for="email">Mi Telefono:</label>
+                            <label><strong v-text="phone"></strong></label>
+                            <div class="col-sm-12" id="send-text">
+                            </div>
+                             
+                         </div>
+                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                              <h3>Dias de juego</h3>
                          </div>
                          <div class="form-group col-sm-12 col-md-12 col-lg-12">
@@ -227,7 +252,7 @@
                                 </li>
                                 <li class="list-group-item"  v-for="item in dataNumbers" :key="item.id">
                                     <div class="row">
-                                       <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Numero:<strong v-text="item.game_number"></strong>
+                                      <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Numero:<strong v-text="item.game_number"></strong>
                                             <h6 v-if="item.winner == 1" class="text-warning"> Ganador <i class="ti-star"></i></h6></div>
                                             <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Juego:<strong v-text="item.games.name"></strong></div>
                                             <div class="col-sm-12 col-md-3 col-lg-3 text-center" >Inversion:$<strong v-text="item.bet"></strong> pesos <h6 v-if="item.winner == 1" class="text-warning" v-text="item.prize"></h6></div>
@@ -235,6 +260,14 @@
                                     </div>
                                 </li>
                             </ul>
+                        </div>
+                          <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
+                            <label for="email">Total Jugadas:</label>
+                            <label >$ {{mTotal}} Pesos</label>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
+                            <label for="email">Numero de dias:</label>
+                            <label v-text="dataNewDays.length" ></label>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
                             <label for="email">Total por dias:</label>

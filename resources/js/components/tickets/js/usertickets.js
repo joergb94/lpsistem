@@ -9,6 +9,8 @@ export default {
         dataFigure:[1,2,3],
         id:'',
         total: 0,
+        pay_to:-1,
+        pay_now:0,
         multiplier:0,
         mTotal:0,
         subtotal:'',
@@ -17,7 +19,7 @@ export default {
         games:'',
         figures:0,
         day:'',
-        ticket_type:'1',
+        ticket_type:'0',
         titleModal:'',
         action:0,
         page:1,
@@ -175,6 +177,7 @@ export default {
                 'total':me.total,
                 'dataNumbers':me.dataNumbers,
                 'dataNewDays':me.dataNewDays,
+                'pay_to':this.pay_to,
             };
             axios.post(url,data).then(function (response) {
 
@@ -231,16 +234,16 @@ export default {
             var data = {
                 'id': item.id,
                 };
-             var m = "Do you want to deactived Ticket?";
-             var mt = "The Ticket will be deactived";
-             var btn = "Deactived";
-
-
-            if(item.active == 0){
-                 m = "Do you want to actived Ticket?";
-                 mt = "The Ticket will be actived";
-                 btn = "Actived";
-            }
+                var m = "¿Deseas confirmar que el Ticket esta pagado?";
+                var mt = "El Ticket sera pagado";
+                var btn = "pagalo";
+   
+   
+               if(item.active == 1){
+                    m = "¿Deseas cancelar que el Ticket esta pagado?";
+                    mt = "El Ticket sera cancelado";
+                    btn = "cancelalo";
+               }
              Swal.fire({
                     title: m,
                     text:  mt,
@@ -248,7 +251,7 @@ export default {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, eliminalo!'
+                    confirmButtonText: 'Si, '+btn+'!',
                 }).then((result) => {
                     if (result.value) {
                          axios.post('/my-tickets/payment',data).then(function (response) {
@@ -305,6 +308,7 @@ export default {
                                 me.titleModal = 'Info Ticket Numero: '+answer.ticket.id;
                                 me.dataNumbers = answer.ticketDetail;
                                 me.dataNewDays = answer.days;
+                                me.phone =answer.client.phone;
                                 me.total = answer.ticket.total;
                                 $("#myModal").modal('show');
                             }).catch(function (error) {}) 
@@ -317,19 +321,24 @@ export default {
             }
         },
         closeModal(){
-                this.titleModal = '';
-                this.phone = '';
-                this.total = '';
-                this.multiplier= 0;
-                this.mTotal = 0;
-                this.number = '';
-                this.ticket_type = '1';
-                this.subtotal = '';
-                this.dataNumbers =[];
-                this.dataNewDays = [];
-                $('#send-text').html('');
-                 $.notifyClose();
-                $("#myModal").modal('hide');
+            this.titleModal = '';
+            this.phone = '';
+            this.game ='';
+            this.pay_to=-1;
+            this.figures=0;
+            this.day ='';
+            this.total = '';
+            this.number = '';
+            this.subtotal = '';
+            this.multiplier = 0;
+            this.mTotal = 0;
+            this.ticket_type = '0';
+            this.dataNumbers =[];
+            this.dataNewDays = [];
+            this.client ='';
+            $('#send-text').html('');
+             $.notifyClose();
+            $("#myModal").modal('hide');
         },
         addNumber() {
             let me = this;
@@ -458,6 +467,17 @@ export default {
                 me.dataGames = answer;
 
             }).catch(function (error) {});
+        },
+        get_pay_now(){
+            let me = this;
+            this.pay_now=0;
+            var m = Number(this.pay_to) + 1;
+            console.log(m)
+            this.pay_now =(m > 0)? me.total*m:0;
+        },
+        set_pay_to(){
+            this.pay_to = -1;
+            this.get_pay_now();
         }
     },
     mounted () {
