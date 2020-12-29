@@ -8,6 +8,7 @@ export default {
         tickets_not_pay_off:0,
         incomes:0,
         titleModal:'',
+        mt:0,
         action:0,
         page:1,
         users: 1,
@@ -67,6 +68,7 @@ export default {
                 me.dataTicktes = respuesta.TableTickets.Tickets.data;
                 me.date = respuesta.date;
                 me.pagination = respuesta.TableTickets.pagination;
+                me.mt =respuesta.my_not_pay;
             })
             .catch(function (error) {
                 console.log(error);

@@ -44,6 +44,7 @@ Route::get('/tickets', 'ManagementTicketsController@index');
 Route::post('/tickets/add', 'ManagementTicketsController@store');
 Route::get('/tickets/detail', 'ManagementTicketsController@detail');
 Route::post('/tickets/payment','ManagementTicketsController@payment');
+Route::post('/tickets/paymentD','ManagementTicketsController@paymentD');
 Route::post('/tickets/deleteOrResotore','ManagementTicketsController@deleteOrResotore');
  
 //UserTickets

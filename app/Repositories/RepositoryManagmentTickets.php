@@ -356,6 +356,38 @@ class RepositoryManagmentTickets
             });
     }
 
+    public function updateStatusDetail($Ticket_id)
+    {
+        $Ticket = $this->model_detail->find($Ticket_id);
+        return DB::transaction(function () use ($Ticket) {
+
+            switch ($Ticket->active) {
+                case 0:
+                    $Ticket->active = 1;
+                break;
+                case 1:
+                    $Ticket->active = 0;  
+                break;
+            }
+
+            if ($Ticket->save()) {
+                        $pay = $this->model_detail->where('ticket_id',$Ticket['ticket_id'])->where('active',true)->count();
+                        $detail = $this->model_detail->where('ticket_id',$Ticket['ticket_id'])->count();;
+                        $active =($pay == $detail)?true:false;
+                        if($this->model->find($Ticket->ticket_id)
+                                       ->update(['charged_id'=>Auth::user()->id,'active'=>$active])){
+                            
+                                        return $Ticket;
+
+                        }
+                        
+                    throw new GeneralException(__('Error changing status of Ticket.'));
+                }
+
+                throw new GeneralException(__('Error changing status of Ticket.'));
+            });
+    }
+
     public function deleteOrResotore($Ticket_id)
     {  
                  

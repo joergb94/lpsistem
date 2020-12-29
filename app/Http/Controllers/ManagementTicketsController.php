@@ -62,6 +62,12 @@ class ManagementTicketsController extends Controller
         return response()->json(Answer('success','Ticket'));
     } 
 
+    public function paymentD(Request $request)
+    {
+        $this->RepositoryManagmentTickets->updateStatusDetail($request->id);
+        return response()->json(Answer('success','Ticket'));
+    } 
+
     public function deleteOrResotore(Request $request)
     {    
         $this->RepositoryManagmentTickets->deleteOrResotore($request->id);

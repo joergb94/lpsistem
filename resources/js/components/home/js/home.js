@@ -4,6 +4,7 @@ export default {
             dataUsers:[],
             dataTicktes:[],
             typeU:0,
+            mt:0,
             date:'',
             tickets_pay_off:0,
             tickets_not_pay_off:0,
@@ -75,6 +76,7 @@ export default {
                     me.dataTicktes = respuesta.TableTickets.Tickets.data;
                     me.date = respuesta.date;
                     me.typeU = respuesta.type;
+                    me.mt =respuesta.my_not_pay;
                     me.pagination = respuesta.TableTickets.pagination;
                 })
                 .catch(function (error) {

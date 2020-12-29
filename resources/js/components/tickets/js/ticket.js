@@ -357,6 +357,7 @@ export default {
             }
         },
         closeModal(){
+                this.ListTickets();
                 this.titleModal = '';
                 this.phone = '';
                 this.game ='';
@@ -518,7 +519,53 @@ export default {
         set_pay_to(){
             this.pay_to = -1;
             this.get_pay_now();
-        }
+        },
+        changeStatusDetail(item){
+            let me = this;
+            var data = {
+                'id': item.id,
+                };
+             var m = "¿Deseas confirmar que la jugada esta pagada?";
+             var mt = "La jugada sera pagado";
+             var btn = "pagalo";
+
+
+            if(item.active == 1){
+                 m = "¿Deseas cancelar que la jugada esta pagada?";
+                 mt = "La jugada sera cancelado";
+                 btn = "cancelalo";
+            }
+             Swal.fire({
+                    title: m,
+                    text:  mt,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, '+btn+'!'
+                }).then((result) => {
+                    if (result.value) {
+                         axios.post('/tickets/paymentD',data).then(function (response) {
+                            
+                            axios.get('/tickets/detail?id='+item.ticket_id).then(function (response) {
+                                var answer = response.data;
+                                me.dataNumbers = answer.ticketDetail;
+
+                                $.notify({
+                                    // options
+                                    title: "Listo!",
+                                    message:"Exito",
+                                },{
+                                    // settings
+                                    type: 'success'
+                                });
+                            }).catch(function (error) {}) 
+
+                            }).catch(function (error) {}) 
+                    }
+                }) 
+               
+        },
     },
     mounted () {
        this.ListTickets(1);

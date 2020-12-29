@@ -36,11 +36,10 @@ class RepositoryHome
     public function data_tickets($date,$type,$pay)
     {
 
-          $Ticket = Day_ticket::select( DB::raw('SUM(ticket_details.bet_gain) as total_bet_gain'),
+          $Ticket = TicketDetail::select( DB::raw('SUM(ticket_details.bet_gain) as total_bet_gain'),
                                         DB::raw('SUM(ticket_details.bet_seller) as total_bet_seller'),
                                         DB::raw('SUM(ticket_details.bet) as total_bet'))
-                                ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
-                                ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
+                                ->join('tickets','tickets.id', "=", 'ticket_details.ticket_id');
 
                             if(Auth::user()->type_user_id < 3 ){
                                     $Ticket->where('tickets.id','>=',0);
@@ -118,15 +117,14 @@ class RepositoryHome
 
     public function byTicketsPayOff($date,$type,$pay)
     {
-        $Ticket = Day_ticket::select(   'tickets.id as id',
+        $Ticket = TicketDetail::select( 'tickets.id as id',
                                         'tickets.phone as phone',
                                         'tickets.active as active',
                                         'tickets.winner as winner',
                                         'tickets.total as total',
                                         'tickets.deleted_at as deleted_at',
                                         'ticket_details.date_ticket as date')
-                                ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id')
-                                ->join('ticket_details','ticket_details.date_ticket', "=", 'day_tickets.game_date');
+                                ->join('tickets','tickets.id', "=", 'ticket_details.ticket_id');
 
         if(Auth::user()->type_user_id < 3 ){
                 $Ticket->where('tickets.id','>=',0);
@@ -158,6 +156,38 @@ class RepositoryHome
                 $Ticket->whereDate('ticket_details.date_ticket', $date);
                 break;
         }
+        
+        $data=$Ticket->where('tickets.active',$pay)->whereNull('tickets.deleted_at')->count();
+        return $data;
+    }
+
+    public function byMyTicketsPayOff($date,$type,$pay)
+    {
+        $Ticket = TicketDetail::select( 'tickets.id as id',
+                                        'tickets.phone as phone',
+                                        'tickets.active as active',
+                                        'tickets.winner as winner',
+                                        'tickets.total as total',
+                                        'tickets.deleted_at as deleted_at',
+                                        'ticket_details.date_ticket as date')
+                                ->join('tickets','tickets.id', "=", 'ticket_details.ticket_id');
+
+        if(Auth::user()->type_user_id < 3 ){
+                $Ticket->where('tickets.id','>=',0);
+
+        }else if(Auth::user()->type_user_id == 3){
+
+                $Ticket->where('tickets.seller_id',Auth::user()->id); 
+                
+        }else if(Auth::user()->type_user_id == 4){
+
+                $Ticket->where('tickets.charged_id',Auth::user()->id);
+        }else{
+                
+            $Ticket->where('tickets.user_id',Auth::user()->id);
+        }
+
+        $Ticket->whereDate('ticket_details.date_ticket', $date);
         
         $data=$Ticket->where('tickets.active',$pay)->whereNull('tickets.deleted_at')->count();
         return $data;
@@ -267,7 +297,8 @@ class RepositoryHome
                     "incomes"=>RepositoryHome::data_tickets($date,$type,true),
                     "TableTickets"=>RepositoryHome::table_byTicket($date,$type),
                     "date"=>$date->format('Y-m-d'),
-                    "type"=>Auth::user()->type_user_id
+                    "type"=>Auth::user()->type_user_id,
+                    "my_not_pay"=>RepositoryHome::byMyTicketsPayOff($date,$type,false),
                 ];
             return $home;
     }
@@ -286,12 +317,13 @@ class RepositoryHome
   
    public function data_indexC($date_filter,$type_filter)
    {
-       $date = ($date_filter)?  Carbon::parse($date_filter) : Carbon::now();
-       $type = ($type_filter)?  $type_filter : 'day';
+       $date = Carbon::now();
+       $type = 'day';
        $home = [
                    "games"=>RepositoryHome::data_games($date),
                    "TableTickets"=>RepositoryHome::table_byTicket($date,$type),
-                   "date"=>$date->format('Y-m-d')
+                   "date"=>$date->format('Y-m-d'),
+                   "my_not_pay"=>RepositoryHome::byMyTicketsPayOff($date,$type,false),
                ];
            return $home;
    }

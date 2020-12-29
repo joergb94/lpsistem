@@ -20,6 +20,14 @@
                         </div>
                     </div>
                     <div class="card-body">
+                           <div v-if="mt==0" class="alert alert-success">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Excelente!</strong> No hay tickets sin pagar para hoy <strong v-text="date"></strong>.
+                            </div>
+                            <div v-if="mt > 0" class="alert alert-warning">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Precaucion!</strong> A un falta(n) <strong v-text="mt"></strong> tickte(s) para hoy <strong v-text="date"></strong>.
+                            </div>
                             <div class="col-sm-12 text-center">
                                 <h1>Bienvenido </h1>
                                 <br>

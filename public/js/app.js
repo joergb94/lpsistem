@@ -2212,6 +2212,7 @@ __webpack_require__.r(__webpack_exports__);
       dataUsers: [],
       dataTicktes: [],
       typeU: 0,
+      mt: 0,
       date: '',
       tickets_pay_off: 0,
       tickets_not_pay_off: 0,
@@ -2284,6 +2285,7 @@ __webpack_require__.r(__webpack_exports__);
         me.dataTicktes = respuesta.TableTickets.Tickets.data;
         me.date = respuesta.date;
         me.typeU = respuesta.type;
+        me.mt = respuesta.my_not_pay;
         me.pagination = respuesta.TableTickets.pagination;
       })["catch"](function (error) {
         console.log(error);
@@ -2375,6 +2377,7 @@ __webpack_require__.r(__webpack_exports__);
       tickets_not_pay_off: 0,
       incomes: 0,
       titleModal: '',
+      mt: 0,
       action: 0,
       page: 1,
       users: 1,
@@ -2435,6 +2438,7 @@ __webpack_require__.r(__webpack_exports__);
         me.dataTicktes = respuesta.TableTickets.Tickets.data;
         me.date = respuesta.date;
         me.pagination = respuesta.TableTickets.pagination;
+        me.mt = respuesta.my_not_pay;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3403,6 +3407,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     closeModal: function closeModal() {
+      this.ListTickets();
       this.titleModal = '';
       this.phone = '';
       this.game = '';
@@ -3562,6 +3567,48 @@ __webpack_require__.r(__webpack_exports__);
     set_pay_to: function set_pay_to() {
       this.pay_to = -1;
       this.get_pay_now();
+    },
+    changeStatusDetail: function changeStatusDetail(item) {
+      var me = this;
+      var data = {
+        'id': item.id
+      };
+      var m = "¿Deseas confirmar que la jugada esta pagada?";
+      var mt = "La jugada sera pagado";
+      var btn = "pagalo";
+
+      if (item.active == 1) {
+        m = "¿Deseas cancelar que la jugada esta pagada?";
+        mt = "La jugada sera cancelado";
+        btn = "cancelalo";
+      }
+
+      Swal.fire({
+        title: m,
+        text: mt,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, ' + btn + '!'
+      }).then(function (result) {
+        if (result.value) {
+          axios.post('/tickets/paymentD', data).then(function (response) {
+            axios.get('/tickets/detail?id=' + item.ticket_id).then(function (response) {
+              var answer = response.data;
+              me.dataNumbers = answer.ticketDetail;
+              $.notify({
+                // options
+                title: "Listo!",
+                message: "Exito"
+              }, {
+                // settings
+                type: 'success'
+              });
+            })["catch"](function (error) {});
+          })["catch"](function (error) {});
+        }
+      });
     }
   },
   mounted: function mounted() {
@@ -41372,6 +41419,44 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _vm.mt == 0
+              ? _c("div", { staticClass: "alert alert-success" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: { type: "button", "data-dismiss": "alert" }
+                    },
+                    [_vm._v("×")]
+                  ),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v("Excelente!")]),
+                  _vm._v(" No hay tickets sin pagar para hoy "),
+                  _c("strong", { domProps: { textContent: _vm._s(_vm.date) } }),
+                  _vm._v(".\n                            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.mt > 0
+              ? _c("div", { staticClass: "alert alert-warning" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: { type: "button", "data-dismiss": "alert" }
+                    },
+                    [_vm._v("×")]
+                  ),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v("Precaucion!")]),
+                  _vm._v(" A un falta(n) "),
+                  _c("strong", { domProps: { textContent: _vm._s(_vm.mt) } }),
+                  _vm._v(" tickte(s) para hoy "),
+                  _c("strong", { domProps: { textContent: _vm._s(_vm.date) } }),
+                  _vm._v(".\n                            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "col-sm-12 text-center" }, [
               _c("h1", [_vm._v("Bienvenido ")]),
               _vm._v(" "),
@@ -42126,6 +42211,44 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _vm.mt == 0
+              ? _c("div", { staticClass: "alert alert-success" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: { type: "button", "data-dismiss": "alert" }
+                    },
+                    [_vm._v("×")]
+                  ),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v("Excelente!")]),
+                  _vm._v(" No hay tickets sin pagar para hoy "),
+                  _c("strong", { domProps: { textContent: _vm._s(_vm.date) } }),
+                  _vm._v(".\n                            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.mt > 0
+              ? _c("div", { staticClass: "alert alert-warning" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: { type: "button", "data-dismiss": "alert" }
+                    },
+                    [_vm._v("×")]
+                  ),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v("Precaucion!")]),
+                  _vm._v(" A un falta(n) "),
+                  _c("strong", { domProps: { textContent: _vm._s(_vm.mt) } }),
+                  _vm._v(" tickte(s) para hoy "),
+                  _c("strong", { domProps: { textContent: _vm._s(_vm.date) } }),
+                  _vm._v(".\n                            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "col-sm-12 text-center" }, [
               _c("h1", [_vm._v("Bienvenido ")]),
               _vm._v(" "),
@@ -45155,7 +45278,15 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(item.games.name)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    item.active == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [_vm._v(" Pagado ")]
+                                        )
+                                      : _vm._e()
                                   ]
                                 ),
                                 _vm._v(" "),
@@ -45196,7 +45327,20 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(item.date_ticket)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-warning",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.changeStatusDetail(item)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "ti-money" })]
+                                    )
                                   ]
                                 )
                               ])
@@ -46819,7 +46963,15 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(item.games.name)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    item.active == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [_vm._v(" Pagado ")]
+                                        )
+                                      : _vm._e()
                                   ]
                                 ),
                                 _vm._v(" "),
@@ -46860,7 +47012,20 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(item.date_ticket)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-warning",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.changeStatusDetail(item)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "ti-money" })]
+                                    )
                                   ]
                                 )
                               ])
@@ -48275,7 +48440,15 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(item.games.name)
                                       }
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    item.active == 1
+                                      ? _c(
+                                          "h6",
+                                          { staticClass: "text-success" },
+                                          [_vm._v(" Pagado ")]
+                                        )
+                                      : _vm._e()
                                   ]
                                 ),
                                 _vm._v(" "),
