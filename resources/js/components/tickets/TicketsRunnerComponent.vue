@@ -237,21 +237,6 @@
                                             </div>
                                         </div>
                                 </div>
-                                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label for="pwd">Pagar:</label>
-                                    <select class="form-control" v-model="pay_to" id="ticket_type" v-on:change="get_pay_now()" name="ticket_type">
-                                        <option value="-1">Ninguno</option>
-                                        <option v-if="ticket_type >= 0"  value="0">Pagar el 1er</option>
-                                        <option v-if="ticket_type >= 1"  value="1">Pagar el 1er y 2do </option>
-                                        <option v-if="ticket_type >= 2"  value="2">Pagar el 1er, 2do y 3er</option>
-                                        <option v-if="ticket_type >= 3"  value="3">Pagar el 1er, 2do , 3er y 4to</option>
-                                        <option v-if="ticket_type >= 4"  value="4">Pagar Todos</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label for="pwd">Pagar ahora:</label>
-                                    <h6 class="text-primary">$ {{pay_now}} Pesos</h6>
-                                </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 text-left">
                                     <label for="email">Total Jugadas:</label>
                                     <label >$ {{mTotal}} Pesos</label>
