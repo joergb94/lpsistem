@@ -97,7 +97,7 @@ class RepositoryManagmentTickets
                         } 
                 }
                 
-                $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('ticket_details.date_ticket', 'asc')->paginate(10);
+                $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('ticket_details.date_ticket', 'desc')->paginate(10);
                
                
         return [
