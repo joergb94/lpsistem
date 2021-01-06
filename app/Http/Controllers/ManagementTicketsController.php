@@ -37,7 +37,7 @@ class ManagementTicketsController extends Controller
         $search = trim($request->search);
         $criterion = trim($request->criterion);
         $status = ($request->status)? $request->status : 1;
-        $date =($request->date)? Carbon::parse($request['date']): Carbon::now();
+        $date =($request->date)? Carbon::parse($request['date']):'';
         $seller = ($request->seller > 0)?$request->seller:'all';
         
         return $this->RepositoryManagmentTickets->getSearchPaginated($criterion, $search, $status ,$date,$seller);

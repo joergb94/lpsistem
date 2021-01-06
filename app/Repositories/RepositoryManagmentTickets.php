@@ -44,14 +44,14 @@ class RepositoryManagmentTickets
      */
     public function getSearchPaginated($criterion, $search, $status, $date, $seller)
     {   
-        $rg = $this->modelDAT->select( 'tickets.id as id',
+        $rg = $this->model_detail->select( 'tickets.id as id',
                                         'tickets.phone as phone',
                                         'tickets.active as active',
                                         'tickets.winner as winner',
                                         'tickets.total as total',
                                         'tickets.deleted_at as deleted_at',
-                                        'day_tickets.game_date as date')
-                            ->join('tickets','tickets.id', "=", 'day_tickets.ticket_id');
+                                        'ticket_details.date_ticket as date')
+                            ->join('tickets','tickets.id', "=", 'ticket_details.ticket_id');
 
             if(Auth::user()->type_user_id == 3)
             {
@@ -72,8 +72,10 @@ class RepositoryManagmentTickets
                 
             
                 
-                   if($date){
-                    $rg->whereDate('day_tickets.game_date',$date);
+                   if(strlen($date) > 0){
+
+                    $rg->whereDate('ticket_details.date_ticket',$date);
+
                    }
                     
             
@@ -95,7 +97,7 @@ class RepositoryManagmentTickets
                         } 
                 }
                 
-                $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('tickets.id', 'desc')->paginate(10);
+                $Tickets = $rg->whereNull('tickets.deleted_at')->orderBy('ticket_details.date_ticket', 'asc')->paginate(10);
                
                
         return [
@@ -110,7 +112,7 @@ class RepositoryManagmentTickets
                 'Tickets' => $Tickets,
                 'Games'=>Game::all(),
                 'Days'=>Day::all(),
-                'Date' =>($date)? Carbon::parse($date)->toDateString(): Carbon::now()->toDateString(),
+                'Date' =>(strlen($date) > 0)? Carbon::parse($date)->toDateString(): null,
                 'Sellers' =>Auth::user()->type_user_id < 3?User::whereNotIn('type_user_id',[1,5])->get():User::where('type_user_id',[3])->get(),
                 'type'=>Auth::user()->type_user_id,
                 'user'=>Auth::user()->id,
